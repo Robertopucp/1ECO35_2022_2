@@ -154,7 +154,7 @@ Después de ejecutar esos comandos, espere de 3 a 4 minutos. Establecerá autom�
 
 ## <a name="Giyh-Hub"></a> Instalación de Git-Hub Desktop
 
-Crear cuenta de Git-Hub usando el correo de la Universidad  [click](https://github.com/). Luego, instalar Git-hub Desktop [click](https://desktop.github.com/). El aplicativo estará asociado a su ceunta activa de Git-Hub. En la primera clase de enseñará como crear su propio repositorio y clonar el repositorio del curso. Clonar el repositorio del curso requeiere ingresar su cuenta de Git-Hub en el excel comaprtido por el correo. De esta manera yo pueda integrarlo al repositorio como usuario.
+Crear cuenta de Git-Hub usando el correo de la Universidad  [click](https://github.com/). Luego, instalar Git-hub Desktop [click](https://desktop.github.com/). El aplicativo estará asociado a su cuenta activa de Git-Hub. En la primera clase de enseñará como crear su propio repositorio y clonar el repositorio del curso. Clonar el repositorio del curso requeiere ingresar su cuenta de Git-Hub en el excel comaprtido por el correo. De esta manera yo pueda integrarlo al repositorio como usuario.
 
 
 
