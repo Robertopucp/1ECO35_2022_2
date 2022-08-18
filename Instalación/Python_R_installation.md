@@ -56,7 +56,28 @@ instalación:
 
 3. Ejecutar el programa, aceptar las indicaciones y listo. 
 
-### En clase explicaré cómo incorporar Julia en anaconda - python 
+4. Settear Julia en Jupyter notebook: Ahora podemos acceder a la terminal de Julia. En tu barra de búsqueda, escribe Julia y abre la terminal.
+
+<img src="imagenes/julia_launcher.png">
+
+En la terminal de Julia, escribe
+
+     using Pkg
+
+Eso es similar a la instrucción *import* en Python.
+
+Ahora escribe el siguiente comando:
+
+     Pkg.add(“IJulia”)
+    
+El código anterior agrega el paquete IJulia al IDE de Jupyter Notebook, al que podemos acceder usando Anaconda Navigator.
+
+<img src="img/julia_jupyter.png">
+
+
+Después de ejecutar esos comandos, espere de 3 a 4 minutos. Establecerá automáticamente una conexión entre Julia y Jupyter Notebook, y ahora se puede crear un nuevo Jupyter Notebook con Julia.
+
+<img src="img/julia_jupyter_2.png">
 
 ## <a name="Anaconda"></a> Instalación de Anconda
 
