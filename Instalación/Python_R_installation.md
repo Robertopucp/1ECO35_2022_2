@@ -72,12 +72,12 @@ Ahora escribe el siguiente comando:
     
 El código anterior agrega el paquete IJulia al IDE de Jupyter Notebook, al que podemos acceder usando Anaconda Navigator.
 
-<img src="img/julia_jupyter.png">
+<img src="imagenes/julia_jupyter.png">
 
 
 Después de ejecutar esos comandos, espere de 3 a 4 minutos. Establecerá automáticamente una conexión entre Julia y Jupyter Notebook, y ahora se puede crear un nuevo Jupyter Notebook con Julia.
 
-<img src="img/julia_jupyter_2.png">
+<img src="imagenes/julia_jupyter_2.png">
 
 ## <a name="Anaconda"></a> Instalación de Anconda
 
@@ -106,7 +106,7 @@ Seguir los siguientes pasos con cuidado. Darse un tiempo para ello.
 Es importante tener en cuenta que la ruta del directorio (carpeta de destino) no contiene espacios ni caracteres Unicode (! % $).
 
 ## El siguiente paso es importante
-4.  Para instalar correctamente Anaconda para nuestros propósitos, elija **NOT** to add Anaconda to your PATH environment variable. Elija "Register Anaconda3 as my default Python 3.7". 
+4.  Para instalar correctamente Anaconda para nuestros propósitos. Elija "Register Anaconda3 as my default Python 3.7". 
 ![Imagen](https://docs.anaconda.com/_images/win-install-options.png)
 5. Finalmente, haga clic en el botón Instalar y espere un poco. Después de una instalación exitosa, aparecerá “Thanks for installing Anaconda”
 6. Después de la instalación, verá un nuevo programa instalado en su PC escribiendo "Anaconda" en Windows.
