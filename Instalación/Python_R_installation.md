@@ -136,7 +136,7 @@ Si prefiere mantener Anaconda como la instaló en el pasado, asegúrese de **no 
 
 ## <a name="Giyh-Hub"></a> Instalación de Git-Hub
 
-Crear cuenta de Git-Hub usando el correo de la Universidad  [click](https://github.com/). Luego, instalar Git-hub Desktop [click]([https://github.com/](https://desktop.github.com/)), abrir el aplicativo e ingresar con su cuenta.  
+Crear cuenta de Git-Hub usando el correo de la Universidad  [click](https://github.com/). Luego, instalar Git-hub Desktop [click](https://desktop.github.com/), abrir el aplicativo e ingresar con su cuenta.  
 
 
 
