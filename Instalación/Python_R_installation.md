@@ -36,8 +36,6 @@ Si no se cuenta con los programas, seguir los siguientes pasos:
 
 2. Ejecutar el programa y aceptar las indicaciones de instalación
 
-### En clase explicaré cómo incorporar R en anaconda - python 
-
 
 ## <a name="julia"></a> Instalación de julia 
 
