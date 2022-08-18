@@ -55,7 +55,7 @@ Si prefiere mantener Anaconda como la instaló en el pasado, asegúrese de **no 
 > **_Recomendaciones:_** 
 > 1. Recomendamos encarecidamente desinstalar Python por completo. Incluso algunas carpetas que quedan pueden causar problemas con los paquetes en el futuro. Así que asegúrese de no tener carpetas nombradas "Python" or "Anaconda".
 
-### <a name="justA"></a>III. Jupyter notebook and Anaconda
+### <a name="justA"></a>III. Jupyter notebook y Spyder
 
 - Ir a inicio y abrir Anaconda Navigator 
 
