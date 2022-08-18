@@ -132,3 +132,12 @@ Si prefiere mantener Anaconda como la instaló en el pasado, asegúrese de **no 
 
 > **_Recomendaciones:_** 
 > 1. Recomendamos encarecidamente desinstalar Python por completo. Incluso algunas carpetas que quedan pueden causar problemas con los paquetes en el futuro. Así que asegúrese de no tener carpetas nombradas "Python" or "Anaconda".
+
+
+## <a name="Giyh-Hub"></a> Instalación de Git-Hub
+
+Crear cuenta de Git-Hub usando el correo de la Universidad  [click](https://github.com/). Luego, instalar Git-hub Desktop [click]([https://github.com/](https://desktop.github.com/)), abrir el aplicativo e ingresar con su cuenta.  
+
+
+
+
