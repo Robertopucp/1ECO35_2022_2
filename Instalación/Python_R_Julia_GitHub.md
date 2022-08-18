@@ -63,15 +63,15 @@ Si prefiere mantener Anaconda como la instaló en el pasado, asegúrese de **no 
 
 - Luego de algunos minutos se abrira una ventana. Luego, si las opciones debajo de cada icono de Jupyter notebook y Spyder aparace install, entonces haga click en install. Caso contrario aparecerá la opción launch, si es así, entonces ambos programadas ya están instalados por defualt. Haga click en launch y abrirá cada programa.
 
-<img src="imagenes/ananconda1.png">
+<img src="imagenes/anaconda1.png">
 
 #### Jupyter notebook 
 
-<img src="imagenes/ananconda2.png">
+<img src="imagenes/anaconda2.png">
 
 #### Spyder
 
-<img src="imagenes/ananconda3.png">
+<img src="imagenes/anaconda3.png">
 
 ## Intalación de R
 
