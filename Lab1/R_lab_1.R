@@ -94,6 +94,8 @@ append(a,b)
 print(mean(a))
 print(sd(a))
 
+a <- array(1:20)
+
 # take care standar deviation formula
 
 n <- length(a)
