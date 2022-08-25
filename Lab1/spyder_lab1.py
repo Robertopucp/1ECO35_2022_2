@@ -1,14 +1,21 @@
 # -*- coding: utf-8 -*-
 """
+# Laboratorio 1 Python
 
-@author: Roberto
+##  Types of variables
+
+@author: Roberto Mendoza
 """
+#%%
 
 ########################################################
-## 1.0 Types of variables 
+"""
+ 1.0 Types of variables 
+"""
 
 a1 = 3.141
 type(a1)
+
 
 a2 = 3.1416165516
 type(a2)
@@ -32,19 +39,16 @@ c1 = "My first python code"
 print(c1)  # show that varaible's content
 type(c1) # providing varaibles's type 
 
-c2 = 'Lab1 Pucp'
-print(c2)
-
-type(c2)
-
 # including a space using \n
 
 c1 = "First python code"
-print(c1,'\n')
+c2 = "at R y python Class"
+print(c1,'\n',c2)
 
 # join string 
 
-print(c1 + ":" + c2)
+print(c1 + " : " + c2)
+
 
 # f-using 
 
@@ -57,12 +61,6 @@ print(f'{c1} : semester {d}-1')
 
 print('{} : semester {}-1'.format(c1,d))
 
-#Using % string 
-
-print("%s : semester %s -1" % (c1,d))
-
-c1
-
 c1[0:5]
 
 #first character
@@ -71,25 +69,20 @@ print('Fisrt letter is :',c1[0])
 #first word
 print('Fisrt word is :',c1[0:5])
 
-# triple quotes string can extend multiple lines
-my_string = """Hello, welcome to
-             the world of Python"""
-print(my_string)
+
+#%%
 
 ########################################################
-### 2. 0 Bool variables 
+""" 
+2. 0 Bool variables 
+"""
 
 "a" == "a"
 
 1 > 1
 
 z1 = (1==1)
-z1
-
 int(z1)
-
-z1 = int(z1)
-print(z1)
 
 z2 = (10 > 20)
 int(z2)
@@ -97,13 +90,18 @@ int(z2)
 z3 = (100 != 100)
 int(z3)
 
+
+#%%
+
 ########################################################
-## 3.0 Tuple
+"""
+ 3.0 Tuple
+"""
 
 #### It is an ordered and immutable Python object
 
 T1 = (1,4,8,10,20,15,4,5,3,8)
-
+print(T1)
 type(T1)
 
 # aritmethic operations
