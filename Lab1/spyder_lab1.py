@@ -6,7 +6,7 @@
 
 @author: Roberto Mendoza
 """
-#%%
+#%% Types of variables
 
 ########################################################
 """
@@ -70,7 +70,7 @@ print('Fisrt letter is :',c1[0])
 print('Fisrt word is :',c1[0:5])
 
 
-#%%
+#%% Bool variables 
 
 ########################################################
 """ 
@@ -91,7 +91,7 @@ z3 = (100 != 100)
 int(z3)
 
 
-#%%
+#%% Tuple
 
 ########################################################
 """
@@ -110,66 +110,72 @@ print('Suma:', sum(T1),"\n", "Minimo:", min(T1), '\n', "Maximo:", max(T1))
 
 len(T1) # lenght of tuple
 
+"""
+Indexing tuple
+"""
+
 T1[0:5] # give us elements from 0 position until 4 position 
 
 T1[1] # get tuple's element 
 
 T1[0:3]
 
-# 0 : first element
-# end - 1 element
-
 # It is not possible to change
 T1[0] = 4
 
-# count times of 8
-T1.count(8)
-
-T1[-1]
+T1[-1] # last element
 
 #position
 T1.index(8)
 
-T2 = ("alex", 5, True)
-len(T2[0])
 
-## 4.0 List
+#%% List
+"""
+ 4.0 List
+"""
 
 #### It is an ordered and mutable Python container.
 
 L1 = []
 print(L1)
+type(L1)
 
 dis1 = ["ATE", 'BARRANCO','BREÑA', 'CALLAO', 'CARABAYLLO']
 dis1
 
 dis2 = ['ATE', 'BARRANCO','BREÑA', 'CALLAO', 'CARABAYLLO','CHACLACAYO','CHORRILLOS','CIENEGUILLA'
         ,'COMAS','EL_AGUSTINO','INDEPENDENCIA']
-
+print(dis2)
 len(dis2)
 
-dis2[0]
+dis2[1]
 
-print(type(dis2))
+# Change elements
+dis2[0] = "CALLAO"
+print(dis2)
 
-dis2[0]
+# Indexing
+
+dis2[1]
 
 dis2[2:5]   #(5-1=4)
 
-dis2[3:7]
-
-type(dis2[-1])
+dis2[-1]
 
 dis2[-5:-1]
 
-len(dis2)
+## sorting
 
 num = [13,5,5,8,9,10,5,8,13,1,20]
 num.sort()
 print(num)
 
+## append new elements 
+
 num.append(102)
 print(num)
+
+## append new lists
 
 num2 = [10,20,30]
 num.extend(num2)
@@ -179,57 +185,28 @@ print(num.index(102))
 
 print("Suma:", sum(num),'\n', "Minimo:", min(num), '\n', "Maximo:", max(num))
 
-
-########################################################
-
-import numpy as np
-
-
-list1 = [ np.array([1,2,3]), "R", 120]
-
-list1[0]
-
-# from tuple to list 
-T3 = (1,4,8,10,20,15,4,5,8,8)
-#list(range(0,10))
-T3 = list(T3)
-
-print(list(T2))
-T2 = ("alex", 5, True)
-type(T2[2])
-# No use list as a object´s name 
-
-
+#%% Diccionario
 ########################################################
 ## 5.0 Dictionarities
-
-
 
 Postal_code = {'Majes': 40520, 'Mollendo': 40701, 'Islay': 40704, 'Cotahuasi': 40801, 'Alca': 40802 }
 type(Postal_code)
 
 Postal_code
-
-Postal_code['Alca']
-
-Postal_code.clear()
-print( Postal_code )
-
-Postal_code = {'Majes': 40520, 'Mollendo': 40701,
-               'Islay': 40704, 'Cotahuasi': 40801, 
-               'Alca': 40802 }
+Postal_code.keys()
 
 # Get information from key
-Postal_code.keys()
-Postal_code.get('Islay')
-
-Postal_code['Islay']
+Postal_code['Alca']
+Postal_code.get('Alca')
 
 # Drop key
 Postal_code.pop('Islay')
 Postal_code
 
+# add new elements 
 Postal_code.update( { "CHARCANA" :  40803 } )
+
+#diccioanrio dentro de otro diccionario
 
 Postal_code.update( {"LOMAS": {"UBIGEO": 40311, "Poverty Rate" : "18.2%", "Population" : "20 mil"}})
 
@@ -247,24 +224,19 @@ ct_pc = dict( zip( cities , postal_code1) )
 
 ct_pc
 
-
+#%% Numpy
 ########################################################
 ## 6.0 Numpy (array, matrices)
 
 import numpy as np
-#import pandas as pd
 
 # 1D array
 a = np.array( [1, 2, 3, 4, 5] )
-a
-#type(a)
+print(a)
+
 
 np.mean(a)
-
-
 np.std(a)
-
-
 np.std(a,ddof=1)
 
 # 2D array
@@ -272,15 +244,8 @@ M = np.array( [ [1, 2, 3], [4, 5, 6] ] )
 
 print(M)
 type(M)
-
-np.mean(M)
-
-print(np.mean(M, axis=0)) # vertical operation axis = 0
-
-print(np.mean(M, axis=1)) # horizontal operation axis = 1
-
-print("Rows:",M.shape[0],"\n", "Columns: ", M.shape[1])
-
+# dimensiones
+M.shape
 
 # Create a 1D NumPy array with values from 0 to 20 (exclusively) incremented by 2:
 y = np.arange( 0, 20, 2 )
@@ -292,13 +257,13 @@ y[0]
 # deafult one by one 
 
 y = np.arange( 1, 11)
-y
+print(y)
 
-for i in np.arange(1,11):
-    print(i)
+"""
+# Mattrix
+"""
 
 A = np.array([np.arange(0,10), np.arange(10,20), np.arange(30,40), np.arange(-20,-10), np.arange(2,21,2)])
-
 A
 
 A[2:5,:]  # rows selecrtion
@@ -318,10 +283,7 @@ M3 = np.hstack((M1,M2))
 M3
 
 
-#vstack
-
-con1 = np.concatenate((M1,M2), axis = 1) # add more columns. This is a horizontal operation
-con1
+# vstack
 
 M4 = np.array([[2,2,3,4,5,1],[1,5,5,9,8,2]])
 print(M4)
@@ -329,9 +291,6 @@ print(M4)
 M5 = np.vstack((M3,M4))
 print(M5)
 M5.T
-
-con2 = np.concatenate((M3,M4), axis = 0) # add more rows. This is a vertical operation
-con2
 
 # Create a 1D NumPy array of ones of length 10:
 w = np.ones(10)
@@ -342,7 +301,7 @@ type(w)
 I = np.eye(8)
 print(I)
 
-
+# Reshape
 
 I3 = I.reshape(32, 2)
 print(I3)
@@ -350,6 +309,8 @@ print(I3)
 #Transpose
 print(I3.T)
 (I3.T).shape
+
+#%% OlS 
 
 import random 
 
@@ -370,4 +331,4 @@ X = np.column_stack((np.ones(500),x1,x2,x3,x4))
 X
 
 beta = np.linalg.inv(X.T @ X) @ ((X.T) @ Y )
-
+print(beta)
