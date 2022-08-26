@@ -4,12 +4,6 @@
 
 " Laboratorio 1 Python"
 
-# "typeof" how the object is stored and "class" is the type of object 
-
-# double use more memory than float 
-
-# integer, single precision and double precision
-
 ## ---------------------------------------------------------------------
 
 "Types of variables"
@@ -74,8 +68,12 @@ z2 <- (10 > 20)
 as.integer(z2)
 
 z3 <- (100 != 100)
-z3 <- as.integer(z3)
+z3 <- as.numeric(z3)
 typeof(z3)
+
+
+"TRUE <> T , FALSE <> F"
+
 
 ## ---------------------------------------------------------------------
 
@@ -83,24 +81,86 @@ typeof(z3)
 
 # 1D numeric array
 
+" 3.1 c() Atomic vector: simple vector data"
+
 a <- c(1,2,3,4,"Perú")
 print(a)
+class(a)
+typeof(a[1])
+
+c2 <- c("Red", "Green", "Purple")
+print(c2)
+
 
 a <- c(1,2,3,4)
 a <- append(a, 5)
-b <-  rep(2,3) # repeat 2 3 times 
+
+" 3.2 rep( number, times) "
+
+b <-  rep(2,3) # repeat 2, 3 times 
 append(a,b)
 
 print(mean(a))
 print(sd(a))
 
+rep("blue", 3)
+
+length( rep(sample(1:100, size = 10), 3) )
+
+
+" 3.3 seq(from , to ,by ) "
+
+y <- seq(from = 0, to = 19, by = 2)
+
+y <- seq(0, 19, 2)
+
+print(y)
+typeof(y)
+
+y[1]
+
+# second example 
+
+y <- seq( 1, 10)
+print(y)
+
+# Consecutives numbers
+
+seq(100)
+1:100
+seq_len(10)
+
+# split sequence in 50 parts
+
+seq(100,1000, length.out = 50)
+
+
+"3.4 Split vector"
+
+indices <- split(seq(100), sort( seq(100) %% 3 ) )
+names(indices) <- c('training', 'est', 'test') ## add labels 
+print(indices)
+indices$est
+
+attributes(indices) # atributos 
+
+"attribute : información de cualquier objeto en R"
+
+" 3.5 Array: genera vectores multidimensionales R^n "
+
+ar <- array(c(11:14, 21:24, 31:34), dim = c(2, 2, 3))
+print(ar)
+typeof(ar)  # tipo de elementos
+class(ar)   # tipo de estrucutura del objeto
+
+
+
+# array 1-dim vector 
+
 a <- array(1:20)
-
-# take care standar deviation formula
-
 n <- length(a)
 
-print(sd(a)*sqrt((n-1)/n))
+print(sd(a)*sqrt((n-1)/n))  # take care standar deviation formula
 
 # 2D array numeric
 
@@ -121,18 +181,8 @@ dim(M)[1]
 
 # Create a 1D NumPy array with values from 0 to 20 (exclusively) incremented by 2.5:
 
-y <- seq(0,19,2)
-print(y)
-typeof(y)
 
-y[1]
-
-# second example 
-
-y <- seq( 1, 10)
-print(y)
-
-# Matrix
+" 3.6 Matrix "
 
 A <- matrix(c(seq(0, 9), seq( 10, 19), seq( 30, 39), seq( -20, -11), seq( 2, 20,2)), nrow = 5, byrow =TRUE)
 A
@@ -180,6 +230,35 @@ I3 <- matrix(I, nrow = 32, ncol = 2)
 print(I3)
 typeof(I3)
 
+"3.7 Factor"
+
+university <- factor( c( rep("Licenciada",10), rep("No licenciada",100) ) )
+attributes(university)
+
+
+" 3. 8 List"
+
+dis2 <- list('ATE', 'BARRANCO','BREÑA', 'CALLAO', 'CARABAYLLO','CHACLACAYO','CHORRILLOS','CIENEGUILLA'
+             ,'COMAS','EL_AGUSTINO','INDEPENDENCIA')
+dis2[[1]] # get element
+
+
+dis1[2:5]
+
+dis1[-1] # drop first element
+
+# add new element
+num <- list(13,5,5,8,9,10,5,8,13,1,20)
+append(num, 102)
+# add a list 
+num2 <- list(10,20,30)
+append(num, num2)
+
+
+cat("Suma:", sum(unlist(num)),'\n', "Minimo:", min(unlist(num)), '\n', "Maximo:", max(unlist(num)))
+
+list1 <- list(100:130, "R", list(TRUE, FALSE))
+
 ## ---------------------------------------------------------------------
 
 ### 3.0 OLS
@@ -207,4 +286,15 @@ head(X)
 
 beta <- solve(t(X) %*% X) %*% (t(X) %*% Y)
 beta
+
+
+## Probabilities from Distributions 
+
+
+
+
+
+
+
+
 
