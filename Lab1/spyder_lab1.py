@@ -254,10 +254,31 @@ print(y)
 
 y[0]
 
+np.array_split
+
 # deafult one by one 
 
 y = np.arange( 1, 11)
 print(y)
+
+np.arange(11)
+range(11)
+
+"""
+Repeat elements np.repeat(number, times) , np.tile(number : vector , times)
+"""
+
+np.repeat(2, 4)
+np.repeat(range(11), 4)
+
+np.tile(np.array([1,2]), 4)
+np.tile(range(11),5)
+
+"""
+Split array
+"""
+
+np.array_split(np.arange( 100, 1000),50)
 
 """
 # Mattrix
