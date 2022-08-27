@@ -8,10 +8,14 @@
 
 "Types of variables"
 
+" Correr la lineas de codugo Ctrl + enter"
+"Codigo a texto Ctrl + Shift + c"
+
 a2 <- 3.1614
 print(a2)
 typeof(a2)
 class(a2)
+
 
 a2 <- as.integer(a2)
 typeof(a2)
@@ -33,6 +37,8 @@ cat(c1," : ",c2)
 
 
 a <- paste0(c1,' : semester 2022-1')
+
+
 print(a)
 
 d <- 2022
@@ -98,6 +104,8 @@ a <- append(a, 5)
 " 3.2 rep( number, times) "
 
 b <-  rep(2,3) # repeat 2, 3 times 
+
+
 append(a,b)
 
 print(mean(a))
@@ -128,7 +136,7 @@ print(y)
 
 seq(100)
 1:100
-seq_len(10)
+seq_len(100)
 
 # split sequence in 50 parts
 
@@ -138,9 +146,14 @@ seq(100,1000, length.out = 50)
 "3.4 Split vector"
 
 indices <- split(seq(100), sort( seq(100) %% 3 ) )
+indices
+
+
 names(indices) <- c('training', 'est', 'test') ## add labels 
 print(indices)
+
 indices$est
+indices$test
 
 attributes(indices) # atributos 
 
@@ -152,7 +165,6 @@ ar <- array(c(11:14, 21:24, 31:34), dim = c(2, 2, 3))
 print(ar)
 typeof(ar)  # tipo de elementos
 class(ar)   # tipo de estrucutura del objeto
-
 
 
 # array 1-dim vector 
@@ -265,7 +277,6 @@ list1 <- list(100:130, "R", list(TRUE, FALSE))
 
 set.seed(756)
 
-
 x1 <- runif(500)
 x2 <- runif(500)
 x3 <- runif(500)
@@ -288,7 +299,6 @@ beta <- solve(t(X) %*% X) %*% (t(X) %*% Y)
 beta
 
 
-## Probabilities from Distributions 
 
 
 

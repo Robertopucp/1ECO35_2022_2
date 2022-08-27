@@ -335,7 +335,7 @@ print(I3.T)
 
 import random 
 
-random.seed(175)
+np.random.seed(175)
 
 x1 = np.random.rand(500) # uniform distribution  [0,1]
 x2 = np.random.rand(500) # uniform distribution [0,1]
