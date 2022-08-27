@@ -501,7 +501,7 @@ ols <- function(M, Y , standar = T, Pvalue = T , instrumento = NULL, index = NUL
     beta_x <- solve(t(Z) %*% Z) %*% (t(Z) %*% X[,index])
     
     x_est <- Z %*% beta_x 
-    X[,index] <- x_est  x_est ## se reemplaza la variable x endógena por su estimado 
+    X[,index] <- x_est ## se reemplaza la variable x endógena por su estimado 
     
     beta_iv <- solve(t(X) %*% X) %*% (t(X) %*% Y)
     
