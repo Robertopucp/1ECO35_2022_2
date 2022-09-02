@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ################  laboratorio 1 ############################
 ## Curso: Laboratorio de R y Python ###########################
 ## @author: Roberto Mendoza 
@@ -309,3 +310,6 @@ beta
 
 
 
+=======
+a
+>>>>>>> 2760e3776b0e3b5cb6826b012ab0692713fecab0
