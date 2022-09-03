@@ -264,7 +264,7 @@ tryCatch(a/7,
 # -------------------------------------------------------
 
 #Check function
-str(apply)
+str(apply) # Tambien se usa para revisar el tipo de variable en un DataFrame 
 
 
   
@@ -288,7 +288,7 @@ X <- cbind(matrix(1,500),x1,x2,x3,x4)
 
 # Matrix a lista por cada columna
 
-lapply(seq_len(ncol(X)),function(x) X[ , x])
+lapply(seq_len(ncol(X)),function(x) X[ , x]) #X[ , x] Filtro columna  por columna 
 
 "sapply es similar  a lappy pero no genera una lista sino valores numéricos"
 
@@ -323,13 +323,11 @@ apply(x, 2, function(i){
  ( i -  mean(i) ) / sd(i)
 } )
 
-"mapply - apply multivariado"
 
 est <- function(mean, sd, x){
   (x - mean)/sd
 }
 
-str(mapply)
 
 mapply(est, mean = 1:5, sd = seq(0.1,0.5,0.1), MoreArgs = list(x = x))
 
