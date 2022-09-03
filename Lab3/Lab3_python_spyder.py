@@ -14,7 +14,7 @@ Importar librerias
 import numpy as np
 import pandas as pd
 from pandas import DataFrame,Series
-import os # for usernanme 
+import os # for usernanme y set direcotrio
 
 # Debemos construir el directorio donde se trabajará
 # 
