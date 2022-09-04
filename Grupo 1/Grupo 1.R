@@ -81,6 +81,64 @@ escalonar (z)
 
 ##########################################  Pregunta 3 ##########################################
 
+# Generamos los valores aleatorios con una poblacion de 10000
+x1 <- runif(10000, 0, 1)
+x2 <- runif(10000, 0, 1)
+x3 <- runif(10000, 0, 1)
+x4 <- runif(10000, 0, 1)
+x5 <- runif(10000, 0, 1)
+e <- rnorm(10000,0,1)
+
+#Se crea una lista con los diferentes tamanios de muestra 
+numMuestras <- list(10, 50, 80, 120, 200, 500, 800, 100, 5000)
+
+
+#Creamos un bucle, para que itere el codigo con los diferentes tamanos de muestra 
+
+DF <- list ()
+#Se pone un for para que itere cada vez que pase con una cantidad diferente de muestra
+for (i in 1:length(numMuestras)){
+  
+  k=numMuestras[[i]]
+  
+  #Especificamos un k=i que contenga el n�mero de tama�os de cada muestra     
+  x1_m = sample(x1, k=i)    
+  x2_m = sample(x2, k=i)    
+  x3_m = sample(x3, k=i)    
+  x4_m = sample(x4, k=i)  
+  
+  #Se plantea un data frame para cada valor de la muestra
+  df<-data.frame(dplyr::sample_n(
+    data.frame(
+      bind_cols(x1,x2,x3,x4))%>%
+      setNames(c("x1","x2","x3","x4")),
+    size=k))
+  DF[[i]] <- df%>%
+    mutate(muesta=k)
+  
+  Y <- 1 + 0.8*x1_m + 1.2*x2_m + 0.5*x3_m + 1.5*x4_m + e
+  
+  #Plantemos el modelo OLS (MCO)
+  ols <- function(M, Y, instrumento = NULL, index = NULL){
+    
+    if (standar & is.null(instrumento) & is.null(index)){
+      beta <- solve(t(M) %*% M) %*% (t(M) %*% Y)
+      y_est <- M %*% beta  ## Y estimado 
+      n <- dim(M)[1]  # filas
+      k <- dim(M)[2] - 1  # variables sin contar el intercepto
+    }
+    
+    if ( !is.null(instrumento) & !is.null(index) ){
+      beta <- solve(t(M) %*% M) %*% (t(M) %*% Y)
+      index <- index + 1
+    }
+  }
+}
+
+DF_all<-map_df(DF, bind_rows)
+rm(df, DF, k, i)
+  
+
 ##########################################  Pregunta 4 ##########################################
 
 # Creamos un proceso generador de datos con 8 variables y 800 observaciones.
