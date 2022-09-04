@@ -3,7 +3,7 @@ import numpy as np
 import math
 
 
-# %% EJERCICIO 1
+# %% EJERCICIO NUMERO 1
 
 np.random.seed(188)  # Luego, definimos la random seed 188
 # Posteriormente, creamos x que será un vector 1x20 con valores entre 0 y 500
