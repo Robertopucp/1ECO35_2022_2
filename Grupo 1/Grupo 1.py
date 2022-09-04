@@ -149,6 +149,95 @@ resultado_vector = reescalar (v) #como se puede observar, arroja un vector fila 
 
 #%% Pregunta 3
 
+import numpy as np
+import random 
+import pandas as pd
+
+#Se genera 5 variables con un tamaño de población de 10 mil observaciones
+#Se genera con datos aleatorios 
+x1 = np.random.rand(10000)
+x2 = np.random.rand(10000)
+x3 = np.random.rand(10000)
+x4 = np.random.rand(10000)
+x5 = np.random.rand(10000)
+
+#Se crea una lista con los diferentes tamaños de muestra 
+numMuestras = [10, 50, 80, 120, 200, 500, 800, 100, 5000]
+
+#Se crean listas vacías de los coeficientes y los errores de las cuatro primeras variables 
+tamMuestra = []
+b1 = []
+b2 = []
+b3 = []
+b4 = []
+
+e1 = []
+e2 = []
+e3 = []
+e4 = []
+
+#Creamos un bucle, para que itere el código con los diferentes tamaños de muestra 
+for i in numMuestras:        
+#Utilizamos random.choices para utilizar los valores aleatorios generados anteriormente 
+#Especificamos un k=i que contenga el número de tamaños de cada muestra     
+    x1_m = random.choices(x1, k=i)    
+    x2_m = random.choices(x2, k=i)    
+    x3_m = random.choices(x3, k=i)    
+    x4_m = random.choices(x4, k=i)    
+
+#Generamos un data frame con los valores de todas las variables de x
+    x = pd.DataFrame ({'x1': x1_m, 'x2': x2_m, 'x3': x3_m, 'x4': x4_m})
+
+#Generamos un data frame con los valores de y
+    y_m = random.choices(x5, k=i)
+    y = pd.DataFrame({'y': y_m})
+
+#N y P son el tamaño de las columnas y filas para la matriz que va a contener nuestros datos. 
+#Esta matriz es X_with_intercept y contendra datos del tipo float
+    N = len(x)    
+#La primera columna es contiene puros 1, las demás se rellenan con x1, x2, x3, x4
+    p = len(x.columns) + 1 
+    
+    X_int = np.empty(shape=(N, p), dtype=float)
+    X_int[:,0] = 1
+    X_int[:,1:p] = x.values
+
+#Calculamos los valores de los estimadores de beta
+    b_hat = np.linalg.inv(X_int.T @ X_int) @ X_int.T @ y.values
+    
+#Estimamos los valores de y con los coeficientes de regresion lineal hallados
+#El modelo de regresion lineal incluye un valor b almacenado en beta_hat[0], así sucesivamente 
+    y_hat = b_hat[0] + (b_hat[1] * x1_m) + (b_hat[2] * x2_m) + (b_hat[3] * x3_m) + (b_hat[4] * x4_m)    
+    
+#Definimos los valores de los residuos 
+    residuals = y.values - y_hat
+    
+#Definimos la suma de cuadrados de los residuos (SCR)
+    SCR = residuals.T @ residuals
+    
+#Definimos el estimador de sigma al cuadrado y de la varianza 
+    sigma_squared_hat = SCR[0, 0] / (N - p)
+    var_beta_hat = np.linalg.inv(X_int.T @ X_int) * sigma_squared_hat
+
+#Utilizamos el append para agregar los datos aleatorios
+    tamMuestra.append(i)
+    b1.append(b_hat[1])
+    b2.append(b_hat[2])
+    b3.append(b_hat[3])
+    b4.append(b_hat[4])
+    
+#Utilizamos el append para agregar los datos de los errores 
+#Estimamos los errores, como teníamos la varianza, sabemos que las desviaciones se calculan sacandole raíz cuadrada
+    e1.append(var_beta_hat[1,1]**0.5) 
+    e2.append(var_beta_hat[2,2]**0.5) 
+    e3.append(var_beta_hat[3,3]**0.5) 
+    e4.append(var_beta_hat[4,4]**0.5) 
+
+#Generamos un DataFrame que contenga los tamaños de muestra, los coeficientes (betas) y los errores de cada variable
+df = pd.DataFrame({'Tamaño de muestra': tamMuestra, 'Beta 1': b1, 'Error x1': e1, 'Beta 2': b2, 
+        'Error x2': e2, 'Beta 3': b3, 'Error x3': e3, 'Beta 4': b4, 
+        'Error x4': e4})
+print(df)
 
 #%% Pregunta 4
 
