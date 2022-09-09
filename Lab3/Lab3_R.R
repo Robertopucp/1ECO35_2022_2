@@ -1,5 +1,5 @@
 # install.packages("dplyr") # filter data
-# install.packages("readxl") # excel, csv
+install.packages("readxl") # excel, csv
 # install.packages("tidyr")
 
 'Solo es necesario cargar una vez los paquetes, luego simplemente debemos llamarlo:'
