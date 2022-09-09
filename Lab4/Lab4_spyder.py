@@ -9,6 +9,9 @@ import numpy as np
 import pandas as pd
 from pandas import DataFrame, Series
 import statistics
+import inspect  # Permite conocer los argumentos de una función , clase, etc 
+
+
 #%% Loop replacement
 
 
@@ -44,6 +47,8 @@ def sdv(x,mean,sd):
 '''
 Función 2, de estandarización
 '''
+
+map( lambda x, mean = np.mean(vector), std = np.std(vector): sdv(x,mean, std) , vector)
 
 list( map( lambda x, mean = np.mean(vector), std = np.std(vector): sdv(x,mean, std) , vector)   )  
 
@@ -516,8 +521,8 @@ class OLS(object):
         
         self.R2()
         self.Algebralineal()
-        
-        sigma =  self.SCR / self.nk
+        scr = self.SCR
+        sigma =  scr / self.nk
         Var = sigma*np.linalg.inv(self.X1.T @ self.X1)
         sd = np.sqrt( np.diag(Var) )
         t_est = np.absolute(self.beta/sd)
@@ -561,11 +566,12 @@ Reg1.Table(Output = "Diccionario")['standar_error']
          
 Reg1.Table(Output = "DataFrame")
 
+# Know arguments from function or class
 
+inspect.getfullargspec(OLS)
+inspect.getfullargspec(transform)
 
-
-
-
+help(np)  # inspeccionar una liberia 
 
 
 
