@@ -9,7 +9,8 @@ import numpy as np
 import pandas as pd
 from pandas import DataFrame, Series
 import statistics
-import inspect  # Permite conocer los argumentos de una función , clase, etc 
+import inspect  # Permite conocer los argumentos de una función , classes, etc 
+
 
 
 #%% Loop replacement
@@ -17,7 +18,11 @@ import inspect  # Permite conocer los argumentos de una función , clase, etc
 
 vector = np.arange(100)
 
+map( lambda x: np.sqrt(x) , vector) 
+
 list( map( lambda x: np.sqrt(x) , vector)   )    
+
+
 np.sqrt(vector)
 
 
@@ -48,9 +53,9 @@ def sdv(x,mean,sd):
 Función 2, de estandarización
 '''
 
-map( lambda x, mean = np.mean(vector), std = np.std(vector): sdv(x,mean, std) , vector)
+map( lambda x, v1 = np.mean(vector), v2 = np.std(vector): sdv(x,v1, v2) , vector)
 
-list( map( lambda x, mean = np.mean(vector), std = np.std(vector): sdv(x,mean, std) , vector)   )  
+list( map( lambda x, v1 = np.mean(vector), v2 = np.std(vector): sdv(x,v1, v2) , vector)  )  
 
 
 vector1 = (vector - np.mean(vector))/np.std(vector)
@@ -62,7 +67,7 @@ Función 3, extrae lo numeros de un texto
 La función extrae los numeros de texto
 
 '''
-import re
+import re # Regex
 
 
 texto_vector = np.array(["Municipio San Luis: 12450","Municipio La victoria: 1450",
@@ -118,7 +123,7 @@ numpy.apply_along_axis(func1d, axis, arr, *args, **kwargs)
 # mead y desviación estandar por columnas
 
 
-np.mean(X, axis=0)
+np.mean(X, axis=0)   # axis = 0 (se aplica por columnas)
 np.std(X, axis=0)
 
 # mead y desviación estandar por filas
@@ -137,12 +142,11 @@ Tres formas de estandarizar una matriz
    
 XNormed = (X - np.mean(X, axis=0))/np.std(X, axis=0)
 
-X_std = np.apply_along_axis(lambda x, prom = 3, desv = 100\
-                            : (x-prom)/desv,0, X)
+X_std = np.apply_along_axis(lambda x, prom = 3, desv = 100: (x-prom)/desv,0, X)
   
     
-X_std_1 = np.apply_along_axis(lambda x\
-                            : (x-x.mean())/x.std(),0, X)
+X_std_1 = np.apply_along_axis(lambda x: (x-x.mean())/x.std(),0, X)
+
             
 def standarize(x):
        out = (x - np.mean(x))/np.std(x)
@@ -226,14 +230,20 @@ user = os.getlogin()   # Username
 os.chdir(f"C:/Users/{user}/Documents/GitHub/1ECO35_2022_2/Lab4") # Set directorio
 
 cps2012_env = pyreadr.read_r("../data/cps2012.Rdata") # output formato diccionario
-cps2012_env
-cps2012 = cps2012_env[ 'data' ] # extrae iformación almacenada en la llave data del diccionario cps2012_env
+
+
+cps2012_env  # es un diccionario. En la llave "data" está la base de datos 
+cps2012 = cps2012_env[ 'data' ] # extrae información almacenada en la llave data del diccionario cps2012_env
 dt = cps2012.describe()
  
 # Borrar variables constantes 
 
 variance_cols = cps2012.var().to_numpy() # to numpy
 X = cps2012.iloc[ : ,  np.where( variance_cols != 0   )[0] ]
+
+# np.where( variance_cols != 0   ) resulta la posición de lasa columnas con varianza != 0
+
+np.where( variance_cols != 0   )[0] # array
 
 # np.where() permite obtener el index de las variables u observaciones que cumplen la condición
 
@@ -243,7 +253,7 @@ def demean(x):
     dif = x - np.mean( x ) # tima la media de la columna 
     return dif 
 
-X = X.apply( demean, axis = 0 )  # axis :0 se aplica la función por colum
+X = X.apply( demean, axis = 0 )  # axis :0 se aplica la función por columna
 
 X.to_stata("../data/clean_data.dta", write_index = False)
 
@@ -574,7 +584,7 @@ inspect.getfullargspec(transform)
 help(np)  # inspeccionar una liberia 
 
 
-
+dir(OLS) # isnspeccionar metodos e instancias
 
 
 
