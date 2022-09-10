@@ -245,7 +245,7 @@ X = cps2012.iloc[ : ,  np.where( variance_cols != 0   )[0] ]
 
 np.where( variance_cols != 0   )[0] # array
 
-# np.where() permite obtener el index de las variables u observaciones que cumplen la condición
+# np.where() permite obtener la posición de columnas que cumplen la condición
 
 # Retirar la media de las variables 
 
@@ -272,6 +272,8 @@ of arguments to a function. The object *args is a tuple that contains all the ar
 *args : tipo tuple o array
 '''
 
+"Keyword: *args, incluir una cantidad variable de argumentos"
+
 
 def calculator( *args ):
     
@@ -290,7 +292,7 @@ def calculator( *args ):
     return result, minimo, maximo
 
 
-calculator( 8, 9, 50, 40, 10, 1)
+calculator( 8, 9, 50, 10, 12 ,15,20,100,120)
 
 '''
 *args se puede usar otro nombre siempre que se use * al inicio
@@ -353,10 +355,11 @@ def calculator( *list_vars, **kwargs):
 
 calculator( 4, 5, 6, 7, 8, function = "adicion" )
 
-calculator( 4, 5, 6, 7, 8, function = "media" )
+calculator( 4, 5, 6, function = "media" )
 
 calculator( 4, 5, 6, 7, 8, function = "inversa" )
 
+calculator( np.arange(10), function = "media" )
 
 '''
 Example using dataset cps2012
@@ -484,7 +487,6 @@ print(student.school)
 student.person_age()
 student.print_name_1()
 
-
 # Modificar propiedades directamente
 
 student.age = "Pablo"
@@ -492,6 +494,7 @@ student.age = "Pablo"
 '''
 OLS class
 '''
+
 from scipy.stats import t # t - student 
 
 class OLS(object):
