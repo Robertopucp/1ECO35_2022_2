@@ -147,7 +147,7 @@ def calculator(x,y,z):
 
 print( calculator( 158, 38, 10 ) )
 
-calculator( 158, 38)
+calculator( 158, 38,15)
 
 
 ## return multiple

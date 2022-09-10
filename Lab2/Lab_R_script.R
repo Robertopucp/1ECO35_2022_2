@@ -518,3 +518,8 @@ ols(X,Y)
 
 ols(X,Y,instrumento = z, index = 1)
 
+
+a = c(1,2)
+typeof(a)
+class(a)
+is.vector(a)
