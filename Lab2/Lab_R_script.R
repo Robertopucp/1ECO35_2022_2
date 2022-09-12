@@ -8,7 +8,7 @@
 
 y <- runif(10,-10,10) # runif( n: cantidad de elementos, inicio , final)
 
-if (mean(y) > 0){
+if (mean(y) > 0) {
   dummy <- 1
 } else {
   dummy <- 0
@@ -200,7 +200,7 @@ calculator_base_5( 1, 3.0)
 
 ## Function y valore predeterminados de parámetros
 
-transpose <- function(M, est = TRUE, z = NULL){
+transpose <- function(M, est = TRUE, z = NULL ){
   if(! is.matrix(M)) stop("x must be a matrix")
   
   M <- t(M) 
@@ -447,9 +447,7 @@ str(df)
 
 # -------------------------------------------------------
 
-set.seed(756)
-
-
+set.seed(756)  # permite que los numeros aleatorios no cambien al correr los códigos
 x1 <- runif(500)
 x2 <- runif(500)
 x3 <- runif(500)
@@ -472,19 +470,19 @@ ols <- function(M, Y , standar = T, Pvalue = T , instrumento = NULL, index = NUL
 
     beta <- solve(t(M) %*% M) %*% (t(M) %*% Y)
     
-    y_est <- M %*% beta
+    y_est <- M %*% beta  ## Y estimado 
     n <- dim(M)[1]  # filas
     k <- dim(M)[2] - 1  # varaibles sin contar el intercepto}
-    df <- n- k
+    df <- n- k ## grados de libertad
     sigma <- sum(sapply(Y - y_est , function(x) x ^ 2))/ df 
     
     Var <- sigma*solve(t(M) %*% M)
-    sd <- sapply(diag(Var) , sqrt)
+    sd <- sapply(diag(Var) , sqrt) ## raíz cuadrado a los datos de la diagonal principal de Var
     
     t.est <- abs(beta/sd)
     pvalue <-2*pt(t.est, df = df, lower.tail = FALSE) ## pt : t - student densidad
       
-    table <- data.frame(OLS= beta,  
+    table <- data.frame(OLS = beta,  
                      standar.error = sd, P.value = pvalue)
     
     
@@ -498,12 +496,12 @@ ols <- function(M, Y , standar = T, Pvalue = T , instrumento = NULL, index = NUL
     index <- index + 1
     
     Z <- X
-    Z[,index] <- z
+    Z[,index] <- z  ## reemplazamos la variable endógena por el instrumento en la matrix de covariables
     
     beta_x <- solve(t(Z) %*% Z) %*% (t(Z) %*% X[,index])
     
-    x_est <- Z %*% beta_x
-    X[,index] <- x_est
+    x_est <- Z %*% beta_x 
+    X[,index] <- x_est ## se reemplaza la variable x endógena por su estimado 
     
     beta_iv <- solve(t(X) %*% X) %*% (t(X) %*% Y)
     
@@ -519,3 +517,9 @@ ols <- function(M, Y , standar = T, Pvalue = T , instrumento = NULL, index = NUL
 ols(X,Y)
 
 ols(X,Y,instrumento = z, index = 1)
+
+
+a = c(1,2)
+typeof(a)
+class(a)
+is.vector(a)
