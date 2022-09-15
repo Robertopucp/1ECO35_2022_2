@@ -137,6 +137,7 @@ apply(X, 2, min)
 
 apply(X, 1, max)
 
+
 "Estandarizar una matriz "
 
 apply(X, 2, function(i){
@@ -150,9 +151,9 @@ cps2012  <- get(load("../data/cps2012.Rdata"))  # load R dataset format, extensi
 
 # Tomamos la varianza de cada columna
 
-apply(cps2012, 2, var)
+apply(cps2012, 2, var) # tomando la varianza por columna (Margin:2)
   
-X <- X[ , which(apply(X, 2, var) != 0)] # Se exlucye las columnas constantes
+X <- cps2012[ , which(apply(cps2012, 2, var) != 0)] # Se exlucye las columnas constantes
 
 demean<- function (x){ x- mean(x)}
 X<- apply(X, 2, demean)
