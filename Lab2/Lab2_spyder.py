@@ -517,7 +517,7 @@ def ols(M,Y, standar = True, Pvalue = True , instrumento = None, index = None):
          sd = np.sqrt( np.diag(Var) )
          t_est = np.absolute(beta/sd)
          pvalue = (1 - t.cdf(t_est, df=nk) ) * 2
-         df =    
+         df =   pd.DataFrame( {"OLS": beta , "sd" : sd, "Pvalue":pvalue})   
          
     
     elif (not instrumento is None) and (not index is None) :
