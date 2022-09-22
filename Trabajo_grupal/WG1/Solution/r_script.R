@@ -25,15 +25,13 @@ for (i in seq(20)){
   
 }
 
-vector
-
 
 "2. IF statement and Loop, escalar function"
 
 
 ## Escalar a vector 
 
-vector2 <- sample( seq(500) , 100) # seq(500) valores entre 0 y 500, 20 observaciones
+vector2 <- sample( seq(500) , 100) # seq(500) valores entre 0 y 500, 100 observaciones
 
 length(vector2)
 
@@ -144,7 +142,7 @@ table <- data.frame(sample_size= size,
                     beta_x1 = beta[,2], sd_x1= sd[,2], 
                     beta_x2 = beta[,3], sd_x2 = sd[,3], 
                     beta_x3 = beta[,4], sd_x3 = sd[,4], 
-                    beta_x4= beta[,5], sd_x4 = sd[,5]
+                    beta_x5= beta[,5], sd_x5 = sd[,5]
                     )
 
 table
