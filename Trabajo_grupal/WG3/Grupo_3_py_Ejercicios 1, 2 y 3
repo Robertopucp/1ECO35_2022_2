@@ -1,0 +1,347 @@
+// EJERCICIO 1
+ 
+ import pandas as pd
+pd.read_excel(r"C:\Users\oscar\Downloads\Region_Junin (1).xlsx")
+DB= pd.read_excel(r"C:\Users\oscar\Downloads\Region_Junin (1).xlsx")
+#1)Obtener el nombre de todas las variables:
+DB.columns
+#2) Tipo de variable y principales estadísticos
+#TIPOS
+DB.dtypes
+#ESTADÍSTICOS
+DB.describe
+#3) ¿Existen missing values?
+print(DB.isnull().sum())
+#4) Cambio de nombre
+df.rename(columns={'place': 'comunidad', 'men_not_read': 'homxlee','women_not_read':'mujerxlee','total_not_read':'totalxlee'}, inplace=True)
+#5) Valores únicos de comunidad y distrito
+pd.unique(DB["District"])
+pd.unique(DB["Place"])
+
+#6) Crear columnas
+DB['No escriben ni leen (Mujeres)'] = DB['mujerxlee']/DB['totalxlee']*100
+
+# En segunda instancia, hallamos el % de varones que no escriben ni leen, razón por la cual, el código a utilizar es: 
+DB['No escriben ni leen (Hombres)'] = DB['homxlee']/DB['totalxlee']*100
+
+# En tercera instancia, hallamos el % de nativos respecto al total de la población. Para el total de la población sumar (peruvian_men + peruvian_women + foreign_men + foreign_women). En este sentido, el código a utilizar es:
+
+DB['TOTAL POBLACION'] = DB['peruvian_men'] + DB['peruvian_women'] + DB['foreign_men'] + DB['foreign_women']
+DB.head()
+
+#7)Crear una base de datos con la siguiente información:
+#a. Quedarse con la información de los distritos de Ciudad del Cerro, Jauja, Acolla, San Gerónimo, Tarma, Oroya y Concepción
+SELDISTRIC = DB[DB['District'].isin(['ACOLLA','CIUDAD DEL CERRO','JAUJA','SAN GERÓNIMO','TARMA','OROYA','CONCEPCIÓN'])]
+#b. Luego quedarse con las comunidades que cuentan con nativos y mestizos.
+Seleccion_distritos22 = DB[(DB['natives'] > 0) & (DB['mestizos'] > 0)]
+#c. Solo quedarse con las variables trabajadas en el punto 6), nombre de distrito y comunidad.
+DB[['No escriben ni leen (Mujeres)','No escriben ni leen (Hombres)','TOTAL POBLACION','District','Place']]
+#d. Guardar la base de datos en formato csv en la carpeta data. (Use el siguiente nombre Base_cleaned_WG(numero de grupo)
+
+
+
+# EJERCICIO 2
+
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Importing numpy\n",
+    "import numpy as np"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Defining the scalar function\n",
+    "def reescalar(x):\n",
+    "    return (x-x.min())/(x.max()-x.min())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Generating a random vector (with 100 observations) and matrix (with size 100x50)\n",
+    "vector = np.random.randint(10, size = (100))\n",
+    "matrix = np.random.randint(10, size = (100,50))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[1 3 2 6 6 6 3 3 2 3 9 6 4 5 8 6 0 9 0 4 5 7 5 0 5 4 9 0 2 5 9 8 5 7 2 5 6\n",
+      " 3 0 4 3 7 9 1 1 0 5 7 9 9 4 8 5 5 1 7 8 0 8 7 0 4 8 8 6 0 0 4 6 8 6 5 1 6\n",
+      " 7 4 6 3 4 6 5 7 7 4 9 4 2 2 1 0 8 2 9 2 7 3 3 7 1 6] \n",
+      "\n",
+      "[0.11111111 0.33333333 0.22222222 0.66666667 0.66666667 0.66666667\n",
+      " 0.33333333 0.33333333 0.22222222 0.33333333 1.         0.66666667\n",
+      " 0.44444444 0.55555556 0.88888889 0.66666667 0.         1.\n",
+      " 0.         0.44444444 0.55555556 0.77777778 0.55555556 0.\n",
+      " 0.55555556 0.44444444 1.         0.         0.22222222 0.55555556\n",
+      " 1.         0.88888889 0.55555556 0.77777778 0.22222222 0.55555556\n",
+      " 0.66666667 0.33333333 0.         0.44444444 0.33333333 0.77777778\n",
+      " 1.         0.11111111 0.11111111 0.         0.55555556 0.77777778\n",
+      " 1.         1.         0.44444444 0.88888889 0.55555556 0.55555556\n",
+      " 0.11111111 0.77777778 0.88888889 0.         0.88888889 0.77777778\n",
+      " 0.         0.44444444 0.88888889 0.88888889 0.66666667 0.\n",
+      " 0.         0.44444444 0.66666667 0.88888889 0.66666667 0.55555556\n",
+      " 0.11111111 0.66666667 0.77777778 0.44444444 0.66666667 0.33333333\n",
+      " 0.44444444 0.66666667 0.55555556 0.77777778 0.77777778 0.44444444\n",
+      " 1.         0.44444444 0.22222222 0.22222222 0.11111111 0.\n",
+      " 0.88888889 0.22222222 1.         0.22222222 0.77777778 0.33333333\n",
+      " 0.33333333 0.77777778 0.11111111 0.66666667]\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Using 'apply_along_axis' function for the vector\n",
+    "print(vector, '\\n')\n",
+    "print(np.apply_along_axis(reescalar, axis=0, arr=vector))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[[2 0 8 ... 5 4 0]\n",
+      " [4 2 3 ... 3 4 9]\n",
+      " [7 8 7 ... 6 2 0]\n",
+      " ...\n",
+      " [0 5 2 ... 5 6 1]\n",
+      " [1 3 8 ... 0 0 0]\n",
+      " [8 2 5 ... 3 2 6]] \n",
+      "\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "array([[0.22222222, 0.        , 0.88888889, ..., 0.55555556, 0.44444444,\n",
+       "        0.        ],\n",
+       "       [0.44444444, 0.22222222, 0.33333333, ..., 0.33333333, 0.44444444,\n",
+       "        1.        ],\n",
+       "       [0.77777778, 0.88888889, 0.77777778, ..., 0.66666667, 0.22222222,\n",
+       "        0.        ],\n",
+       "       ...,\n",
+       "       [0.        , 0.55555556, 0.22222222, ..., 0.55555556, 0.66666667,\n",
+       "        0.11111111],\n",
+       "       [0.11111111, 0.33333333, 0.88888889, ..., 0.        , 0.        ,\n",
+       "        0.        ],\n",
+       "       [0.88888889, 0.22222222, 0.55555556, ..., 0.33333333, 0.22222222,\n",
+       "        0.66666667]])"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# Using 'apply_along_axis' function for the matrix\n",
+    "print(matrix, '\\n')\n",
+    "np.apply_along_axis(reescalar, axis=0, arr=matrix)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[0.6666666666666666, 0.2222222222222222, 0.1111111111111111, 0.1111111111111111, 1.0, 0.7777777777777778, 1.0, 0.0, 0.5555555555555556, 0.1111111111111111, 0.1111111111111111, 1.0, 0.1111111111111111, 1.0, 0.8888888888888888, 0.1111111111111111, 0.2222222222222222, 0.0, 0.5555555555555556, 1.0, 0.8888888888888888, 0.0, 0.2222222222222222, 0.1111111111111111, 0.1111111111111111, 0.5555555555555556, 0.0, 0.0, 0.3333333333333333, 1.0, 0.0, 0.6666666666666666, 0.3333333333333333, 0.3333333333333333, 0.4444444444444444, 0.2222222222222222, 0.1111111111111111, 1.0, 0.3333333333333333, 0.8888888888888888, 1.0, 1.0, 0.0, 0.7777777777777778, 0.2222222222222222, 0.5555555555555556, 0.2222222222222222, 0.7777777777777778, 0.6666666666666666, 0.3333333333333333, 0.4444444444444444, 1.0, 0.1111111111111111, 0.2222222222222222, 0.5555555555555556, 1.0, 1.0, 0.4444444444444444, 0.6666666666666666, 0.2222222222222222, 0.1111111111111111, 1.0, 0.4444444444444444, 0.7777777777777778, 0.0, 0.4444444444444444, 0.4444444444444444, 0.3333333333333333, 0.5555555555555556, 0.6666666666666666, 0.4444444444444444, 0.5555555555555556, 0.6666666666666666, 0.7777777777777778, 0.0, 0.5555555555555556, 0.0, 0.6666666666666666, 0.7777777777777778, 0.4444444444444444, 0.2222222222222222, 0.2222222222222222, 0.8888888888888888, 0.0, 0.4444444444444444, 0.3333333333333333, 0.3333333333333333, 0.7777777777777778, 1.0, 0.2222222222222222, 0.0, 0.2222222222222222, 0.0, 1.0, 0.7777777777777778, 0.4444444444444444, 1.0, 0.5555555555555556, 0.1111111111111111, 0.1111111111111111]\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Using 'map' for vector\n",
+    "vec = np.random.randint(10, size = (100))\n",
+    "\n",
+    "norm_vec = map(lambda x: (x-vec.min())/(vec.max()-vec.min()), vec)\n",
+    "print(list(norm_vec))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {
+    "collapsed": true
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([[0.66666667, 0.22222222, 0.        , ..., 0.77777778, 0.22222222,\n",
+       "        0.77777778],\n",
+       "       [0.11111111, 0.88888889, 0.55555556, ..., 0.11111111, 0.44444444,\n",
+       "        0.        ],\n",
+       "       [0.44444444, 0.88888889, 0.33333333, ..., 0.        , 0.33333333,\n",
+       "        0.22222222],\n",
+       "       ...,\n",
+       "       [0.33333333, 0.33333333, 0.55555556, ..., 0.77777778, 0.88888889,\n",
+       "        0.11111111],\n",
+       "       [0.66666667, 0.22222222, 0.33333333, ..., 0.33333333, 1.        ,\n",
+       "        0.88888889],\n",
+       "       [0.77777778, 1.        , 0.        , ..., 0.88888889, 0.77777778,\n",
+       "        0.77777778]])"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "# For matrix\n",
+    "mat = np.random.randint(10, size = (100,50))\n",
+    "\n",
+    "new_matrix = (mat - mat.min(axis=0, keepdims=1))/(mat.max(axis=0, keepdims=1)-mat.min(axis=0, keepdims=1))\n",
+    "new_matrix"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Using 'map' for matrix\n",
+    "mat = np.array([[ 0,  3,  6],\n",
+    "             [ 9, 12, 15],\n",
+    "             [11, 31, 4]])\n",
+    "\n",
+    "def reescalarN(x):\n",
+    "    return (x - x.min(axis=0, keepdims=1))/(x.max(axis=0, keepdims=1) - x.min(axis=0, keepdims=1))\n",
+    "\n",
+    "array = list(map(reescalarN, mat))\n",
+    "print(array)"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
+
+
+#Ejercicio 3
+
+# In[ ]:
+
+
+import numpy as np
+
+
+# In[ ]:
+
+
+#Ejercicio 3: Para este ejercicio los Keywords especiales a utilizar van a ser *args y *kwargs. Cabe mencionar también que reescalar hace referencia a la función que requerimos para resolver este ejercicio. 
+
+# Como un primer paso, es relevante mencionar que primero debemos definir o crear la función calculator, con la finalidad de poder estandarizar y reescalar el vector.
+
+def calculator( *args, **kwargs):
+    
+#Con la finalidad de crear un vector, recordar que tenemos que utilizar array. 
+    
+    vector = np.array( list(args) )  
+    
+# Para el siguiente paso a realizar, es necesario saber que mean hace referencia a la media del vector y que std hace referencia al error estándar del vector. 
+# En lo que sigue nos enfocaremos en calcular el primer valor y el segundo valor usando if y elif respectivamente.
+
+    if ( kwargs[ 'function' ] == "estandarizar" ) :
+        
+        def reescalar (x, mean, std):
+            out = (x - mean) / std
+            return out
+        
+        result = list( map( lambda x, mean = np.mean(vector), std = np.std(vector): reescalar(x, mean, std), vector)  )
+    
+    elif ( kwargs[ 'function' ] == "reescalar" ) :
+       
+        def reescalar (x, min, max):
+            out = (x - min) / (max - min)
+            return out
+        
+        result = list( map( lambda x, min = np.min(vector), max = np.max(vector): reescalar(x, min, max), vector)  ) 
+
+#Es preciso mencionar que el apartado que dice else, nos ayuda para poder identificar si es que en caso hay error, no nos salga en python de que nos hemos equivocado. 
+    
+    else:
+        raise ValueError( f"The function argument {kwargs[ 'function' ]} is not supported." )
+      
+
+    return result
+
+
+# In[ ]:
+
+
+#Ya realizado todo los códigos anteriores, realizamos el cálculo de estandarizar y reescalar el vector. Cabe mencionar, que tomamos como ejemplo al número 30 dentro de las 100 observaciones que tiene que tener el vector. 
+
+
+# In[ ]:
+
+
+calculator(np.arange(30), function='estandarizar')
+
+
+# In[ ]:
+
+
+calculator(np.arange(30), function='reescalar')
+
+
+# In[ ]:
+
+
+#Se le invita al lector poner cambiar el valor de 30 por otros valores que estén entre [0-100] a modo de conocer otros ejemplos. 
+
+
+

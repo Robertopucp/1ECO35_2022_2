@@ -1,0 +1,214 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Sep 14 21:31:27 2022
+
+@author: Flavia
+"""
+
+# TAREA 3 
+# WG4
+
+##############################################################################
+#                                                                            #
+#                                 PREGUNTA 1                                 #
+#                                                                            #
+##############################################################################
+
+import numpy as np
+import pandas as pd
+import statistics 
+from pandas import DataFrame, Series
+import os # for usernanme 
+
+#### Debemos construir el directorio donde se trabajará y subir la base de datos 
+user = os.getlogin()   # Username
+print(user)
+
+os.chdir(f"C:/Users/{user}/Documents/GitHub/1ECO35_2022_2/data")
+
+junin_data = pd.read_excel("../data/Region_Junin.xlsx") # Subir base de datos
+junin_data
+
+#%% 1. Obtener el nombre de todas las variables
+
+#### Ya que el nombre de las variables se ubica en las columnas, usamos "col"
+for col in junin_data.columns:
+    print(col)
+
+#### También podemos hacerlo así:
+print(junin_data.columns.values)
+
+
+#%% 2. Mostrar el tipo de variables (type) así como presentar los principales estadísticos.
+
+#### Para el tipo de variable usamos:
+junin_data.info()
+### Después de correrlo, sabemos que hay 24 floats, 15 intergers y 3 objetos.
+
+#### Media de todas las variables:
+df = pd.DataFrame(junin_data)
+df.mean(axis=0)
+
+#### Varianza:
+df.var(axis=0)
+
+#### Desviación estándar:
+df.std(axis=0)
+
+#### Mediana:
+df.median(axis=0)
+
+#%% 3. Verifique si las columnas presentan missing values
+
+print( junin_data.isnull() )
+#### Notamos que sí existen missing values, así que procedemos a contar cuántos hay:
+
+junin_data.isnull().sum()
+
+#%% 4. Cambie el nombre de las siguientes variables:
+# place : comunidad
+# men_not_read: homxlee
+# women_not_read: mujerxlee
+# total_not_read: totalxlee
+
+junin_data.rename(columns = {'Place':'Comunidad', 'men_not_read':'homxlee', 'women_not_read':'mujerxlee', 'total_not_read': 'totalxlee'}, inplace = True)
+
+junin_data
+#%% 5. Muestre los valores únicos de las siguientes variables ( Comunidad , District)
+
+junin_data['Comunidad'].unique()
+junin_data['District'].unique()
+
+#%% 6. Crear columnas con las siguiente información:
+    
+#### % de mujeres del que no escriben ni leen (mujerxlee/totalxlee) 
+
+junin_data['pmujxl%'] = junin_data['mujerxlee'] / junin_data['totalxlee'] * 100
+
+#### % de varones que no escriben ni leen (homxlee/totalxlee)
+
+junin_data['phomxl%'] = junin_data['homxlee'] / junin_data['totalxlee'] * 100
+
+#### % de nativos respecto al total de la población. 
+
+# Para el total de la población sumar (peruvian_men + peruvian_women + foreign_men + foreign_women)
+
+junin_data['totplo'] = junin_data['peruvian_men'] + junin_data['peruvian_women'] + junin_data['foreign_men'] + junin_data['foreign_women'] 
+
+# Ahora sí podemos hallar el porcentaje de nativos
+
+junin_data['pnative%'] = junin_data['natives'] / junin_data['totplo'] * 100
+
+#%% 7. Crear una base de datos con la siguiente información:
+
+#a. Quedarse con la información de los distritos de Ciudad del Cerro, Jauja, Acolla, San Gerónimo, Tarma, Oroya y Concepción
+
+junin_data1 = junin_data[junin_data["District"].isin(["CIUDAD DEL CERRO","JAUJA","ACOLLA","SAN GERÓNIMO","TARMA","OROYA","CONCEPCIÓN"])]
+
+#b. Luego quedarse con las comunidades que cuentan con nativos y mestizos.
+
+junin_data2 = junin_data1.loc[ ( junin_data1[ "natives"] > 0 )
+                              & ( junin_data1["mestizos"] > 0 ) ]
+                                           
+#c. Solo quedarse con las variables trabajadas en el punto 7), nombre de distrito y comunidad.
+
+junin_data3 = junin_data2[["District", "Comunidad"]]
+
+#d. Guardar la base de datos en formato csv en la carpeta data. (Use el siguiente nombre Base_cleaned_WG(numero de grupo)
+
+junin_data3.to_csv("../Based_cleaned_WG4.csv")
+
+
+#%% PREGUNTA 2
+
+
+#### Importamos las librerías necesarias
+
+import numpy as np
+import pandas as pd
+from pandas import DataFrame, Series
+import statistics
+import inspect  
+
+#### Creamos el vector con 100 observaciones 
+
+v= np.arange(100)
+
+print(v)
+
+
+#### Definimos la función de escalamiento para el vector
+
+def escalar(x,a,b):
+    
+    result = (x-a)/(b-a)
+    
+    return result 
+
+
+#### Obtenemos el vector reescalado
+
+list(map( lambda x,  a= min(v), b= max(v): escalar(x,a,b) , v))
+
+
+
+#### Creamos la matriz de 100 x 50 
+
+m=np.random.randint(0, 101, (100, 50)) 
+
+
+#### Definimos la función de escalamiento para la matriz y usamos apply along axis
+
+def escalar_m(x):
+       out = (x - min(x))/(max(x)-min(x))
+          
+       return out
+   
+m_reescalado = np.apply_along_axis(escalar_m,0, m)
+
+
+#### Obtenemos la matriz reescalada
+    
+print (m_reescalado)
+
+#%% PREGUNTA 3
+
+m=np.random.randint(0, 101, (100, 50)) 
+
+#### La función que debemos estandarizar y escalar es
+
+def escalar_m(x):
+       out = (x - min(x))/(max(x)-min(x))
+          
+       return out
+
+def calculador (*args, **kwargs): 
+    
+    print( type( args) )
+    print( type( kwargs ) )
+
+    if ( kwargs[ 'function' ] == "escalar" ):
+      result = np.standar ( args)
+
+    elif ( kwargs[ 'function' ] == "estandarizar" ):
+     result = np.standarize (args) 
+                       
+return result 
+
+calculator ( np.apply_along_axis(escalar_m,0, m)), function =  "escalar" )
+calculator( np.apply_along_axis(standarize,0, X)), function = "estandarizar" )
+   
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
