@@ -38,15 +38,23 @@ enapres2020_1$ESTRATO %>% attr('label') # var label
 
 
 
+print(AREA)
+
+enapres2020_1$AREA%>% attr('labels') # value labels
+
+print(RESFIN)
+
+enapres2020_1$RESFIN %>% attr('labels') # value labels
+
 # 2. Check duplicates report
 
 " %>%  Ctrol + shift + m, uso de dplyr library" 
 
 attach(enapres2020_1)
 
-# Vemos los duplicados 
+# Filter hogares urbanos que responden toda la encuesta
 
-
+enapres2020_1 <- enapres2020_1 %>% filter(RESFIN == 1 & AREA == 1)
 
 data_filtrada <- enapres2020_1 %>% group_by(CCDD ,CCPP , CCDI ,CONGLOMERADO , NSELV, VIVIENDA, HOGAR) %>% 
   mutate(duplicates = n()) %>% filter(duplicates >1) %>%
@@ -54,23 +62,28 @@ data_filtrada <- enapres2020_1 %>% group_by(CCDD ,CCPP , CCDI ,CONGLOMERADO , NS
 
 View(data_filtrada)
 
+
+
 # First group by unique household identifier
 # mutate() create variables
 # filter duplicates 
 # select unique household identifier
 
-
-# Drop duplicates rows (observaciones)
-
-# Drop duplicates rows (observaciones)
+# Drop duplicates rows (observaciones). Se borra las copias, No las primeras apariciones
 
 enapres2020_1_ndup <- enapres2020_1 %>% distinct(CCDD ,CCPP 
                                                  , CCDI ,CONGLOMERADO , NSELV,
                                                  VIVIENDA, HOGAR, .keep_all = TRUE)
-                                                 
-                                                 
-dim(enapres2020_1_ndup)
 
+# .keep_all = TRUE muestra todas las variables
+                                                 
+enapres2020_1_ndup <- enapres2020_1 %>% distinct(CCDD ,CCPP 
+                                                 , CCDI ,CONGLOMERADO , NSELV,
+                                                 VIVIENDA, HOGAR, .keep_all = F)
+
+# .keep_all = FALSE Solo muestra las variables seleccionadas "CCDD ,CCPP,CCDI ,CONGLOMERADO , NSELV,VIVIENDA, HOGAR"
+
+dim(enapres2020_1_ndup)
 
 
 # Check unique values. We can se that there is missing values
