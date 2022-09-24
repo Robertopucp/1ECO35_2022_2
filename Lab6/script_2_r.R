@@ -3,10 +3,11 @@
 ## @author: Roberto Mendoza 
 
 
+
 pacman::p_load(tidyverse, haven, dplyr, janitor , stringr)
 
-# have: leer archivos spss (sav)
-# string : tarabar con string
+# haven: leer archivos spss (sav)
+# string : trabajar con string
 
 
 
@@ -28,6 +29,8 @@ names(enapres2020_1) # nombre de las variables en una lista
 
 # Observar labels 
 
+# %>% Ctrl + shift + m
+
 enapres2020_1$ESTRATO %>% attr('labels') # value labels
 
 
@@ -37,11 +40,19 @@ enapres2020_1$ESTRATO %>% attr('label') # var label
 
 # 2. Check duplicates report
 
-" %>%  Ctrol + shift + m, uso de dplyr library"
+" %>%  Ctrol + shift + m, uso de dplyr library" 
 
-enapres2020_1 %>% group_by(CCDD ,CCPP , CCDI ,CONGLOMERADO , NSELV, VIVIENDA, HOGAR) %>% 
+attach(enapres2020_1)
+
+# Vemos los duplicados 
+
+
+
+data_filtrada <- enapres2020_1 %>% group_by(CCDD ,CCPP , CCDI ,CONGLOMERADO , NSELV, VIVIENDA, HOGAR) %>% 
   mutate(duplicates = n()) %>% filter(duplicates >1) %>%
-  select(CCDD ,CCPP , CCDI ,CONGLOMERADO , NSELV, VIVIENDA, HOGAR) 
+  select(CCDD ,CCPP , CCDI ,CONGLOMERADO , NSELV, VIVIENDA, HOGAR, duplicates ) 
+
+View(data_filtrada)
 
 # First group by unique household identifier
 # mutate() create variables
