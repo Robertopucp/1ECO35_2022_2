@@ -288,40 +288,59 @@ class RegClass( object ):
     #%% Parte 4
     
     def rmse(self):
-         
+        
+        self.reg_beta_OLS()
+        
+        #Se crean nuevos valores y atributos para el calculos de la varianza 
+        X_np = self.X_np
+        y_np = self.y_np
+        
+        # Se traen los valores estimados de los betas 
+        beta_OLS = self.beta_OLS.values.reshape( - 1, 1 ) 
+
+        # Calculos de los errores
+        e = y_np - ( X_np @ beta_OLS )
+        
         suma = 0 
          
         for v in self.y_np:
             suma = suma + v
         
-        media = suma/self.y_np.len()
+        media = suma/len(self.y_np)
         
         #columna = self.y_np
         
-        columna = np.ones(self.y_np.len())
+        columna = np.ones(len(self.y_np))
         
         y_dif= self.y_np - media * columna.T 
         
         sct = y_dif.T @ y_dif
-        
-        sce = self.error.T @ self.error
+                
+        sce = e.T @ e
         
         R_2 = 1- (sce / sct)
-        
-        root = pow(sct/self.y_np.len(), 0.5)
-        
         self.R_cuadrado = R_2
         
+        root = pow(sct/len(self.y_np), 0.5)
         self.root_mse = root
         
-        R_2_root = {self.R_cuadrado, self.root_mse}
         
-        return R_2_root
-          
-def mostrar_resultados (self):
+        R_2_root = {'R^2': R_2.ravel(), 
+                    'Root' :root.ravel()}
+        
+        index_names = self.columns
+        resultados = pd.DataFrame(R_2_root, index = index_names )
+
+        return resultados
+    
+    
+      #%% Parte 5
+      
+    def mostrar_resultados (self):
 
     #Corremos las funciones pertinentes
         self.reg_OLS()
+        self.pregunta_3_var_covar_robust()
         self.pregunta_3_parte_2()
         self.rmse()
     
