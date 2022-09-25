@@ -5,7 +5,7 @@
 # 20163197, Enrique Alfonso Pazos 
 # 20191894, Ilenia Ttito
 # 20151595, Rodrigo Ramos
-# 20193469, Luis Eguzquiza 
+# 20193469, Luis Egusquiza 
 # 20163377, Jean Niño de Guzmán
 
     #%% 
