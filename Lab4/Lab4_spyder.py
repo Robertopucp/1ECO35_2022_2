@@ -503,11 +503,13 @@ student.age = "Pablo"
 OLS class
 '''
 
+W = [1,2,3]
+
 from scipy.stats import t # t - student 
 
 class OLS(object):
     
-    def __init__(self, X,Y):
+    def __init__(self, X,Y, W):
         
         self.X = X
         self.Y = Y
@@ -542,6 +544,9 @@ class OLS(object):
         
         self.R2()
         self.Algebralineal()
+        
+        
+        
         scr = self.SCR
         sigma =  scr / self.nk
         Var = sigma*np.linalg.inv(self.X1.T @ self.X1)

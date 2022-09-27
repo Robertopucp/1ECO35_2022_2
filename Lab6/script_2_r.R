@@ -10,7 +10,6 @@ pacman::p_load(tidyverse, haven, dplyr, janitor , stringr)
 # string : trabajar con string
 
 
-
 #janitor to detect duplicates
 
 user <- Sys.getenv("USERNAME")  # username
