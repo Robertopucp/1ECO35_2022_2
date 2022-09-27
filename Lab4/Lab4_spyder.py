@@ -98,6 +98,9 @@ list( map( lambda x: function2(x) , vector)   )
 # re.sub( patron de texto, sustitución, texto)
 
 ''' Loop replacement in Matrix '''
+
+import numpy as np
+
 np.random.seed(15632)
 x1 = np.random.rand(500) # uniform distribution  [0,1]
 x2 = np.random.rand(500) # uniform distribution [0,1]
@@ -106,6 +109,8 @@ x4 = np.random.rand(500) # uniform distribution [0,1]
 
 
 X = np.column_stack((np.ones(500),x1,x2,x3,x4))
+
+print(X.shape)
 
 '''
 
@@ -292,8 +297,7 @@ def calculator( *args ):
     return result, minimo, maximo
 
 
-calculator( 8, 9, 50)
-
+calculator( 8, 9, 50, 10, 12 ,15,20,100,120)
 
 '''
 *args se puede usar otro nombre siempre que se use * al inicio
@@ -375,7 +379,7 @@ def transform(Data, *select, **function) -> pd.DataFrame: #output DataFrame
     
     if function['method'] == "demean":
         
-        X = Data_select.apply(lambda row: row - np.mean(row), axis =0) # axis = 0 por columnas
+        X = Data_select.apply(lambda row: row - np.mean(row), axis =0)
         
     elif function['method'] == "estandarize":
         
@@ -385,9 +389,6 @@ def transform(Data, *select, **function) -> pd.DataFrame: #output DataFrame
 
 
 transform(cps2012, "lnw", "exp1","exp2", method = "estandarize")
-
-transform(cps2012, "exp2","exp3", method = "demean")
-
 
 
 
@@ -442,18 +443,10 @@ class MyFirstClass:
     
     # the worst way to call a parameter
     # we need to define them as attributes
-    def print_age( self ):
-        print( f'I am { self.age} years old' )
+    def print_name_3( self ):
+        print( f'This is my { self.name }.' )
         
-student = MyFirstClass(name = "Jose" , age = 22)
-
-student.name
-student.age
-
-
-student.print_name_1()
-student.print_age()
-
+student = MyFirstClass( name = "Jose" , age = 22)
 
 '''
 Recuperamos los parámetros 
@@ -494,13 +487,13 @@ class MyFirstClass:
 
 student = MyFirstClass( name = "Jose" , age = 22, school = "Saco Oliveros" )
 
+student.name
+student.age
+
 print(student.age)
 print(student.school)
 student.person_age()
-student.person_school()
-
-student.print_name_3()
-
+student.print_name_1()
 
 # Modificar propiedades directamente
 
@@ -521,22 +514,18 @@ class OLS(object):
         self.X = X
         self.Y = Y
         
-        
-        
     def Algebralineal(self):
         
-        self.n = self.X.shape[0] # numero de observaciones, # self.n "Se crea un nuevo atributo"
+        self.n = self.X.shape[0]
         k = self.X.shape[1]
         X1 = np.column_stack((np.ones(self.n ), self.X.to_numpy() ))  # self.X.to_numpy()  # DataFrame to numpy
-        Y1 = self.Y.to_numpy().reshape(self.n  ,1)  #reshape(-1  ,1)
+        Y1 = self.Y.to_numpy().reshape(self.n  ,1)
         self.X1 = X1
         self.Y1 = Y1
         self.beta = np.linalg.inv(X1.T @ X1) @ ((X1.T) @ Y1 )
         self.nk = self.n - k 
         
     def R2(self):
-        
-        
         
         self.Algebralineal()  # run function 
            
@@ -569,7 +558,6 @@ class OLS(object):
 
                df = pd.DataFrame( {"OLS": self.beta.flatten() , "standar_error" : sd.flatten()} )
                 
-               #self.beta.flatten() # multy-array a simple array 
                 
         elif (Kargs['Output'] == "Diccionario"):
     
@@ -583,12 +571,6 @@ class OLS(object):
 #flatten():  De multi array a simple array 
 
 
-
-
-cps2012.shape
-
-variance_cols = cps2012.var().to_numpy() # to numpy
-
 Dataset = cps2012.iloc[ : ,  np.where( variance_cols != 0   )[0] ]
 
 X = Dataset.iloc[:,1:10]
@@ -597,24 +579,18 @@ Y = Dataset[['lnw']]
 Reg1 = OLS(X,Y)
 
 Reg1.X
-Reg1.beta
-
 
 Reg1.Algebralineal()
-Reg1.beta  # accedemos al atributo beta del meptodo Algebralienal
+Reg1.X1
 
-Reg1.R2() # se corre el metodo R2 y me devuelve el R2 
-
-# output de resultados 
-Reg1.Table(Output = "DataFrame")
+Reg1.R2()
 
 
-Reg1.Table(Output = "Diccionario")['OLS']
-
- 
+Reg1.Table(Output = "Diccionario")['OLS'] 
 Reg1.Table(Output = "Diccionario")['Pvalue'] 
 Reg1.Table(Output = "Diccionario")['standar_error'] 
          
+Reg1.Table(Output = "DataFrame")
 
 # Know arguments from function or class
 
@@ -622,6 +598,7 @@ inspect.getfullargspec(OLS)
 inspect.getfullargspec(transform)
 
 help(np)  # inspeccionar una liberia 
+
 
 dir(OLS) # isnspeccionar metodos e instancias
 
