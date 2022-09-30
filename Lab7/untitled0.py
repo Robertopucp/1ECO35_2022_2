@@ -7,10 +7,14 @@ Created on Sat Sep 24
 @script: Clean ENAHO
 """
 
+#!pip install weightedcalcs
 
 import os # for usernanme y set direcotrio
 import pandas as pd
 import numpy as np
+import weightedcalcs as wc # ponderador
+from tqdm import tqdm  # controlar el tiempo en un loop
+
 
 user = os.getlogin()   # Username
 
@@ -173,7 +177,11 @@ num = ["34","37"]
 
 merge_hog = enaho01
 
-for i in num:
+merge_hog['ubigeo_pr'] = merge_hog['ubigeo'].str[:2]
+
+merge_hog = merge_hog[merge_hog.ubigeo_pr.isin(["15","03","04"])]
+
+for i in tqdm(num):
     merge_hog = pd.merge(merge_hog, globals()[f'enaho{i}'], 
                          on = ["conglome", "vivienda", "hogar"],
                        how = "left", 
@@ -181,9 +189,11 @@ for i in num:
                        validate = "1:1")
 
 
-#merge using individual dataset
+# merge using individual dataset
 
 #%% Merge using different Key variables 
+
+
 
 enaho03.rename(columns={"conglome":"cong", "vivienda":"viv", "hogar":"hog","codperso":"perso"}, 
                inplace = True)
@@ -203,7 +213,12 @@ enaho03.rename(columns={"cong":"conglome", "viv":"vivienda", "hog":"hogar","pers
 num = ["03","04","05"]
 merge_ind = enaho02
 
-for i in num:
+merge_ind['ubigeo_pr'] = merge_ind['ubigeo'].str[:2]
+
+merge_ind= merge_ind[merge_ind.ubigeo_pr.isin(["15","03","04"])]
+
+
+for i in tqdm(num):
     merge_id = pd.merge(merge_ind, globals()[f'enaho{i}'], 
                          on = ["conglome", "vivienda", "hogar","codperso"],
                        how = "left", 
@@ -219,11 +234,8 @@ merge_base_2020 = merge_id.merge(merge_hog,
                             suffixes=('', '_y'),
                             )
 
-## Filter ##
 
-index_columns = np.where( merge_base_2020.columns.str.contains('_y$', regex=True))[0]
 
-merge_base_2020.drop(merge_base_2020.columns[index_columns], axis = 1, inplace = True)
 
 
 ###########################################
@@ -271,6 +283,11 @@ num = ["34","37"]
 
 merge_hog = enaho01
 
+merge_hog['ubigeo_pr'] = merge_hog['ubigeo'].str[:2]
+
+merge_hog = merge_hog[merge_hog.ubigeo_pr.isin(["15","03","04","12"])]
+
+
 for i in num:
     merge_hog = pd.merge(merge_hog, globals()[f'enaho{i}'], 
                          on = ["conglome", "vivienda", "hogar"],
@@ -282,8 +299,12 @@ for i in num:
 num = ["03","04","05"]
 merge_ind = enaho02
 
+merge_ind['ubigeo_pr'] = merge_ind['ubigeo'].str[:2]
+
+merge_ind= merge_ind[merge_ind.ubigeo_pr.isin(["15","03","04","12"])]
+
 for i in num:
-    merge_id = pd.merge(merge_ind, globals()[f'enaho{i}'], 
+    merge_ind = pd.merge(merge_ind, globals()[f'enaho{i}'], 
                          on = ["conglome", "vivienda", "hogar","codperso"],
                        how = "left", 
                        suffixes=('', '_y'),
@@ -291,7 +312,7 @@ for i in num:
 
 # Merge hogares e individuos 
 
-merge_base_2020 = merge_id.merge(merge_hog, 
+merge_base_2020 = merge_ind.merge(merge_hog, 
                             on = ["conglome", "vivienda", "hogar"],
                             how = "left",
                             validate = "m:1",
@@ -347,9 +368,14 @@ enaho05 = enaho05[["conglome", "vivienda", "hogar" , "codperso",
                   "p507", "p511a", "p512b", "p513a1", "p505" , "p506", "d544t", "d556t1",
                   "d556t2" , "d557t" , "d558t" , "ocu500" , "i530a" , "i541a"]]
 
+
 num = ["34","37"]
 
 merge_hog = enaho01
+
+merge_hog['ubigeo_pr'] = merge_hog['ubigeo'].str[:2]
+
+merge_hog = merge_hog[merge_hog.ubigeo_pr.isin(["15","03","04","12"])]
 
 for i in num:
     merge_hog = pd.merge(merge_hog, globals()[f'enaho{i}'], 
@@ -359,10 +385,15 @@ for i in num:
                        validate = "1:1")
 
 num = ["03","04","05"]
+
 merge_ind = enaho02
 
+merge_ind['ubigeo_pr'] = merge_ind['ubigeo'].str[:2]
+
+merge_ind= merge_ind[merge_ind.ubigeo_pr.isin(["15","03","04","12"])]
+
 for i in num:
-    merge_id = pd.merge(merge_ind, globals()[f'enaho{i}'], 
+    merge_ind = pd.merge(merge_ind, globals()[f'enaho{i}'], 
                          on = ["conglome", "vivienda", "hogar","codperso"],
                        how = "left", 
                        suffixes=('', '_y'),
@@ -370,7 +401,7 @@ for i in num:
 
 # Merge hogares e individuos 
 
-merge_base_2019 = merge_id.merge(merge_hog, 
+merge_base_2019 = merge_ind.merge(merge_hog, 
                             on = ["conglome", "vivienda", "hogar"],
                             how = "left",
                             validate = "m:1",
@@ -382,20 +413,6 @@ index_columns = np.where( merge_base_2019.columns.str.contains('_y$', regex=True
 merge_base_2019.drop(merge_base_2019.columns[index_columns], axis = 1, inplace = True)
 
 
-# Ubigeo de provincia 
-
-
-merge_base_2019['ubigeo_pr'] = merge_base_2019['ubigeo'].str[:2]
-
-
-merge_base_2019['ubigeo_pr_2'] = merge_base_2019['ubigeo'].str[:2] + "00"
-
-
-merge_base_2020['ubigeo_pr'] = merge_base_2020['ubigeo'].str[:2]
-
-# merge_base_2019 = merge_base_2019[merge_base_2019.ubigeo_pr == "15"]
-# merge_base_2020 = merge_base_2020[merge_base_2020.ubigeo_pr == "15"]
-
 
 
 
@@ -404,48 +421,139 @@ merge_base_2020['ubigeo_pr'] = merge_base_2020['ubigeo'].str[:2]
 
 merge_append = merge_base_2020.append(merge_base_2019,  ignore_index= True)
 
-merge_append.to_stata("../data/append_enaho.dta", write_index=False)
+merge_append.to_stata("../../../append_enaho.dta", write_index=False)
 
 
+# write_index=False no genera una columna adicional para el índice
+
+#%% Poverty mesure
+
+# 1) Ingreso per capita mensual
+# 2) Gasto per capita mensual
+
+# inghog1d: ingreso anual del hogar 
+# gashog2d: gasto anual del hogar
+# mieperho: integrantes del hogar
+# ingreso_month: ingreso per capita mensual 
+# gasto_month: gasto per capita mensual
+
+merge_base_2020["ingreso_month"] = merge_base_2020["inghog1d"]/(12*merge_base_2020["mieperho"])
+
+merge_base_2020["gasto_month"]  = merge_base_2020["gashog2d"]/(12*merge_base_2020["mieperho"])
 
 
+#Generamos variable "pobre" mediante comparación gasto y linea de pobreza
+
+merge_base_2020["pobre"] = np.where(
+    merge_base_2020["gasto_month"] < merge_base_2020["linea"], 
+                                    "pobre", "no pobre")
 
 
+# np.where(Condicioón, colocar v si es verdadero, colcoar w si es falso)
+
+merge_base_2020["dummy_pobre"] = np.where(
+    merge_base_2020["gasto_month"] < merge_base_2020["linea"],
+                                    1, 0)
+
+#Generamos variable "pc_pobre" recodificando variable "pobreza"
 
 
+merge_base_2020["pc_pobre"] = merge_base_2020["pobreza"].replace({1: "Pobre", 
+                                                  2: "Pobre",
+                                                  3: "No pobre"})
 
 
+# pobreza (1 pobre extremo, 2 pobre no extremo, 3 no pobre)
+
+###############################################
+################ Dummies ######################
+###############################################
+
+merge_base_2020["p301a"].unique()
+merge_base_2020["p301a"].value_counts()
+
+merge_base_2020["p301a"].replace({np.nan: 99}, inplace =True)
+
+merge_base_2020["p301a"].unique()
+merge_base_2020["p301a"].value_counts()
 
 
+#Replace missing values 
+
+merge_base_2020["p301a"].replace({99: np.nan}, inplace =True)
+
+#Genrate dummies
+
+pd.get_dummies(merge_base_2020["p301a"])
+
+levels = len(merge_base_2020["p301a"].unique()) - 1
+
+merge_base_2020[[f"var_{i+1}" for i in range(levels)]] = pd.get_dummies(merge_base_2020["p301a"])
 
 
+#Tabla de comparación  value_counts similar tab in stata
 
 
+print("*-----------------------------------*")
+print("Comparación de variables de pobreza")
+print("*-----------------------------------*")
+print("Pobreza")
+print(merge_base_2020["pobre"].value_counts())
+print("*-----------------------------------*")
+print("pc pobre")
+print(merge_base_2020["pc_pobre"].value_counts())
+print("*-----------------------------------*")
+print("Dummy pobre")
+print(merge_base_2020["dummy_pobre"].value_counts())
+print("*-----------------------------------*")
 
 
+merge_base_2020["dpto"] = merge_base_2020["ubigeo_pr"].replace({
+    "15": "Lima","03": "Apurimac","04": "Arequipa","12":"Junín"
+                                            })
+
+# Gen urbano variable
 
 
+merge_base_2020["urbano"] = np.where(
+    merge_base_2020["estrato"] == 5,
+                                    1, 0)
 
 
+# Cross tab (tabla cruzada)  tab var1 var 2 in stata
+
+pd.crosstab(merge_base_2020["dpto"], merge_base_2020["dummy_pobre"])
+
+#Generamos tablas sin ponderador
+pd.crosstab([merge_base_2020["urbano"],merge_base_2020["estrsocial"]], 
+            merge_base_2020["pc_pobre"] , margins=True)
 
 
+#Tasa de pobreza usando factor expansión / ponderador
+merge_base_2020["facpop"] = merge_base_2020["factor07"]*merge_base_2020["mieperho"]
+
+# factor de expansión poblacional a partir del factor de expansión de hogares
+# Se multiplica el factor de expansión de hoagres por al cantidad de miembros por hogar
 
 
+calc = wc.Calculator("facpop")
 
+#Distribución de variable "pc_pobre"
 
+apurimac = merge_base_2020[ merge_base_2020["dpto"] == "Apurimac" ]
 
+calc.distribution(apurimac,"pc_pobre").round(3).sort_values(ascending=False)
 
+    
+# maximo nivel educativo alcanzado, dummy si educación superior, menor nivel alcanzado 
 
+# indice de pobreza por departamento 
 
+# cantidad de menores de edad por hogar 
 
+# cantidad de hogares que reciben el programa Juntos 
 
-
-
-
-
-
-
-
+# crear años de educación mediante apply, classe 
 
 
 
