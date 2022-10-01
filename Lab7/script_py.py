@@ -490,7 +490,29 @@ levels = len(merge_base_2020["p301a"].unique()) - 1
 
 merge_base_2020[[f"var_{i+1}" for i in range(levels)]] = pd.get_dummies(merge_base_2020["p301a"])
 
+#%% Colapse
 
+# maximo nivel educativo alcanzado, dummy si educación superior, menor nivel alcanzado 
+
+
+df1 = merge_base_2020.groupby( [ "conglome", "vivienda", "hogar" ],
+                              as_index = False ).agg( edu_max = ( 'p301a', np.max ) ,
+                                                       edu_min = ( 'p301a', np.min ) ,
+                        total_miembros = ('mieperho', np.size),
+                        sup_educ = ( 'var_10', np.sum ))
+                                                     
+                             
+df2 = merge_base_2020.groupby( [ "ubigeo_pr" ],
+                                  as_index = False ).agg( index_poverty = ( 'dummy_pobre', np.mean ))                                               
+                                                     
+merge_base_2020["dpto"] = merge_base_2020["ubigeo_pr"].replace({
+    "15": "Lima","03": "Apurimac","04": "Arequipa","12":"Junín"
+                                            })
+
+
+df3 = merge_base_2020.groupby( [ "dpto" ],
+                                  as_index = False ).agg( index_poverty = ( 'dummy_pobre', np.mean ))                                                
+                                                     
 #Tabla de comparación  value_counts similar tab in stata
 
 
@@ -506,11 +528,6 @@ print("*-----------------------------------*")
 print("Dummy pobre")
 print(merge_base_2020["dummy_pobre"].value_counts())
 print("*-----------------------------------*")
-
-
-merge_base_2020["dpto"] = merge_base_2020["ubigeo_pr"].replace({
-    "15": "Lima","03": "Apurimac","04": "Arequipa","12":"Junín"
-                                            })
 
 # Gen urbano variable
 
@@ -533,27 +550,18 @@ pd.crosstab([merge_base_2020["urbano"],merge_base_2020["estrsocial"]],
 merge_base_2020["facpop"] = merge_base_2020["factor07"]*merge_base_2020["mieperho"]
 
 # factor de expansión poblacional a partir del factor de expansión de hogares
-# Se multiplica el factor de expansión de hoagres por al cantidad de miembros por hogar
+# Se multiplica el factor de expansión de hogares por al cantidad de miembros por hogar
 
 
 calc = wc.Calculator("facpop")
 
 #Distribución de variable "pc_pobre"
 
+
 apurimac = merge_base_2020[ merge_base_2020["dpto"] == "Apurimac" ]
 
 calc.distribution(apurimac,"pc_pobre").round(3).sort_values(ascending=False)
 
-    
-# maximo nivel educativo alcanzado, dummy si educación superior, menor nivel alcanzado 
-
-# indice de pobreza por departamento 
-
-# cantidad de menores de edad por hogar 
-
-# cantidad de hogares que reciben el programa Juntos 
-
-# crear años de educación mediante apply, classe 
 
 
 

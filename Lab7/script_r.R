@@ -4,9 +4,10 @@
 ## Clean dataset
 
 
+
 #Librerias de limpieza de datos 
 
-pacman::p_load(haven,dplyr, stringr)
+pacman::p_load(haven,dplyr, stringr, fastDummies)
 
 
 # tydiverse: ggplot , dplyr other libraries
@@ -192,7 +193,7 @@ colnames(merge_base)
 
 #----------------------------------------------------------
 
-"ENAHO 2019"
+"ENAHO 2020"
 
 enaho01 <- data.frame(
   read_dta("../../../datos/2019/687-Modulo01/687-Modulo01/enaho01-2019-100.dta")
@@ -279,13 +280,18 @@ index <- grep(".y$", colnames(merge_base))
 merge_base_2020 <- merge_base[, - index]
 
 
-### Ubigeo de provincia 
+### Ubigeo de departamento
 
 
 merge_base_2020['ubigeo_dep'] = substr(merge_base_2020$ubigeo, 1, 2)
 
 merge_base_2020['ubigeo_dep_2'] = paste(str_sub(merge_base_2020$ubigeo,1,2),
                                         "00", sep = "")
+
+
+merge_base_2020 <- merge_base_2020 %>%  filter(
+  merge_base_2020$ubigeo_dep  %in% c("15","03","04","12") )
+
 
 
 #----------------------- Append -----------------------------------
@@ -299,51 +305,45 @@ merge_append <-  bind_rows(merge_base_2020, merge_base_2019)
 write_dta(merge_append, "../data/append_enaho_r.dta")
 
 
+#------------------------ Poverty and dummies -------------------------------
+
+data <- merge_base_2020 %>%
+  mutate(ingreso_month = merge_base_2020$inghog1d/(12*merge_base_2020$mieperho),
+         gasto_month = merge_base_2020$gashog2d/(12*merge_base_2020$mieperho)
+         ) %>%
+  
+ mutate(dummy_pobre = ifelse( merge_base_2020$gashog2d < merge_base_2020$linea , 
+                        1 , 
+                        ifelse(!is.na(merge_base_2020$gashog2d),0, NA) ) )  %>%
+
+  mutate(pobre = ifelse( merge_base_2020$gashog2d < merge_base_2020$linea , 
+                               "pobre" , 
+                  ifelse(!is.na(merge_base_2020$gashog2d),"No pobre", NA) ) )   %>%
+  
+ mutate(pc_pobre = case_when(merge_base_2020$pobreza == 1 ~ "Pobre extremo",
+                             merge_base_2020$pobreza == 2 ~ "Pobre",
+                             merge_base_2020$pobreza == 3 ~ "No pobre"))  
+
+
+data_dummies <- dummy_cols(merge_base_2020, select_columns = 'p301a')
+
+
+#----------------------------------------------------------------------
+################ Colappse #############################################
+
+
+# Tab in R
+
+dplyr::count(merge_base_2020, pobreza, sort = TRUE)
+
+dplyr::count(merge_base_2020, pobreza, sort = F)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+df <- merge_base_2020 %>% group_by(conglome, vivienda, hogar ) %>% 
+  summarise(edu_max= median(!is.na(Dummy_2)), estrato_D_mean = mean(!is.na(Dummy_2)),
+            estrato_D_max = max(!is.na(Dummy_2)), estrato_D_min = min(!is.na(Dummy_2)),
+            estrato_D_total =sum(!is.na(Dummy_2)), total_hogares_distrito = n() )
 
 
 
