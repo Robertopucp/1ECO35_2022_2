@@ -458,7 +458,7 @@ merge_base_2020["dummy_pobre"] = np.where(
 #Generamos variable "pc_pobre" recodificando variable "pobreza"
 
 
-merge_base_2020["pc_pobre"] = merge_base_2020["pobreza"].replace({1: "Pobre", 
+merge_base_2020["pc_pobre"] = merge_base_2020["pobreza"].replace({1: "Pobre extremo", 
                                                   2: "Pobre",
                                                   3: "No pobre"})
 
@@ -490,7 +490,7 @@ levels = len(merge_base_2020["p301a"].unique()) - 1
 
 merge_base_2020[[f"var_{i+1}" for i in range(levels)]] = pd.get_dummies(merge_base_2020["p301a"])
 
-#%% Colapse
+#%% Collapse
 
 # maximo nivel educativo alcanzado, dummy si educación superior, menor nivel alcanzado 
 
@@ -498,7 +498,7 @@ merge_base_2020[[f"var_{i+1}" for i in range(levels)]] = pd.get_dummies(merge_ba
 df1 = merge_base_2020.groupby( [ "conglome", "vivienda", "hogar" ],
                               as_index = False ).agg( edu_max = ( 'p301a', np.max ) ,
                                                        edu_min = ( 'p301a', np.min ) ,
-                        total_miembros = ('mieperho', np.size),
+                        total_miembros = ('conglome', np.size),
                         sup_educ = ( 'var_10', np.sum ))
                                                      
                              
