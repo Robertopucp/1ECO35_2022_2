@@ -13,25 +13,7 @@ user <- Sys.getenv("USERNAME")  # username
 setwd( paste0("C:/Users/",user,"/Documents/GitHub/1ECO35_2022_2/Lab3") ) # set directorio
 
 
-## Equivalent *args de Python en R 
 
-caso1 <- function(...) return(sum(...))
-
-caso1(2,4,5)
-
-
-
-caso2 <- function(...) {
-  
-  return(prod(...))
-  
-  
-}  
-
-caso2(sample(1:50, size = 5))
-
-str(sandwich)
-args(lapply)
 ##################################################################################
 
 "Lapply and Sapply"
@@ -164,7 +146,40 @@ args(demean)
 args(sandwich)
 
 
+#------------------------------------------------------------
+#             Equivalent *args de Python en R 
 
+
+
+caso1 <- function(...) return(sum(...))
+
+caso1(2,4,5)
+
+
+
+caso2 <- function(...) {
+  
+  return(prod(...))
+  
+  
+}  
+
+caso2(sample(1:50, size = 5))
+
+str(sandwich)
+args(lapply)
+
+
+# Una aplicación usando la base de datos cps2012
+
+transform <- function(Data, ...){
+  
+  Data_select = Data[,c(...)]
+  
+}
+
+
+View(transform(cps2012, "lnw", "exp1","exp2","exp3","exp4"))
 
 
 
