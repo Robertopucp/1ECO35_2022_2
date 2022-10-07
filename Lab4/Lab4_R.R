@@ -13,7 +13,6 @@ user <- Sys.getenv("USERNAME")  # username
 setwd( paste0("C:/Users/",user,"/Documents/GitHub/1ECO35_2022_2/Lab3") ) # set directorio
 
 
-
 ##################################################################################
 
 "Lapply and Sapply"
@@ -147,7 +146,7 @@ args(sandwich)
 
 
 #------------------------------------------------------------
-#             Equivalent *args de Python en R 
+#             Equivalent *args de Python en R (...)
 
 
 
