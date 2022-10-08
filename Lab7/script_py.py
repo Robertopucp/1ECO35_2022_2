@@ -536,7 +536,6 @@ merge_base_2020["urbano"] = np.where(
     merge_base_2020["estrato"] == 5,
                                     1, 0)
 
-
 # Cross tab (tabla cruzada)  tab var1 var 2 in stata
 
 pd.crosstab(merge_base_2020["dpto"], merge_base_2020["dummy_pobre"])
@@ -545,13 +544,11 @@ pd.crosstab(merge_base_2020["dpto"], merge_base_2020["dummy_pobre"])
 pd.crosstab([merge_base_2020["urbano"],merge_base_2020["estrsocial"]], 
             merge_base_2020["pc_pobre"] , margins=True)
 
-
 #Tasa de pobreza usando factor expansión / ponderador
-merge_base_2020["facpop"] = merge_base_2020["factor07"]*merge_base_2020["mieperho"]
+merge_base_2020["facpop"] = merge_base_2020["facpob07"]
 
 # factor de expansión poblacional a partir del factor de expansión de hogares
 # Se multiplica el factor de expansión de hogares por al cantidad de miembros por hogar
-
 
 calc = wc.Calculator("facpop")
 
@@ -560,8 +557,8 @@ calc = wc.Calculator("facpop")
 
 apurimac = merge_base_2020[ merge_base_2020["dpto"] == "Apurimac" ]
 
-calc.distribution(apurimac,"pc_pobre").round(3).sort_values(ascending=False)
 
+calc.distribution(apurimac,"pc_pobre").round(3).sort_values(ascending=False)
 
 
 

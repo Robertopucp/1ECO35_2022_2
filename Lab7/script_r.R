@@ -3,18 +3,21 @@
 ## @author: Roberto Mendoza 
 ## Clean dataset
 
-#install.packages("pacman")
+#install.packages("srvyr")
+
+
 #install.packages("fastDummies")
 
 #Librerias de limpieza de datos 
 
 #pacman::p_load(haven,dplyr, stringr, fastDummies)
 
+
 library(haven)
 library(dplyr)
 library(stringr)   # grep 
 library(fastDummies)
-
+library(srvyr)
 
 # tydiverse: ggplot , dplyr other libraries
 
@@ -107,7 +110,7 @@ enaho05 <- enaho05[ , c("conglome", "vivienda", "hogar" , "codperso",
 
 
 
-# _merge3 == 1
+# _merge3 == 1,3
 
 "Left merge"
 
@@ -132,7 +135,7 @@ enaho_02_05 <- merge(enaho02, enaho05,
 
 # all.x = False, all.y = False
 
-# _merge3 == 2
+# _merge3 == 2,3
 
 
 enaho_02_05 <- merge(enaho02, enaho05,
@@ -200,7 +203,7 @@ enaho_merge <- merge(enaho02, enaho01,
 
 names(enaho_merge)
 
-#------------------------- Match with different keyword -------------------------
+#------------------------- Match with different keyword (variable llave)  -------------------------
 
 
 # rename variables que identifican de manera unica a cada hogar
@@ -257,7 +260,7 @@ for (i in num){
 names(merge_ind)
 
 
-#----------------------------------------------------------
+#----------------------- Merge Indivual and Hohar datasets -----------------------------------
 
 # merge merge_hog and merge_ind
 # mwrge_ind : master data
@@ -271,18 +274,30 @@ colnames(merge_base)
 
 index <- grep(".y$", colnames(merge_base))  # Regular regular 
 
-index
-class(index)
-
 # $ el texto finaliza con .y
-
 
 merge_base_2020 <- merge_base[, - index]
 
 colnames(merge_base_2020)
 
 
+### Ubigeo de departamento
 
+
+merge_base_2020['ubigeo_dep'] = substr(merge_base_2020$ubigeo, 1, 2)
+
+merge_base_2020['ubigeo_dep_2'] = paste(str_sub(merge_base_2020$ubigeo,1,2),
+                                        "00", sep = "")
+
+### filtrado para algunos departamentos
+
+merge_base_2020 <- merge_base_2020 %>%  filter(
+  merge_base_2020$ubigeo_dep  %in% c("15","03","04","12") ) 
+merge_base_2020 <- merge_base_2020 %>% 
+  mutate(region = case_when(ubigeo_dep == "04" ~ "Arequipa",
+                          ubigeo_dep == "03" ~ "Apurimac",
+                          ubigeo_dep == "12" ~ "Junin",
+                          ubigeo_dep == "15" ~ "Lima") ) 
 #----------------------------------------------------------
 
 "ENAHO 2019"
@@ -372,20 +387,6 @@ index <- grep(".y$", colnames(merge_base))
 merge_base_2019 <- merge_base[, - index]
 
 
-### Ubigeo de departamento
-
-
-merge_base_2020['ubigeo_dep'] = substr(merge_base_2020$ubigeo, 1, 2)
-
-merge_base_2020['ubigeo_dep_2'] = paste(str_sub(merge_base_2020$ubigeo,1,2),
-                                        "00", sep = "")
-
-### filtrado para algunos departamentos
-
-merge_base_2020 <- merge_base_2020 %>%  filter(
-  merge_base_2020$ubigeo_dep  %in% c("15","03","04","12") )
-
-
 
 #----------------------- Append -----------------------------------
 
@@ -400,16 +401,25 @@ write_dta(merge_append, "../data/append_enaho_r.dta")
 
 #------------------------ Poverty and dummies -------------------------------
 
-#dplyr
+#Ingreso nominal percapita mensual y gasto nominal mensual percapital del hogar
+
+# inghog1d: ingreso anual bruto del hogar  (incluye ingresos en forma de bienes) 
+# gashog2d: gasto anual bruto hogar 
+
+# Estas variables provienen del módulo 34 - sumaria (módulo de variables calculadas)
+# Linea de pobreza
+# mieperho: miembros del hogar
+# Excluye a los trabajadores domésticos y a las personas que subarriendan una habitación en el hogar
+
 
 merge_base_2020 <- merge_base_2020 %>%
   mutate(ingreso_month = merge_base_2020$inghog1d/(12*merge_base_2020$mieperho),
          gasto_month = merge_base_2020$gashog2d/(12*merge_base_2020$mieperho)
          ) %>%
- mutate(dummy_pobre = ifelse( merge_base_2020$gasto_month < merge_base_2020$linea , 
+ mutate(dummy_pobre = ifelse( gasto_month < merge_base_2020$linea , 
                         1 , 
-                        ifelse(!is.na(merge_base_2020$gashog2d),0, NA) ) )  %>%
-  mutate(pobre = ifelse( merge_base_2020$gasto_month < merge_base_2020$linea , 
+                        ifelse(!is.na(merge_base_2020$gashog2d),0, NA) ) ) %>%
+  mutate(pobre = ifelse( gasto_month < merge_base_2020$linea , 
                                "pobre" , 
                   ifelse(!is.na(merge_base_2020$gashog2d),"No pobre", NA) ) )   %>%
  mutate(pc_pobre = case_when(merge_base_2020$pobreza == 1 ~ "Pobre extremo",
@@ -421,9 +431,6 @@ merge_base_2020 <- merge_base_2020 %>%
 #creando dummies usando la variabe de nivel educativo alcanzado p301a
 
 merge_base_2020 <- dummy_cols(merge_base_2020, select_columns = 'p301a')
-
-
-merge_base_2020$p301a
 
 
 View(merge_base_2020[, c("p301a","p301a_1","p301a_2","p301a_3","p301a_4","p301a_5")])
@@ -438,7 +445,7 @@ View(merge_base_2020[, c("p301a","p301a_1","p301a_2","p301a_3","p301a_4","p301a_
 
 count(merge_base_2020, pobreza, sort = TRUE)
 
-count(merge_base_2020, pobreza, sort = F)
+count(merge_base_2020, pobre, sort = F)
 
 
 
@@ -451,7 +458,7 @@ df1 <- merge_base_2020 %>% group_by(conglome, vivienda, hogar ) %>%
 
 # La advertencia surge por que se están agrupando por varias variables
 
-df1_1 <- merge_base_2020 %>% group_by(conglome, vivienda, hogar ) %>% 
+df2 <- merge_base_2020 %>% group_by(conglome, vivienda, hogar ) %>% 
   summarise(
     edu_min = min(p301a, na.rm = TRUE),
     sup_educ = sum(p301a_10, na.rm = T), total_miembros = n(),
@@ -462,8 +469,40 @@ df1_1 <- merge_base_2020 %>% group_by(conglome, vivienda, hogar ) %>%
 # na.rm permite ignorar los missing en las operaciones mean, sum, max
 
 
-df2 <- merge_base_2020 %>% group_by(ubigeo_dep) %>% 
-  summarise(index_poverty = mean(dummy_pobre) )
+df3 <- merge_base_2020 %>% group_by(ubigeo_dep, region) %>% 
+  summarise(index_poverty = mean(dummy_pobre, na.rm = T), .groups = "keep" ) 
+
+
+class(merge_base_2020$p505)
+
+
+#----------------- Indicadores socieconómicos ------------------------
+
+survey_enaho <- merge_base_2020  %>% as_survey_design(ids = conglome, strata = estrato, 
+                                                      weight = facpob07)
+
+# seteamos el diseño de la encuesta
+
+names(merge_base_2020)
+
+ind1 <- survey_enaho %>%  filter(p208a >=  10 & p208a<= 65) %>% 
+  mutate( 
+    g1 = ifelse(p208a>=10 & p208a <=20,1,0),
+    g2 = ifelse(p208a>20 & p208a <=30,1,0),
+    g3 = ifelse(p208a >30 & p208a <=40,1,0),
+    g4 = ifelse(p208a >40 & p208a <=65,1,0),
+    
+  )  %>%  group_by(ubigeo_dep, region) %>% 
+  
+  summarise( 
+    
+    gp1 = survey_mean(g1), gp2 = survey_mean(g2), gp3 = survey_mean(g3),
+    gp4 = survey_mean(g4),
+    g_sec = survey_mean(p301a_6, na.rm = T), g_uni_co = survey_mean(p301a_10, na.rm = T),
+    
+    .groups = "keep"
+    
+  ) 
 
 
 #referecnes:#
