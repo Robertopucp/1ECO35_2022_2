@@ -32,7 +32,9 @@ os.chdir(f"C:/Users/{user}/Documents/GitHub/1ECO35_2022_2/Lab7") # Set directori
 
 enaho_2020 = pd.read_stata(r"../../../datos/2020/737-Modulo01/737-Modulo01/enaho01-2020-100.dta")
 
-"Debemos colocar convert_categoricals=False. Esto por deafult es True" 
+"Debemos colocar convert_categoricals=False. Esto por deafult es True"
+" De esta manera respetará los value's label "
+
 
 enaho01 = pd.read_stata(r"../../../datos/2020/737-Modulo01/737-Modulo01/enaho01-2020-100.dta",
                            convert_categoricals=False)
@@ -40,6 +42,7 @@ enaho01 = pd.read_stata(r"../../../datos/2020/737-Modulo01/737-Modulo01/enaho01-
 
 labels01 = pd.read_stata(r"../../../datos/2020/737-Modulo01/737-Modulo01/enaho01-2020-100.dta",
                            convert_categoricals=False, iterator=True)
+
 
 
 labels01.variable_labels()
@@ -121,14 +124,16 @@ enaho_merge_2 = pd.merge(enaho02, enaho01[["conglome", "vivienda", "hogar",'long
 #%% Tipos de Merge
 
 
-# output basico de STATA (_merge =1) Keepus Master
+# output basico de STATA (_merge =1,3) Keepus Master
 
 enaho_merge_left = pd.merge(enaho01, enaho37, 
                          on = ["conglome", "vivienda", "hogar"],
                        how = "left", 
                        validate = "1:1")
 
-# output basico de STATA (_merge =2) Keepus using
+
+
+# output basico de STATA (_merge =2,3) Keepus using
 
 enaho_merge_right = pd.merge(enaho01, enaho37, 
                          on = ["conglome", "vivienda", "hogar"],
@@ -142,6 +147,8 @@ enaho_merge_inner = pd.merge(enaho01, enaho37,
                          on = ["conglome", "vivienda", "hogar"],
                        how = "inner", 
                        validate = "1:1")
+
+
 
 enaho_merge_outer = pd.merge(enaho01, enaho37, 
                          on = ["conglome", "vivienda", "hogar"],
@@ -170,25 +177,6 @@ enaho_merge_3 = pd.merge(enaho01, enaho37,
 enaho_merge_3.shape
 
 
-## merge con dataset a nivel hogar enaho01, enaho34, enaho37
-
-
-num = ["34","37"]
-
-merge_hog = enaho01
-
-merge_hog['ubigeo_pr'] = merge_hog['ubigeo'].str[:2]
-
-merge_hog = merge_hog[merge_hog.ubigeo_pr.isin(["15","03","04"])]
-
-for i in tqdm(num):
-    merge_hog = pd.merge(merge_hog, globals()[f'enaho{i}'], 
-                         on = ["conglome", "vivienda", "hogar"],
-                       how = "left", 
-                       suffixes=('', '_y'),
-                       validate = "1:1")
-
-
 # merge using individual dataset
 
 #%% Merge using different Key variables 
@@ -204,19 +192,46 @@ merge_1 = pd.merge(enaho02, enaho03,
                        how = "left", 
                        validate = "1:1")
 
+
 enaho03.rename(columns={"cong":"conglome", "viv":"vivienda", "hog":"hogar","perso":"codperso"}, 
                inplace = True)
 
 
+
+## merge con dataset a nivel hogar enaho01, enaho34, enaho37
+
+
+num = ["34","37"]
+
+merge_hog = enaho01
+
+merge_hog['ubigeo_pr'] = merge_hog['ubigeo'].str[:2]
+merge_hog['ubigeo_pr'] = merge_hog['ubigeo'].str[:2]+"0000"
+
+merge_hog = merge_hog[merge_hog.ubigeo_pr.isin(["15","03","04"])]
+
+
+
+for i in tqdm(num):
+    merge_hog = pd.merge(merge_hog, globals()[f'enaho{i}'], 
+                         on = ["conglome", "vivienda", "hogar"],
+                       how = "left", 
+                       suffixes=('', '_y'),
+                       validate = "1:1")
+    
+    
+    
 # Merge a nivel miembros del hogar
 
-num = ["03","04","05"]
+num = ["03"]
 merge_ind = enaho02
 
 merge_ind['ubigeo_pr'] = merge_ind['ubigeo'].str[:2]
 
-merge_ind= merge_ind[merge_ind.ubigeo_pr.isin(["15","03","04"])]
+merge_ind= merge_ind[merge_ind.ubigeo_pr.isin(["15","03","04","12"])]
 
+
+# glablas para que python entienda que trabajamos una un dataset en el loop
 
 for i in tqdm(num):
     merge_id = pd.merge(merge_ind, globals()[f'enaho{i}'], 
@@ -234,92 +249,7 @@ merge_base_2020 = merge_id.merge(merge_hog,
                             suffixes=('', '_y'),
                             )
 
-
-
-
-
-###########################################
-############# Merge 2020 ##################
-###########################################
-
-enaho01 = pd.read_stata(r"../../../datos/2019/687-Modulo01/687-Modulo01/enaho01-2019-100.dta",
-                           convert_categoricals=False)
-
-enaho02 = pd.read_stata(r"../../../datos/2019/687-Modulo02/687-Modulo02/enaho01-2019-200.dta",
-                           convert_categoricals=False)
- 
-enaho03 = pd.read_stata(r"../../../datos/2019/687-Modulo03/687-Modulo03/enaho01a-2019-300.dta",
-                           convert_categoricals=False)
-
-enaho04 = pd.read_stata(r"../../../datos/2019/687-Modulo04/687-Modulo04/enaho01a-2019-400.dta",
-                           convert_categoricals=False)
-
-
-enaho05 = pd.read_stata(r"../../../datos/2019/687-Modulo05/687-Modulo05/enaho01a-2019-500.dta",
-                           convert_categoricals=False)
-
-enaho34 = pd.read_stata(r"../../../datos/2019/687-Modulo34/687-Modulo34/sumaria-2019.dta",
-                           convert_categoricals=False)
-
-
-enaho37 = pd.read_stata(r"../../../datos/2019/687-Modulo37/687-Modulo37/enaho01-2019-700.dta",
-                           convert_categoricals=False)
-
-
-enaho02 = enaho02[["conglome", "vivienda", "hogar" , "codperso",
-                  "ubigeo", "dominio" ,"estrato" ,"p208a", "p209",
-                  "p207", "p203", "p201p" , "p204",  "facpob07"]]
-
-enaho03 = enaho03[["conglome", "vivienda", "hogar" , "codperso",
-                  "p301a", "p301b", "p301c" , "p300a"]]
-
-
-enaho05 = enaho05[["conglome", "vivienda", "hogar" , "codperso",
-                  "i524e1", "i538e1", "p558a5" , "i513t", "i518",
-                  "p507", "p511a", "p512b", "p513a1", "p505" , "p506", "d544t", "d556t1",
-                  "d556t2" , "d557t" , "d558t" , "ocu500" , "i530a" , "i541a"]]
-
-num = ["34","37"]
-
-merge_hog = enaho01
-
-merge_hog['ubigeo_pr'] = merge_hog['ubigeo'].str[:2]
-
-merge_hog = merge_hog[merge_hog.ubigeo_pr.isin(["15","03","04","12"])]
-
-
-for i in num:
-    merge_hog = pd.merge(merge_hog, globals()[f'enaho{i}'], 
-                         on = ["conglome", "vivienda", "hogar"],
-                       how = "left", 
-                       suffixes=('', '_y'),
-                       validate = "1:1")
-    
-
-num = ["03","04","05"]
-merge_ind = enaho02
-
-merge_ind['ubigeo_pr'] = merge_ind['ubigeo'].str[:2]
-
-merge_ind= merge_ind[merge_ind.ubigeo_pr.isin(["15","03","04","12"])]
-
-for i in num:
-    merge_ind = pd.merge(merge_ind, globals()[f'enaho{i}'], 
-                         on = ["conglome", "vivienda", "hogar","codperso"],
-                       how = "left", 
-                       suffixes=('', '_y'),
-                       validate = "1:1")
-
-# Merge hogares e individuos 
-
-merge_base_2020 = merge_ind.merge(merge_hog, 
-                            on = ["conglome", "vivienda", "hogar"],
-                            how = "left",
-                            validate = "m:1",
-                            suffixes=('', '_y'),
-                            )
-
-## Filter ##
+# drop varibales que terminan en _y
 
 index_columns = np.where( merge_base_2020.columns.str.contains('_y$', regex=True))[0]
 
@@ -353,8 +283,6 @@ enaho37 = pd.read_stata(r"../../../datos/2019/687-Modulo37/687-Modulo37/enaho01-
                            convert_categoricals=False)
 
 
-
-
 enaho02 = enaho02[["conglome", "vivienda", "hogar" , "codperso",
                   "ubigeo", "dominio" ,"estrato" ,"p208a", "p209",
                   "p207", "p203", "p201p" , "p204",  "facpob07"]]
@@ -368,31 +296,33 @@ enaho05 = enaho05[["conglome", "vivienda", "hogar" , "codperso",
                   "p507", "p511a", "p512b", "p513a1", "p505" , "p506", "d544t", "d556t1",
                   "d556t2" , "d557t" , "d558t" , "ocu500" , "i530a" , "i541a"]]
 
-
 num = ["34","37"]
 
 merge_hog = enaho01
 
 merge_hog['ubigeo_pr'] = merge_hog['ubigeo'].str[:2]
+merge_hog['ubigeo_pr'] = merge_hog['ubigeo'].str[:2]+"0000"
+
 
 merge_hog = merge_hog[merge_hog.ubigeo_pr.isin(["15","03","04","12"])]
 
-for i in num:
+
+for i in tqdm(num):
     merge_hog = pd.merge(merge_hog, globals()[f'enaho{i}'], 
                          on = ["conglome", "vivienda", "hogar"],
                        how = "left", 
                        suffixes=('', '_y'),
                        validate = "1:1")
+    
 
-num = ["03","04","05"]
-
+num = ["03"]
 merge_ind = enaho02
 
 merge_ind['ubigeo_pr'] = merge_ind['ubigeo'].str[:2]
 
 merge_ind= merge_ind[merge_ind.ubigeo_pr.isin(["15","03","04","12"])]
 
-for i in num:
+for i in tqdm(num):
     merge_ind = pd.merge(merge_ind, globals()[f'enaho{i}'], 
                          on = ["conglome", "vivienda", "hogar","codperso"],
                        how = "left", 
@@ -408,6 +338,8 @@ merge_base_2019 = merge_ind.merge(merge_hog,
                             suffixes=('', '_y'),
                             )
 
+## Drop variables que termina en _y ##
+
 index_columns = np.where( merge_base_2019.columns.str.contains('_y$', regex=True))[0]
 
 merge_base_2019.drop(merge_base_2019.columns[index_columns], axis = 1, inplace = True)
@@ -419,12 +351,15 @@ merge_base_2019.drop(merge_base_2019.columns[index_columns], axis = 1, inplace =
 #%% Append
 
 
-merge_append = merge_base_2020.append(merge_base_2019,  ignore_index= True)
-
-merge_append.to_stata("../../../append_enaho.dta", write_index=False)
+merge_append = merge_base_2020.append(merge_base_2019, ignore_index = True)
 
 
-# write_index=False no genera una columna adicional para el índice
+#ignore_index= True : no haya conflictos de indexing 
+
+merge_append.to_stata("../../../append_enaho.dta", write_index = False)
+
+# write_index=False: no guardar con una columan de index
+
 
 #%% Poverty mesure
 
@@ -482,7 +417,7 @@ merge_base_2020["p301a"].value_counts()
 
 merge_base_2020["p301a"].replace({99: np.nan}, inplace =True)
 
-#Genrate dummies
+#Generate dummies
 
 pd.get_dummies(merge_base_2020["p301a"])
 
