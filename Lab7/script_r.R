@@ -3,7 +3,7 @@
 ## @author: Roberto Mendoza 
 ## Clean dataset
 
-#install.packages("srvyr")
+#install.packages("srvyr")  para declarar enuestas en R (similar al svyset en stata)
 
 
 #install.packages("fastDummies")
@@ -19,7 +19,15 @@ library(stringr)   # grep
 library(fastDummies)
 library(srvyr)
 
+
+
+
 # tydiverse: ggplot , dplyr other libraries
+
+# Conglome : 1235 , vivienda: 10, hogar: 11 , codperso : 4 año 2019
+
+# Conglome : 1235 , vivienda: 10, hogar: 11, codperso : 4 año 2015
+
 
 
 "1.0 Set Directorio"
@@ -211,16 +219,22 @@ names(enaho_merge)
 enaho05 <- enaho05 %>% rename(Conglo = conglome, viv = vivienda,
                               hog = hogar, cod = codperso)
 
+
+
+
 enaho_02_05 <- merge(enaho02, enaho05,
                      by.x = c("conglome", "vivienda", "hogar","codperso"),
                      by.y = c("Conglo", "viv", "hog","cod"),
                      all = TRUE
 )
 
+
+
 # reset los nombre correctos de la variables que identificar cada hogar
 
 enaho05 <- enaho05 %>% rename(conglome = Conglo, vivienda = viv,
                               hogar = hog, codperso = cod)
+
 
 
 #---------------------- Merge in Loop ------------------------------------
@@ -283,21 +297,34 @@ colnames(merge_base_2020)
 
 ### Ubigeo de departamento
 
+#ubigeo: 12 (ubigeo region junin, 1206 (provincia de satipo) 
+# 120601 (distrito de la provincia de satipo, region junin)
+
+# sibstr permite sustraer digitos de un string, texto, caracter
 
 merge_base_2020['ubigeo_dep'] = substr(merge_base_2020$ubigeo, 1, 2)
 
+# a aprtir de  la posición inicial, extraer los dos primeros digitos
+
 merge_base_2020['ubigeo_dep_2'] = paste(str_sub(merge_base_2020$ubigeo,1,2),
-                                        "00", sep = "")
+                                        "0000", sep = "")
+
 
 ### filtrado para algunos departamentos
 
 merge_base_2020 <- merge_base_2020 %>%  filter(
   merge_base_2020$ubigeo_dep  %in% c("15","03","04","12") ) 
+
+#library(dplyr)
+
 merge_base_2020 <- merge_base_2020 %>% 
   mutate(region = case_when(ubigeo_dep == "04" ~ "Arequipa",
                           ubigeo_dep == "03" ~ "Apurimac",
                           ubigeo_dep == "12" ~ "Junin",
                           ubigeo_dep == "15" ~ "Lima") ) 
+
+
+
 #----------------------------------------------------------
 
 "ENAHO 2019"
@@ -391,7 +418,10 @@ merge_base_2019 <- merge_base[, - index]
 #----------------------- Append -----------------------------------
 
 
-merge_append <-  bind_rows(merge_base_2020, merge_base_2019)
+merge_append <-  bind_rows(merge_base_2020, merge_base_2019) # bind_rows from dyplr 
+
+
+unique(merge_append$aÑo)
 
 # bind_rows from dplyr library 
 
@@ -411,21 +441,26 @@ write_dta(merge_append, "../data/append_enaho_r.dta")
 # mieperho: miembros del hogar
 # Excluye a los trabajadores domésticos y a las personas que subarriendan una habitación en el hogar
 
+merge_base_2020$pobreza
+
 
 merge_base_2020 <- merge_base_2020 %>%
-  mutate(ingreso_month = merge_base_2020$inghog1d/(12*merge_base_2020$mieperho),
-         gasto_month = merge_base_2020$gashog2d/(12*merge_base_2020$mieperho)
+  mutate(ingreso_month_pc = merge_base_2020$inghog1d/(12*merge_base_2020$mieperho),
+         gasto_month_pc = merge_base_2020$gashog2d/(12*merge_base_2020$mieperho)
          ) %>%
- mutate(dummy_pobre = ifelse( gasto_month < merge_base_2020$linea , 
+ mutate(dummy_pobre = ifelse( gasto_month_pc < merge_base_2020$linea , 
                         1 , 
                         ifelse(!is.na(merge_base_2020$gashog2d),0, NA) ) ) %>%
-  mutate(pobre = ifelse( gasto_month < merge_base_2020$linea , 
+  mutate(pobre = ifelse( gasto_month_pc < merge_base_2020$linea , 
                                "pobre" , 
                   ifelse(!is.na(merge_base_2020$gashog2d),"No pobre", NA) ) )   %>%
  mutate(pc_pobre = case_when(merge_base_2020$pobreza == 1 ~ "Pobre extremo",
                              merge_base_2020$pobreza == 2 ~ "Pobre",
                              merge_base_2020$pobreza == 3 ~ "No pobre"))  
 
+
+        
+sum(is.na(merge_base_2020$gashog2d))
 
 
 #creando dummies usando la variabe de nivel educativo alcanzado p301a
@@ -445,16 +480,28 @@ View(merge_base_2020[, c("p301a","p301a_1","p301a_2","p301a_3","p301a_4","p301a_
 
 count(merge_base_2020, pobreza, sort = TRUE)
 
-count(merge_base_2020, pobre, sort = F)
-
+count(merge_base_2020, pc_pobre, sort = F)
 
 
 df1 <- merge_base_2020 %>% group_by(conglome, vivienda, hogar ) %>% 
   summarise(
+    edu_min = min(p301a),
+    sup_educ = sum(p301a_10), total_miembros = n(),
+    edu_max = max(p301a), .groups = "keep"
+  )
+
+
+
+# sin considerar los missing 
+
+df1_no_missing <- merge_base_2020 %>% group_by(conglome, vivienda, hogar ) %>% 
+  summarise(
     edu_min = min(p301a, na.rm = TRUE),
     sup_educ = sum(p301a_10, na.rm = T), total_miembros = n(),
-    edu_max = max(p301a, na.rm = T)
+    edu_max = max(p301a, na.rm = T), .groups = "keep"
   )
+
+
 
 # La advertencia surge por que se están agrupando por varias variables
 
@@ -481,28 +528,33 @@ class(merge_base_2020$p505)
 survey_enaho <- merge_base_2020  %>% as_survey_design(ids = conglome, strata = estrato, 
                                                       weight = facpob07)
 
+
+
 # seteamos el diseño de la encuesta
 
 names(merge_base_2020)
 
-ind1 <- survey_enaho %>%  filter(p208a >=  10 & p208a<= 65) %>% 
+ind1 <- survey_enaho %>%  filter(p208a >=  10 & p208a<= 65) %>%  # me quedo con personas de 10 a 65 años
   mutate( 
-    g1 = ifelse(p208a>=10 & p208a <=20,1,0),
+    g1 = ifelse(p208a>=10 & p208a <=20,1,0),  # dummies por grupos de edad
     g2 = ifelse(p208a>20 & p208a <=30,1,0),
     g3 = ifelse(p208a >30 & p208a <=40,1,0),
     g4 = ifelse(p208a >40 & p208a <=65,1,0),
     
-  )  %>%  group_by(ubigeo_dep, region) %>% 
+  )  %>%  group_by(region) %>%   # indicadores de grupo de edad y nivel educativo 
+                                 # indicadores a nivel regional 
   
   summarise( 
     
     gp1 = survey_mean(g1), gp2 = survey_mean(g2), gp3 = survey_mean(g3),
     gp4 = survey_mean(g4),
-    g_sec = survey_mean(p301a_6, na.rm = T), g_uni_co = survey_mean(p301a_10, na.rm = T),
-    
-    .groups = "keep"
+    g_sec = survey_mean(p301a_6, na.rm = T), g_uni_co = survey_mean(p301a_10, na.rm = T)
     
   ) 
+
+
+
+
 
 
 #referecnes:#
