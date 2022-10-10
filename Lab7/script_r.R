@@ -15,7 +15,7 @@
 
 library(haven)
 library(dplyr)
-library(stringr)   # grep 
+library(stringr)   # grep for regular expression
 library(fastDummies)
 library(srvyr)
 
@@ -554,8 +554,9 @@ ind1 <- survey_enaho %>%  filter(p208a >=  10 & p208a<= 65) %>%  # me quedo con 
 
 
 
+merge_base_2020$estrato
 
-
+merge_base_2020$dominio
 
 #referecnes:#
 

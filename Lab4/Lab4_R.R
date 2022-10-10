@@ -177,8 +177,9 @@ transform <- function(Data, ...){
   
 }
 
+data <- transform(cps2012, "lnw", "exp1","exp2","exp3","exp4")
 
-View(transform(cps2012, "lnw", "exp1","exp2","exp3","exp4"))
+View(data)
 
 
 
