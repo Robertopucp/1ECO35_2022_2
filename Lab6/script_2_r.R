@@ -85,19 +85,6 @@ enapres2020_1_ndup <- enapres2020_1 %>% distinct(CCDD ,CCPP
 dim(enapres2020_1_ndup)
 
 
-# Check unique values. We can se that there is missing values
-
-
-
-enapres2020_1_ndup <- enapres2020_1_ndup %>%  mutate(Dummy_2 = ifelse(ESTRATO == 4 ,  1 , ifelse(!is.na(ESTRATO),0, NA) ) )
-
-
-enapres2020_1_ndup <- enapres2020_1_ndup %>%  mutate(Dummy_3 = ifelse( ESTRATO %in% c(3,4,5) ,  1 , ifelse(!is.na(ESTRATO),0, NA) ) )
-
-
-enapres2020_1_ndup 
-
-
 write_sav(enapres2020_1_ndup , "../data/enapres_2020_ch_100/736-Modulo1618/df.sav")  # save in spss format 
 
 

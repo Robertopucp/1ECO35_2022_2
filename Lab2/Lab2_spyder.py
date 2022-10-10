@@ -174,6 +174,7 @@ def calculator_square_2( x, y ):
     y2 = y * y
     
     result = x2 * y2   
+    
     if result <= 200:
        return f"Large number. Get only the result variable {result}"
     else:

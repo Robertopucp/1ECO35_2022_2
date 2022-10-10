@@ -259,6 +259,7 @@ merge_base_2020.drop(merge_base_2020.columns[index_columns], axis = 1, inplace =
 ############# Merge 2019 ##################
 ###########################################
 
+
 enaho01 = pd.read_stata(r"../../../datos/2019/687-Modulo01/687-Modulo01/enaho01-2019-100.dta",
                            convert_categoricals=False)
 

@@ -23,6 +23,7 @@ panel = pd.read_stata("../data/panel_2016_2018.dta")
 
 panel.columns = map(str.lower, panel.columns)  # any capittal letter to lower
 
+
 panel.rename(columns = {'año_16':'year_16', 'año_17':'year_17', 'año_18':'year_18', 'año_19':'year_19',
                        'año_20':'year_20'}, inplace = True)
 
