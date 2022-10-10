@@ -308,6 +308,8 @@ data.attrs[ 'var_labels' ] = var_labels_data # var labels
 data.attrs[ 'value_labels' ]
 data.attrs[ 'var_labels' ]
 
+# Observamos los atributos asignados a la base de datos 
+
 data.attrs
 
 
