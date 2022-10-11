@@ -306,7 +306,7 @@ merge_base_2020['ubigeo_dep'] = substr(merge_base_2020$ubigeo, 1, 2)
 
 # a aprtir de  la posición inicial, extraer los dos primeros digitos
 
-merge_base_2020['ubigeo_dep_2'] = paste(str_sub(merge_base_2020$ubigeo,1,2),
+merge_base_2020['ubigeo_dep_2'] = paste(substr(merge_base_2020$ubigeo,1,2),
                                         "0000", sep = "")
 
 
