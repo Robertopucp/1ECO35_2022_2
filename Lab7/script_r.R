@@ -3,7 +3,7 @@
 ## @author: Roberto Mendoza 
 ## Clean dataset
 
-#install.packages("srvyr")  para declarar enuestas en R (similar al svyset en stata)
+#install.packages("srvyr")  para declarar encuestas en R (similar al svyset en stata)
 
 
 #install.packages("fastDummies")
@@ -13,12 +13,11 @@
 #pacman::p_load(haven,dplyr, stringr, fastDummies)
 
 
-library(haven)
-library(dplyr)
+library(haven)  # leer archivos spss, stata, dbf, etc
+library(dplyr)  # limpieza de datos
 library(stringr)   # grep for regular expression
-library(fastDummies)
-library(srvyr)
-
+library(fastDummies) # crear dummy
+library(srvyr)  # libreria para declarar el diseño muestral de una encuesta
 
 
 
@@ -216,7 +215,7 @@ names(enaho_merge)
 
 # rename variables que identifican de manera unica a cada hogar
 
-enaho05 <- enaho05 %>% rename(Conglo = conglome, viv = vivienda,
+enaho05 <- enaho05 %>% dplyr::rename(Conglo = conglome, viv = vivienda,
                               hog = hogar, cod = codperso)
 
 
@@ -232,7 +231,7 @@ enaho_02_05 <- merge(enaho02, enaho05,
 
 # reset los nombre correctos de la variables que identificar cada hogar
 
-enaho05 <- enaho05 %>% rename(conglome = Conglo, vivienda = viv,
+enaho05 <- enaho05 %>% dplyr::rename(conglome = Conglo, vivienda = viv,
                               hogar = hog, codperso = cod)
 
 
@@ -441,8 +440,6 @@ write_dta(merge_append, "../data/append_enaho_r.dta")
 # mieperho: miembros del hogar
 # Excluye a los trabajadores domésticos y a las personas que subarriendan una habitación en el hogar
 
-merge_base_2020$pobreza
-
 
 merge_base_2020 <- merge_base_2020 %>%
   mutate(ingreso_month_pc = merge_base_2020$inghog1d/(12*merge_base_2020$mieperho),
@@ -458,9 +455,16 @@ merge_base_2020 <- merge_base_2020 %>%
                              merge_base_2020$pobreza == 2 ~ "Pobre",
                              merge_base_2020$pobreza == 3 ~ "No pobre"))  
 
+# creación de Dummy binaria usando ifelse
+
+ifelse( gasto_month_pc < merge_base_2020$linea , # condición gasto percapita mensual  < linea de pobreza
+        1 ,    # se asigna uno si se cumple la condición
+        ifelse(!is.na(merge_base_2020$gashog2d),0, NA) ) 
+#caso no se cumpla, primero se verifica si el gasto anual del hogar es no missing. Si es asi se coloca cero
+# Pero si es missing, entonces se coloca NA
 
         
-sum(is.na(merge_base_2020$gashog2d))
+sum(is.na(merge_base_2020$gashog2d)) # no hay missing eb la variables gasto anual del hogar
 
 
 #creando dummies usando la variabe de nivel educativo alcanzado p301a
@@ -498,12 +502,13 @@ df1_no_missing <- merge_base_2020 %>% group_by(conglome, vivienda, hogar ) %>%
   summarise(
     edu_min = min(p301a, na.rm = TRUE),
     sup_educ = sum(p301a_10, na.rm = T), total_miembros = n(),
-    edu_max = max(p301a, na.rm = T), .groups = "keep"
+    edu_max = max(p301a, na.rm = T), 
   )
 
 
 
-# La advertencia surge por que se están agrupando por varias variables
+# La advertencia surge por que se están agrupando por varias variables. 
+# Para evitar el mensaje, debemos incluir el argumento .groups = "keep"
 
 df2 <- merge_base_2020 %>% group_by(conglome, vivienda, hogar ) %>% 
   summarise(
@@ -511,6 +516,9 @@ df2 <- merge_base_2020 %>% group_by(conglome, vivienda, hogar ) %>%
     sup_educ = sum(p301a_10, na.rm = T), total_miembros = n(),
     edu_max = max(p301a, na.rm = T), .groups = "keep"
   )
+
+
+#  max(p301a, na.rm = T), na.rm = T causa que R no tome en cuenta a los missings
 
 
 # na.rm permite ignorar los missing en las operaciones mean, sum, max
@@ -525,16 +533,19 @@ class(merge_base_2020$p505)
 
 #----------------- Indicadores socieconómicos ------------------------
 
+# Primero indicamos a R que nuestra base de datos es una encuesta
+# Para ello demebos declarar el diseño de la encuesta
+# ids: conglomerado, strato: estrato y wieght : factor de expansión
+
 survey_enaho <- merge_base_2020  %>% as_survey_design(ids = conglome, strata = estrato, 
                                                       weight = facpob07)
 
+#facpob07: factor de expansión a nivel población. Esto se constriye a partir de información Censo 2017
 
-
-# seteamos el diseño de la encuesta
 
 names(merge_base_2020)
 
-ind1 <- survey_enaho %>%  filter(p208a >=  10 & p208a<= 65) %>%  # me quedo con personas de 10 a 65 años
+ind1 <- survey_enaho %>%  dplyr::filter(p208a >=  10 & p208a<= 65) %>%  # me quedo con personas de 10 a 65 años
   mutate( 
     g1 = ifelse(p208a>=10 & p208a <=20,1,0),  # dummies por grupos de edad
     g2 = ifelse(p208a>20 & p208a <=30,1,0),
