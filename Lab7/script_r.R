@@ -18,7 +18,7 @@ library(dplyr)  # limpieza de datos
 library(stringr)   # grep for regular expression
 library(fastDummies) # crear dummy
 library(srvyr)  # libreria para declarar el diseño muestral de una encuesta
-
+library(survey)
 
 
 # tydiverse: ggplot , dplyr other libraries
@@ -59,11 +59,33 @@ enaho01$dominio
 
 # %>% Ctrl + shift + m  
 
-enaho01$p110 %>% attr('labels') # value labels
+enaho01$estrato  %>% attr('labels') # value labels
 
 
-enaho01$p110 %>% attr('label') # var label
+enaho01$factor07 %>% attr('label') # var label
 
+names(enaho01)
+
+# Weight sampling
+
+enaho02 = data.frame(
+  read_dta("../../../enaho/2020/737-Modulo02/737-Modulo02/enaho01-2020-200.dta")
+)
+
+names(enaho02)
+
+length( unique(enaho02$facpob07) )
+
+length( unique(enaho02$conglome) )
+
+
+length( unique(enaho01$factor07) )
+
+length( unique(enaho01$conglome) )
+
+sum(enaho02$facpob07)
+
+unique(enaho01$conglome) # La suma resulta en total de la población 2020 proyectada?
 
 "Módulo02"
 
@@ -103,7 +125,7 @@ enaho02 <- enaho02[ , c("conglome", "vivienda", "hogar" , "codperso",
 
 
 enaho03 <- enaho03[ , c("conglome", "vivienda", "hogar" , "codperso",
-                        "p301a", "p301b", "p301c" , "p300a")]
+                        "p301a", "p301b", "p301c" , "p300a","p301b","p301c")]
 
 enaho05 <- enaho05[ , c("conglome", "vivienda", "hogar" , "codperso",
                         "i524e1", "i538e1", "p558a5" , "i513t", "i518",
@@ -364,7 +386,7 @@ enaho02 <- enaho02[ , c("conglome", "vivienda", "hogar" , "codperso",
                         "p207", "p203", "p201p" , "p204",  "facpob07")]
 
 enaho03 <- enaho03[ , c("conglome", "vivienda", "hogar" , "codperso",
-                        "p301a", "p301b", "p301c" , "p300a")]
+                        "p301a", "p301b", "p301c" , "p300a","p301b","p301c")]
 
 enaho05 <- enaho05[ , c("conglome", "vivienda", "hogar" , "codperso",
                         "i524e1", "i538e1", "p558a5" , "i513t", "i518",
@@ -487,6 +509,21 @@ count(merge_base_2020, pobreza, sort = TRUE)
 count(merge_base_2020, pc_pobre, sort = F)
 
 
+
+#Alternativa de tab (STATA) en R 
+
+table(merge_base_2020$pc_pobre)
+
+table(merge_base_2020$p301a)
+
+merge_base_2020 %>% dplyr::filter(!is.na(p301a)) %>%  group_by(p301a) %>% summarise(Freq.abs = n()) %>% 
+  mutate(Freq.relative = (Freq.abs/sum(Freq.abs))*100) %>% arrange(desc(Freq.relative))
+
+# arrange de la libreria dplyr permite ordenar una variable 
+# dplyr::filter pues al instalar las librerias, R indica de conflicto en el nombre de funciones 
+# en librerias diferentes. El códugo significa que que usará la función o método filter de la librearia dplyr
+
+
 df1 <- merge_base_2020 %>% group_by(conglome, vivienda, hogar ) %>% 
   summarise(
     edu_min = min(p301a),
@@ -568,6 +605,22 @@ ind1 <- survey_enaho %>%  dplyr::filter(p208a >=  10 & p208a<= 65) %>%  # me que
 merge_base_2020$estrato
 
 merge_base_2020$dominio
+
+
+#------- Libreria Survey -------
+
+# Se declara el diseño muestral
+
+
+survey_enaho <- svydesign(id=~conglome, weights=~facpob07,strata=~estrato, data=merge_base_2020)
+
+
+
+
+
+
+
+
 
 #referecnes:#
 
