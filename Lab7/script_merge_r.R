@@ -521,7 +521,7 @@ merge_base_2020 %>% dplyr::filter(!is.na(p301a)) %>%  group_by(p301a) %>% summar
 
 # arrange de la libreria dplyr permite ordenar una variable 
 # dplyr::filter pues al instalar las librerias, R indica de conflicto en el nombre de funciones 
-# en librerias diferentes. El códugo significa que que usará la función o método filter de la librearia dplyr
+# en librerias diferentes. El código significa que que usará la función o método filter de la librearia dplyr
 
 
 df1 <- merge_base_2020 %>% group_by(conglome, vivienda, hogar ) %>% 
