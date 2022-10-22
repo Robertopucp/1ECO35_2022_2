@@ -9,7 +9,7 @@ Created on Sat Sep 24
 
 #!pip install weightedcalcs
 
-import os # for usernanme y set direcotrio
+import os   # for usernanme y set direcotrio
 import pandas as pd
 import numpy as np
 import weightedcalcs as wc # ponderador
@@ -23,7 +23,6 @@ os.chdir(f"C:/Users/{user}/Documents/GitHub/1ECO35_2022_2/Lab7") # Set directori
 
 # Set directorio
 #%% Merge 
-
 
 
 " Read Stata dataset usando pandas"
@@ -205,10 +204,10 @@ num = ["34","37"]
 
 merge_hog = enaho01
 
-merge_hog['ubigeo_pr'] = merge_hog['ubigeo'].str[:2]
-merge_hog['ubigeo_pr'] = merge_hog['ubigeo'].str[:2]+"0000"
+merge_hog['ubigeo_dep2'] = merge_hog['ubigeo'].str[:2]
+merge_hog['ubigeo_dep6'] = merge_hog['ubigeo'].str[:2]+"0000"
 
-merge_hog = merge_hog[merge_hog.ubigeo_pr.isin(["15","03","04"])]
+merge_hog = merge_hog[merge_hog.ubigeo_dep2.isin(["15","03","04"])]
 
 
 
@@ -224,11 +223,12 @@ for i in tqdm(num):
 # Merge a nivel miembros del hogar
 
 num = ["03"]
-merge_ind = enaho02
+
+merge_ind = enaho02  # modulo de personas 
 
 merge_ind['ubigeo_pr'] = merge_ind['ubigeo'].str[:2]
 
-merge_ind= merge_ind[merge_ind.ubigeo_pr.isin(["15","03","04","12"])]
+merge_ind= merge_ind[merge_ind.ubigeo_pr.isin(["15","03","04"])]
 
 
 # glablas para que python entienda que trabajamos una un dataset en el loop
@@ -240,9 +240,10 @@ for i in tqdm(num):
                        suffixes=('', '_y'),
                        validate = "1:1")
 
+
 # Merge hogares e individuos 
 
-merge_base_2020 = merge_id.merge(merge_hog, 
+merge_base_2020 = pd.merge(merge_id, merge_hog, 
                             on = ["conglome", "vivienda", "hogar"],
                             how = "left",
                             validate = "m:1",
@@ -254,6 +255,10 @@ merge_base_2020 = merge_id.merge(merge_hog,
 index_columns = np.where( merge_base_2020.columns.str.contains('_y$', regex=True))[0]
 
 merge_base_2020.drop(merge_base_2020.columns[index_columns], axis = 1, inplace = True)
+
+
+merge_base_2020['linea']
+
 
 ###########################################
 ############# Merge 2019 ##################
@@ -385,6 +390,12 @@ merge_base_2020["pobre"] = np.where(
                                     "pobre", "no pobre")
 
 
+
+merge_base_2020["pobre"].value_counts()
+
+
+merge_base_2020["pobre"].unique()
+
 # np.where(Condicioón, colocar v si es verdadero, colcoar w si es falso)
 
 merge_base_2020["dummy_pobre"] = np.where(
@@ -398,6 +409,10 @@ merge_base_2020["pc_pobre"] = merge_base_2020["pobreza"].replace({1: "Pobre extr
                                                   2: "Pobre",
                                                   3: "No pobre"})
 
+merge_base_2020["pobreza"]
+merge_base_2020["pc_pobre"]
+
+merge_base_2020["pc_pobre"].unique()
 
 # pobreza (1 pobre extremo, 2 pobre no extremo, 3 no pobre)
 
@@ -409,6 +424,12 @@ merge_base_2020["p301a"].unique()
 merge_base_2020["p301a"].value_counts()
 
 merge_base_2020["p301a"].replace({np.nan: 99}, inplace =True)
+
+
+# reempalzar 99 de valores perdidos por missing 
+
+merge_base_2020["p301a"].replace({99:np.nan}, inplace =True)
+
 
 merge_base_2020["p301a"].unique()
 merge_base_2020["p301a"].value_counts()
@@ -422,35 +443,88 @@ merge_base_2020["p301a"].replace({99: np.nan}, inplace =True)
 
 pd.get_dummies(merge_base_2020["p301a"])
 
-levels = len(merge_base_2020["p301a"].unique()) - 1
 
-merge_base_2020[[f"var_{i+1}" for i in range(levels)]] = pd.get_dummies(merge_base_2020["p301a"])
+# juntar las varibales dummies en el dataframe
+
+levels = len(merge_base_2020["p301a"].unique()) - 1  # no tomar en cuenta la cageoria NA
+
+
+
+merge_base_2020[ [f"var_{i+1}" for i in range(levels)] ] = pd.get_dummies(merge_base_2020["p301a"])
+
+
+# alternativa 
+
+merge_base_2020 = pd.concat([ merge_base_2020 , pd.get_dummies(merge_base_2020["p301a"]) ], axis = 1 )
+
+# axis = 1, se junta las bases de forma horizontal 
+
+merge_base_2020.columns
+
+merge_base_2020[10]
 
 
 #%% Collapse
 
 # maximo nivel educativo alcanzado, dummy si educación superior, menor nivel alcanzado 
 
+df1 = merge_base_2020.groupby( [ "conglome", "vivienda", "hogar" ]).agg( edu_max = ( 'p301a', np.max ) ,
+                                                       edu_min = ( 'p301a', np.min ) ,
+                        total_miembros = ('hogar', np.size),
+                        sup_educ = ( 'var_10', np.sum ))
+           
 
+#   as_index = true (default), las varibales de agrupamiento son variables indenxing
+   
+   
+df1['vivienda'] 
+                         
+df1['hogar']
+    
+# var_10: universitaria completa    
+
+# ""           var_10
+# 1023 12 01   1    
+# 1023 12 01   0     
+# 1023 12 01   1                                                   
+# ""           
+
+                                       
 df1 = merge_base_2020.groupby( [ "conglome", "vivienda", "hogar" ],
                               as_index = False ).agg( edu_max = ( 'p301a', np.max ) ,
                                                        edu_min = ( 'p301a', np.min ) ,
                         total_miembros = ('conglome', np.size),
                         sup_educ = ( 'var_10', np.sum ))
+      
                                                      
-                             
-df2 = merge_base_2020.groupby( [ "ubigeo_pr" ],
+df1['vivienda'] 
+                     
+        
+df2 = merge_base_2020.groupby( [ "ubigeo_dep2" ],
                                   as_index = False ).agg( index_poverty = ( 'dummy_pobre', np.mean ))                                               
-                                                     
-merge_base_2020["dpto"] = merge_base_2020["ubigeo_pr"].replace({
-    "15": "Lima","03": "Apurimac","04": "Arequipa","12":"Junín"
+                                   
+
+#    Dummy
+# 1  0
+# 2  1
+# 3  0
+# 4  1
+
+# (1+0+1+0)/4 = 2/4 = 0.5, pormedio de una dummy es un porcentaje !!
+
+                  
+merge_base_2020["dpto"] = merge_base_2020["ubigeo_dep2"].replace({
+    "15": "Lima","03": "Apurimac","04": "Arequipa"
                                             })
 
 
 df3 = merge_base_2020.groupby( [ "dpto" ],
                                   as_index = False ).agg( index_poverty = ( 'dummy_pobre', np.mean ))                                                
-                                                     
+                           
+
+                          
 #Tabla de comparación  value_counts similar tab in stata
+
 
 
 print("*-----------------------------------*")
@@ -472,20 +546,22 @@ print("*-----------------------------------*")
 pd.crosstab(merge_base_2020["dpto"], merge_base_2020["dummy_pobre"])
 
 #Generamos tablas sin ponderador
-pd.crosstab([merge_base_2020["urbano"],merge_base_2020["estrsocial"]], 
+
+pd.crosstab([merge_base_2020["estrsocial"]], 
             merge_base_2020["pc_pobre"] , margins=True)
 
 #Tasa de pobreza usando factor expansión / ponderador
 
+
 calc = wc.Calculator("facpob07")
 
-#Distribución de variable "pc_pobre"
 
 apurimac = merge_base_2020[ merge_base_2020["dpto"] == "Apurimac" ]
 
+# Ahora la tasa de pobreza segun (pobre extremo, pobre o no pobre) pues toma en cuenta
+# el factor de expansión 
 
 calc.distribution(apurimac,"pc_pobre").round(3).sort_values(ascending=False)
-
 
 
 "References: "
