@@ -510,7 +510,7 @@ df2 = merge_base_2020.groupby( [ "ubigeo_dep2" ],
 # 3  0
 # 4  1
 
-# (1+0+1+0)/4 = 2/4 = 0.5, pormedio de una dummy es un porcentaje !!
+# (1+0+1+0)/4 = 2/4 = 0.5, promedio de una dummy es un porcentaje !!
 
                   
 merge_base_2020["dpto"] = merge_base_2020["ubigeo_dep2"].replace({
@@ -550,11 +550,9 @@ pd.crosstab(merge_base_2020["dpto"], merge_base_2020["dummy_pobre"])
 pd.crosstab([merge_base_2020["estrsocial"]], 
             merge_base_2020["pc_pobre"] , margins=True)
 
-#Tasa de pobreza usando factor expansión / ponderador
-
+#Tasa de pobreza usando factor expansión / ponderador facpob07
 
 calc = wc.Calculator("facpob07")
-
 
 apurimac = merge_base_2020[ merge_base_2020["dpto"] == "Apurimac" ]
 
