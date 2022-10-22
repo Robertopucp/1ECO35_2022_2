@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 """
-Topic: Expresiones regulares 
-Laboratorio de R y Python
+Created on Fri Oct 21 19:17:11 2022
 
 @author: Roberto
 """
+
 
 
 # import libraries

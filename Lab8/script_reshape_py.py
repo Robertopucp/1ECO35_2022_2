@@ -15,9 +15,9 @@ import os # for usernanme y set direcotrio
 
 user = os.getlogin()   # Username
 
-os.chdir(f"C:/Users/{user}/Documents/GitHub/1ECO35_2022_2/Lab7") # Set directorio
+os.chdir(f"C:/Users/{user}/Documents/GitHub/1ECO35_2022_2/Lab8") # Set directorio
 
-panel = pd.read_stata("../data/panel_2016_2018.dta")
+panel = pd.read_stata("../../../datos/panel/743-Modulo1478/sumaria-2016-2020-panelf.dta")
 
 
 
