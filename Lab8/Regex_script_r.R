@@ -130,6 +130,9 @@ data$region <- apply(data['dirección'],
                           1 ,  
               function(x) str_match(x,"\\.*+[D/d]istrito\\s([\\w*\\s]*)\\s[R/r]egion\\s([\\w*\\s]*)")[3])
 
+
+#extracción del numero telefonico
+
 data$telefono_fijo <- apply(data['telefono'],
                      1 ,  
                      function(x) str_match(x,"\\.*+(\\d+\\-\\d+)$")[2])
@@ -183,44 +186,6 @@ data$fecha_apertura_format <-  as.Date(data$fecha_apertura,format='%d/%m/%Y')
 data$year = as.numeric (format(data$fecha_apertura_format ,"%Y"))
 data$month = as.numeric (format(data$fecha_apertura_format ,"%m"))
 data$day = as.numeric (format(data$fecha_apertura_format ,"%d"))
-
-
-dating <- function(var1,var2,var3){
-
-  if ( nchar(as.character(! is.null(var1) )) == 2 ){
-    
-    y = paste("20",as.character(var1),"/",as.character(var2),"/",as.character(var3), sep = "") 
-    
-  }
-  else if ( nchar(as.character(! is.null(var1) )) == 4 ){
-    
-    y = paste(as.character(var1),"/",as.character(var2),"/",as.character(var3), sep = "") 
-    
-  }
-  else{
-    
-    y = ""
-  }
-
-      
-  return(y)
-  
-}
-
-
-data$nueva_fecha2 <- apply(data['year'],
-                   1 ,  
-                   function(x) dating(x, data$month, data$day))
-
-
-
-data$nueva_fecha2 <- mapply(dating, data$year, data$month, data$day)
-
-
-
-nchar(as.character(data['year']))
-
-
 
 
 #----- Segunda aplicación ------------------
