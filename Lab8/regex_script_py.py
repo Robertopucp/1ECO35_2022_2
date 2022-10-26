@@ -26,10 +26,11 @@ data = pd.read_excel("../data/Centro_salud/Centro_salud_mental.xls") # Subir bas
 data
 
 
-
  # from capital letters to lower 
 
 data.columns = map(str.lower, data.columns)
+
+# map es el loop replacement que permite aplicar la función str.lower a cada elemento de la lista data.columns
 
 #%% regex re.sub
 
@@ -38,24 +39,24 @@ data.columns = map(str.lower, data.columns)
 
 # Extraer solo texto de una celda que contiene numero y texto 
 
-data['inst1'] = data['institución_ruc'].apply(lambda x: re.sub('[0-9]*','',x))
+data['inst1'] = data['institución_ruc'].apply(lambda x: re.sub('[0-9]','',x))
 
 "[0-9]*: ninguno, uno o más digitos"
 
 
 # Usando una librería de parallel procesing para que la computadora sea rápida
 
-data['inst1'] = data['institución_ruc'].swifter.apply(lambda x: re.sub('[0-9]*','',x))
-data['inst1'] = data['institución_ruc'].swifter.apply(lambda x: re.sub('[0-9]+','',x))
+data['inst1'] = data['institución_ruc'].swifter.apply(lambda x: re.sub('[0-9]','',x))
+data['inst1'] = data['institución_ruc'].swifter.apply(lambda x: re.sub('[0-9]','',x))
 
 # Alternativas 1
 
-data['inst2'] = data['institución_ruc'].apply(lambda x: re.sub('\d*','',x))
+data['inst2'] = data['institución_ruc'].apply(lambda x: re.sub('\d','',x))
 
 
 # Alternativas 2
 
-data['inst3'] = data['institución_ruc'].apply(lambda x: re.sub('[^a-zA-Z]*','',x))
+data['inst3'] = data['institución_ruc'].apply(lambda x: re.sub('[^a-zA-Z,\s]','',x))
 
 
 "2.0 extraccción del texto"
@@ -63,12 +64,12 @@ data['inst3'] = data['institución_ruc'].apply(lambda x: re.sub('[^a-zA-Z]*','',
 
 # Alternativas 1
 
-data['ruc1'] = data['institución_ruc'].apply(lambda x: re.sub('[a-zA-Z]*','',x))
+data['ruc1'] = data['institución_ruc'].apply(lambda x: re.sub('[a-zA-Z]','',x))
 
 
 # Alternativas 2
 
-data['ruc2'] = data['institución_ruc'].apply(lambda x: re.sub('[a-zA-Z]+','',x))
+data['ruc2'] = data['institución_ruc'].apply(lambda x: re.sub('[a-zA-Z]','',x))
 
 # Alternativas 3
 
@@ -145,7 +146,7 @@ from datetime import datetime
 
 
 
-##% Segunda aplicación
+#%% Segunda aplicación, filtro de columnas 
 
 junin = pd.read_excel("../data/Region_Junin.xlsx")
 
@@ -183,7 +184,7 @@ junin.loc[junin['Place'].str.contains('ro$', flags = re.I, na = False, regex = T
 
 junin.loc[junin['Place'].str.contains('ca$', flags = re.I, na = False, regex = True)]
 
-# match : a , . o a.
+# match : a , . , a.
 
 newbase  = junin.loc[junin['Place'].str.contains('^a\.*', flags = re.I, na = False, regex = True)]
 

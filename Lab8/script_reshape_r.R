@@ -14,7 +14,7 @@ library(dplyr)
 
 user <- Sys.getenv("USERNAME")  # username
 
-setwd( paste0("C:/Users/",user,"/Documents/GitHub/1ECO35_2022_2/Lab7") ) # set directorio
+setwd( paste0("C:/Users/",user,"/Documents/GitHub/1ECO35_2022_2/Lab8") ) # set directorio
 
 
 # load panel dataset
@@ -27,25 +27,29 @@ panel <- read_dta("../../../datos/panel/743-Modulo1478/sumaria-2016-2020-panelf.
 
 panel <- panel[panel$hpanel1620 == 1,]
 
+# nombre de las variables en minuscula
+
+colnames(panel) <- tolower(colnames(panel)) 
+
 # filtramos nuestras variables de interés 
 
 colnames(panel)
 
 
-index =  grep("(aÑo)|(conglome)|(vivienda)|(hogar)|(estrato)|(mieperho)|(gashog2d)|
+index =  grep("(año)|(conglome)|(vivienda)|(hogar)|(estrato)|(mieperho)|(gashog2d)|
               (inghog1d)|(pobreza)|(factor07)",
               colnames(panel))
 
-index =  grep("(aÑo)|(^conglome)|(vivienda)|(hogar)|(estrato_)|(mieperho)|(gashog2d)|
+index =  grep("(año)|(^conglome)|(vivienda)|(hogar)|(estrato_)|(mieperho)|(gashog2d)|
               (inghog1d)|(pobreza_)|(factor07)",
               colnames(panel))
-
+  
 print(colnames(panel)[index])
 
 # rename años
 
-panel <- panel  %>% dplyr::rename("year_16" = "aÑo_16", "year_17" = "aÑo_17", "year_18" = "aÑo_18", "year_19" = "aÑo_19",
-                           "year_20" = "aÑo_20", "cong"= "conglome", "viv" ="vivienda" )
+panel <- panel  %>% dplyr::rename("year_16" = "año_16", "year_17" = "año_17", "year_18" = "año_18", "year_19" = "año_19",
+                           "year_20" = "año_20", "cong"= "conglome", "viv" ="vivienda" )
 
 panel <- panel[,index]
 
