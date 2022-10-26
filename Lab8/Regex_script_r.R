@@ -39,9 +39,9 @@ colnames(data) <- tolower(colnames(data)) # capital letters to lower letters
 
 # Patrones básicos 
 
-# 1. [] : permitir indicar tipo de caracteres, definir el rango de las caracteres
+# 1. [] : permitir indicar tipo de caracter, definir el rango de las caracteres
 # 2. (): permite agrupar caracteres
-# 3. \\-,  \\#,  \\?
+# 3. \\-,  \\#,  \\?, se especifica carcateres espaciales
 # 4. " " : dentro de comillar se debe espeficiar el patron del texto 
 
 # \\\ , un \;  \\\\, para 2\
@@ -63,12 +63,12 @@ colnames(data) <- tolower(colnames(data)) # capital letters to lower letters
 "Patrones de inicio y fin"
 
 # ^\\d, ^M, ^2, ^\\-  : captura inicio de un texto 
-# \\d$, _M$, -2$, \\-$: captura los textos que terminan en digitis, M, 2 o -
-# \\. : identificar todo (espacios, numeros, letras, #!%$)
+# \\d$, _M$, -2$, \\-$: captura los textos que terminan en digitos, M, 2 o -
+# \\. : identificar cualquier tipo de caracter (espacios, numeros, letras, #!%$)
 
 "jdhdh 77575"
 
-# [0-9]*: astericos permite capterar ninungo, uno o más de uno 
+# [0-9]*: astericos permite capterar ninguno, uno o más de uno 
 # [0-9]+: el signo más permite capturar uno o más uno 
 # [0-9][a-z]? : ?, permite capturar a lo más una ocurrencia. 
 
@@ -78,11 +78,11 @@ colnames(data) <- tolower(colnames(data)) # capital letters to lower letters
 
 data$inst1 <- apply(data['institución_ruc'],
                     1 ,    # margin 1: aplicar la función por filas , por observaciones
-                    function(x) gsub("[0-9]+", '', x))
+                    function(x) gsub("[0-9]", '', x))
 
 data$inst1 <- apply(data['institución_ruc'],
                     1 ,    # margin 1: aplicar la función por filas , por observaciones
-                    function(x) gsub("[0-9]*", '', x))
+                    function(x) gsub("[0-9]", '', x))
 
 # gsub permitir reemplazar, gusb( se espeficica el patron de texto, '', string)
 
@@ -90,22 +90,24 @@ data$inst1 <- apply(data['institución_ruc'],
 
 data$inst2 <- apply(data['institución_ruc'],
                     1 ,  
-                    function(x) gsub("\\d+", '', x))
+                    function(x) gsub("\\d", '', x))
 
 
-"\\d+: uno o más digitos"
+"\\d: digitos"
 
-# usando la función extraer
+# usando la función extraer letras y espacio
+
+data$inst3 <- apply(data['institución_ruc'],
+                    1 ,  
+                    function(x) str_extract(x,"[a-zA-Z\\s]+"))
+
 
 data$inst4 <- apply(data['institución_ruc'],
                     1 ,  
-                    function(x) str_extract(x,"[a-zA-Z]*"))
+                    function(x) str_replace(x,"[^a-zA-Z\\s]+",''))
 
+#  substituye lo que sea diferente a letras y espacio por nada (''). 
 
-
-data$inst5 <- apply(data['institución_ruc'],
-                    1 ,  
-                    function(x) gsub("[^a-zA-Z\\s]", '', x))
 
 
 # Extraer numero
@@ -113,7 +115,7 @@ data$inst5 <- apply(data['institución_ruc'],
 
 data$ruc1 <- apply(data['institución_ruc'],
                     1 ,  
-                    function(x) gsub("[a-zA-Z]*", '', x))
+                    function(x) gsub("[a-zA-Z]", '', x))
 
 
 # se extrae digitos de uno o más ocurrencia 
@@ -147,7 +149,7 @@ data$ruc5 <- apply(data['institución_ruc'],
 
 data$ruc6 <- apply(data['institución_ruc'],
                     1 ,  
-                    function(x) gsub("\\D*", '', x))
+                    function(x) gsub("\\D", '', x))
 
 
 
@@ -179,12 +181,14 @@ data$coordinates <- apply(data['gps'],
 # Extraer una sección del texto sin especificar la forma completa del texto
 
 
-x <- "dada--dss kks. 12434 distrito san juan miraflores Region juan lurigancho sds fdds"
+x <- "dada--dss kks. 12434 distrito san juan miraflores region juan lurigancho sds fdds"
 
 str_match(x,"\\.*[D/d]istrito\\s([\\w*\\s]*)\\s[R/r]egion\\s([\\w*\\s]*)")
 
+str_match(x,"\\.*[Dd]istrito\\s([\\w*\\s]*)\\s[Rr]egion\\s([\\w*\\s]*)")
 
-#\\.* : captura inunga, una, o más de un caracter (cualquie: espcaios, letras, numeros, #!%&/())
+
+#\\.* : captura ninguna, una, o más de un caracter (cualquiera: espacios, letras, numeros, #!%&/())
 # () permite capturar lo que me interesa
 
 str_match(x,"\\.*+[D/d]istrito\\s([\\w*\\s]*)\\s[R/r]egion\\s([\\w*\\s]*)")[2] # distrito
@@ -236,8 +240,8 @@ data <- data %>% mutate(code_res = match_output[,2], year_res = match_output[,3]
 
 data <- data %>% mutate(code_res = match_output[,2], year_res = match_output[,3],
                         entidad_res = match_output[,4],
-                        Gob_regional_jur = ifelse(str_detect(institución_ruc,"\\^G"), 1 , 0 ),
-                        Minsa_jur = ifelse(str_detect(institución_ruc,"\\^M"), 1 , 0 )
+                        Gob_regional_jur = ifelse(str_detect(institución_ruc,"^G"), 1 , 0 ),
+                        Minsa_jur = ifelse(str_detect(institución_ruc,"^M"), 1 , 0 )
 )
   
 # Nos quedamos con los centros de salud mental que tienen GPS (georeferenciación)
@@ -245,6 +249,17 @@ data <- data %>% mutate(code_res = match_output[,2], year_res = match_output[,3]
 data_filter <- data %>%  filter(str_detect(gps,"[\\d?]"))
 
 "\\d?: A los más identifica un digito"
+
+#----- Look around ------------
+
+data$horarios1 <- sapply(data$horario,
+                              function(x) str_extract_all(x,"(?<=horario)\\s\\d+\\:\\d+"))
+
+
+
+data$horarios2 <- sapply(data$horario,
+                        function(x) str_extract_all(x,"\\d\\:\\d+\\s(?=peru time)"))
+
 
 
 # ---------------- Fechas en R -----------------
