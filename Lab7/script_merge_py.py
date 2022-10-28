@@ -389,7 +389,18 @@ merge_base_2020["pobre"] = np.where(
     merge_base_2020["gasto_month"] < merge_base_2020["linea"], 
                                     "pobre", "no pobre")
 
+# En este caso gasto_month ni linea presentan missing, si alguno tuviera missing, 
+# entonces la dummy debe generar missing 
 
+merge_base_2020["pobre"] = np.where( 
+    merge_base_2020[['gasto_month','linea']].isnull().any(axis=1), np.nan,  # si al menos uno es missing, se coloca nan
+    np.where(  # caso se contrario se aplica la condición que me interesa
+    merge_base_2020["gasto_month"] < merge_base_2020["linea"], 
+                                    "pobre",
+                                    "no pobre")
+    )
+
+# value_counts hallar la frecuancia absoluta segun los valores de la variables 
 
 merge_base_2020["pobre"].value_counts()
 
@@ -402,6 +413,18 @@ merge_base_2020["dummy_pobre"] = np.where(
     merge_base_2020["gasto_month"] < merge_base_2020["linea"],
                                     1, 0)
 
+
+# tomando en cuenta si existe algún missing 
+
+merge_base_2020["dummy_pobre"] = np.where( 
+    merge_base_2020[['gasto_month','linea']].isnull().any(axis=1), np.nan,  # si al menos uno es missing, se coloca nan
+    np.where(  # caso se contrario se aplica la condición que me interesa
+    merge_base_2020["gasto_month"] < merge_base_2020["linea"], 
+                                    1,
+                                    0)
+    )
+    
+    
 #Generamos variable "pc_pobre" recodificando variable "pobreza"
 
 
@@ -464,7 +487,7 @@ merge_base_2020.columns
 merge_base_2020[10]
 
 
-#%% Collapse
+#%% Collapse - groupby
 
 # maximo nivel educativo alcanzado, dummy si educación superior, menor nivel alcanzado 
 
@@ -477,9 +500,9 @@ df1 = merge_base_2020.groupby( [ "conglome", "vivienda", "hogar" ]).agg( edu_max
 #   as_index = true (default), las varibales de agrupamiento son variables indenxing
    
    
-df1['vivienda'] 
+df1['vivienda'] # no existe
                          
-df1['hogar']
+df1['hogar'] # no existe
     
 # var_10: universitaria completa    
 
@@ -489,6 +512,8 @@ df1['hogar']
 # 1023 12 01   1                                                   
 # ""           
 
+
+# as_index = False  genera que "conglome", "vivienda", "hogar"  sea parte de la base de datos 
                                        
 df1 = merge_base_2020.groupby( [ "conglome", "vivienda", "hogar" ],
                               as_index = False ).agg( edu_max = ( 'p301a', np.max ) ,
@@ -497,7 +522,7 @@ df1 = merge_base_2020.groupby( [ "conglome", "vivienda", "hogar" ],
                         sup_educ = ( 'var_10', np.sum ))
       
                                                      
-df1['vivienda'] 
+df1['vivienda'] # se puede verificar que vivienda pertenece a la base de datos
                      
         
 df2 = merge_base_2020.groupby( [ "ubigeo_dep2" ],

@@ -464,29 +464,47 @@ write_dta(merge_append, "../data/append_enaho_r.dta")
 
 
 merge_base_2020 <- merge_base_2020 %>%
-  mutate(ingreso_month_pc = merge_base_2020$inghog1d/(12*merge_base_2020$mieperho),
-         gasto_month_pc = merge_base_2020$gashog2d/(12*merge_base_2020$mieperho)
+  dplyr::mutate(ingreso_month_pc = inghog1d/(12*mieperho),
+         gasto_month_pc = gashog2d/(12*mieperho)
          ) %>%
- mutate(dummy_pobre = ifelse( gasto_month_pc < merge_base_2020$linea , 
+  dplyr::mutate(dummy_pobre = ifelse( gasto_month_pc < linea , 
                         1 , 
-                        ifelse(!is.na(merge_base_2020$gashog2d),0, NA) ) ) %>%
-  mutate(pobre = ifelse( gasto_month_pc < merge_base_2020$linea , 
+                        0 ) ) %>%
+  dplyr::mutate(pobre = ifelse( gasto_month_pc < linea , 
                                "pobre" , 
-                  ifelse(!is.na(merge_base_2020$gashog2d),"No pobre", NA) ) )   %>%
- mutate(pc_pobre = case_when(merge_base_2020$pobreza == 1 ~ "Pobre extremo",
-                             merge_base_2020$pobreza == 2 ~ "Pobre",
-                             merge_base_2020$pobreza == 3 ~ "No pobre"))  
+                  ifelse(!is.na(gashog2d),"No pobre", NA) ) )   %>%
+  dplyr::mutate(pc_pobre = case_when(pobreza == 1 ~ "Pobre extremo",
+                             pobreza == 2 ~ "Pobre",
+                             pobreza == 3 ~ "No pobre"))  
 
-# creación de Dummy binaria usando ifelse
+# Si existe missing values en las variables usadas en el condicional
+# entonces R colocará missing, esto no es directo en python
 
-ifelse( gasto_month_pc < merge_base_2020$linea , # condición gasto percapita mensual  < linea de pobreza
-        1 ,    # se asigna uno si se cumple la condición
-        ifelse(!is.na(merge_base_2020$gashog2d),0, NA) ) 
-#caso no se cumpla, primero se verifica si el gasto anual del hogar es no missing. Si es asi se coloca cero
-# Pero si es missing, entonces se coloca NA
+
+# Ejemplo adicional 
+
+var1 <- c(NA,2,3)
+
+var2 <- c(400,1,5)
+
+# creamos una base de datos en formato tibble similar a un data.frame
+
+base <- tibble(
+  var1, var2
+  
+)
+
+
+# aplicamos mutate para crear la dummy
+
+base %>%  mutate(
+  
+  Dummy = ifelse(var1 < var2, 1,0)
+  
+)
 
         
-sum(is.na(merge_base_2020$gashog2d)) # no hay missing eb la variables gasto anual del hogar
+sum(is.na(merge_base_2020$gashog2d)) # no hay missing en la variables gasto anual del hogar
 
 
 #creando dummies usando la variabe de nivel educativo alcanzado p301a
