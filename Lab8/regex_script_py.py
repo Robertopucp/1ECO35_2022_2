@@ -186,15 +186,15 @@ junin.loc[junin['Place'].str.contains('ca$', flags = re.I, na = False, regex = T
 
 # match : a , . , a.
 
-newbase  = junin.loc[junin['Place'].str.contains('^a\.*', flags = re.I, na = False, regex = True)]
+newbase  = junin.loc[junin['Place'].str.contains('^ac*', flags = re.I, na = False, regex = True)]
 
 
 # match : a. (strict)
 
-newbase  =  junin.loc[junin['Place'].str.contains('a\.+', flags = re.I, na = False, regex = True)]
+newbase  =  junin.loc[junin['Place'].str.contains('ac+', flags = re.I, na = False, regex = True)]
 
 # match a or .
 
-newbase  =  junin.loc[junin['Place'].str.contains('a\.?', flags = re.I, na = False, regex = True)]
+newbase  =  junin.loc[junin['Place'].str.contains('ac?', flags = re.I, na = False, regex = True)]
 
 

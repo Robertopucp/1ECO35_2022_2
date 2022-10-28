@@ -10,7 +10,12 @@ import chardet # to get string character format
 import re  # for regular expression 
 import os # for usernanme y set direcotrio
 
-# Subimos la base de datos
+# help para revisar la documentación de una libreria 
+
+help(re) 
+
+
+#%% Load dataset
 
 
 user = os.getlogin()   # Username
