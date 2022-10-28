@@ -5,12 +5,19 @@
   
   # Load libraries
   
+# install.packages("lubridate")
+
+  
+# clear environment
+rm(list=ls(all=TRUE)) 
+  
   
 library(readxl)
-library(stringr) # libreria para trabajar expresiones regulares 
-library(dplyr)
-library(tidyverse) # dplyr, ggplot2, tdyr
-  
+#library(stringr) # libreria para trabajar expresiones regulares 
+#library(dplyr)
+library(lubridate)
+
+library(tidyverse) # dplyr, ggplot2, tdyr, stringi, stringr 
   
 search()
   
@@ -71,6 +78,7 @@ colnames(data) <- tolower(colnames(data)) # capital letters to lower letters
 # [0-9]*: astericos permite capterar ninguno, uno o más de uno 
 # [0-9]+: el signo más permite capturar uno o más uno 
 # [0-9][a-z]? : ?, permite capturar a lo más una ocurrencia. 
+
 
 
 # 1) Extraer solo texto de una celda que contiene numero y texto 
@@ -181,7 +189,7 @@ data$coordinates <- apply(data['gps'],
 # Extraer una sección del texto sin especificar la forma completa del texto
 
 
-x <- "dada--dss kks. 12434 distrito san juan miraflores region juan lurigancho sds fdds"
+x <- "dada--dss kks. 12434 distrito san region juan lurigancho sds fdds"
 
 str_match(x,"\\.*[D/d]istrito\\s([\\w*\\s]*)\\s[R/r]egion\\s([\\w*\\s]*)")
 
@@ -244,22 +252,62 @@ data <- data %>% mutate(code_res = match_output[,2], year_res = match_output[,3]
                         Minsa_jur = ifelse(str_detect(institución_ruc,"^M"), 1 , 0 )
 )
   
-# Nos quedamos con los centros de salud mental que tienen GPS (georeferenciación)
 
-data_filter <- data %>%  filter(str_detect(gps,"[\\d?]"))
-
-"\\d?: A los más identifica un digito"
 
 #----- Look around ------------
 
-data$horarios1 <- sapply(data$horario,
-                              function(x) str_extract_all(x,"(?<=horario)\\s\\d+\\:\\d+"))
+
+
+"Horarios de apertura"
+
+# positive lookahead (?=)
+
+
+data$apertura1 <- sapply(data$horario,
+                              function(x) str_extract(x,"[\\d+\\:]+(?= am)"))
+
+
+# positive lookbehind (?<=)
+
+data$apertura2 <- sapply(data$horario,
+                        function(x) str_extract(x,"(?<=apertura )[\\d+\\:]+"))
+
+
+# usando Pips ( |>  y  %>% )
 
 
 
-data$horarios2 <- sapply(data$horario,
-                        function(x) str_extract_all(x,"\\d\\:\\d+\\s(?=peru time)"))
+data$apertura3 <- data$horario |> str_extract("[\\d+\\:]+(?= am)")
 
+data$apertura4 <- data$horario |> str_extract("(?<=apertura )[\\d+\\:]+")
+
+
+data$apertura5 <- data$horario %>%  str_extract("[\\d+\\:]+(?= am)")
+
+data$apertura6 <- data$horario %>%  str_extract("(?<=apertura )[\\d+\\:]+")
+
+
+"Horarios de cierre"
+
+# negative lookbehind (?<!)
+
+data$cierre1 <- data$horario |> str_extract("(?<!apertura )\\d+\\:\\d+")
+
+# negative lookbahead (?!)
+
+data$pre_soles1 <- data$presupuesto |> str_extract("[\\d\\,]+(?!\\$)")
+
+
+# \\b: el string no está rodeado de letras o numeros
+# \\B: el string está rodeado de letras o numeros
+
+data$pre_soles2 <- data$presupuesto |> str_extract("\\w+\\B[\\d+\\,]+\\B")
+
+# retirar tildes 
+
+data$presupuesto <- stri_trans_general(str = data$presupuesto, id = "Latin-ASCII")
+
+data$moneda <- data$presupuesto |> str_extract_all("\\b[A-Za-z]+\\B")
 
 
 # ---------------- Fechas en R -----------------
@@ -269,20 +317,36 @@ data$fecha_apertura_format <-  as.Date(data$fecha_apertura,format='%d/%m/%Y')
 
 #date un different columns 
 
-data$year = as.numeric (format(data$fecha_apertura_format ,"%Y"))
-data$month = as.numeric (format(data$fecha_apertura_format ,"%m"))
-data$day = as.numeric (format(data$fecha_apertura_format ,"%d"))
+data$year = as.numeric(format(data$fecha_apertura_format ,"%Y"))
+data$month = as.numeric(format(data$fecha_apertura_format ,"%m"))
+data$day = as.numeric(format(data$fecha_apertura_format ,"%d"))
 
 
-#----- Segunda aplicación ------------------
+# crear nueva variables de fecha
 
 
-junin_data = read_excel("../data/Region_Junin.xlsx")
+# |> pip similar a %>% 
+
+data <- data |> dplyr::mutate(
+  year1 = ifelse(str_length( as.character(year) ) > 2, year, paste0("20", year)),
+               
+  nueva_fecha = dmy( paste(day,month, year1, sep = "/")  )             
+               )
+
+# diferencia entre paste y paste0, paste0 une sin espacio
+# mientras paste permite indicar como separar los strings 
+
+data$year1 <- NULL
 
 
-newbase <- dplyr::filter(junin_data, grepl('AC', District))
+#  Segunda aplicación ----
 
-newbase <- dplyr::filter(junin_data, grepl('pacha', Place))
+
+# Select varias lineas de cpodigo (Ctrl + alt + cambios)
+
+ junin_data = read_excel("../data/Region_Junin.xlsx")
+ newbase <- dplyr::filter(junin_data, grepl('AC', District))
+ newbase <- dplyr::filter(junin_data, grepl('pacha', Place))
 
 # ignore.case=TRUE: ignora mayuscula o minuscula (upper or lower case)
 
@@ -301,20 +365,17 @@ newbase <- junin_data %>% filter(grepl('^hu', District, ignore.case=TRUE))
 newbase <- junin_data %>% filter(grepl('ro$', Place, ignore.case=TRUE))
 
 
-newbase <-  junin_data %>% filter(grepl('^a\\.*', Place, ignore.case=TRUE))
+newbase <-  junin_data %>% filter(grepl('^ac*', Place, ignore.case=TRUE))
 
-# match con a, . , a.
+# match con a, ac
 
-newbase <-  junin_data %>% filter(grepl('^a\\.+', Place, ignore.case=TRUE))
+newbase <-  junin_data %>% filter(grepl('^ac+', Place, ignore.case=TRUE))
 
-# match con a.
+# match con ac
 
-newbase  <- junin_data %>% filter(grepl('^a\\.?', Place, ignore.case=TRUE))
+newbase  <- junin_data %>% filter(grepl('^ac?', Place, ignore.case=TRUE))
 
-
-# match con a, a.
-
-
+# match con a, ac
 
 
 
