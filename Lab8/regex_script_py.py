@@ -56,7 +56,7 @@ data['inst2'] = data['institución_ruc'].apply(lambda x: re.sub('\d','',x))
 
 # Alternativas 2
 
-data['inst3'] = data['institución_ruc'].apply(lambda x: re.sub('[^a-zA-Z,\s]','',x))
+data['inst3'] = data['institución_ruc'].apply(lambda x: re.sub('[^a-zA-Z\s]','',x))
 
 
 "2.0 extraccción del texto"
@@ -138,11 +138,6 @@ data2 = data[data['gps'].str.contains('[0-9]', na = False)]
 
 # na = False no toma cuenta los missing
 
-##% Fechas 
-
-
-from datetime import datetime
-
 
 
 
@@ -162,7 +157,7 @@ junin.loc[junin['Place'].str.contains('pacha')]
 
 junin.loc[junin['Place'].str.contains('pacha', flags = re.I)]
 
- #re.I ignoring capital o lower letters 
+ # re.I ignoring capital o lower letters 
  
  
  # Ignoring format re.I 
@@ -176,6 +171,7 @@ junin.loc[junin['District'].str.contains('CIUDAD', flags = re.I)]
 
 junin.loc[junin['District'].str.contains('^hu', flags = re.I, na = False, regex = True)]
 
+ # regex True para identificar la expression regular, na = False para ignorar missing
 
 # Ending word
 
