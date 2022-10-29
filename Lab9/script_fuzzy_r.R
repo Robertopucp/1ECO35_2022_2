@@ -112,7 +112,7 @@ name2 <- "Villanueva Villanueva Juan Pablo PABLO"
 
 # distances basado en Levenshtein distance
 
-stringdist(name1, name2,  method = "dl")
+stringdist(name1, name2,  method = "lv")
 
 # Jaro-Winkler method
 
@@ -146,7 +146,7 @@ data_match_jw <- stringdist_join(
   by = "Nombre",
   method = "jw",
   mode = "left",
-  ignore_case = T, distance_col='lv_score'
+  ignore_case = T, distance_col='jw_score'
 )
 
 # cosine method
@@ -156,7 +156,7 @@ data_match_cs <- stringdist_join(
   by = "Nombre",
   method = "cosine",
   mode = "left",
-  ignore_case = T, distance_col='lv_score'
+  ignore_case = T, distance_col='cs_score'
 )
 
 
