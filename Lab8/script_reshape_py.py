@@ -44,6 +44,8 @@ index_columns = np.where( panel.columns.str.contains(
     '(año)|(^conglome)|(vivienda)|(hogar)|(estrato_)|(mieperho)|(gashog2d)|(pobreza_)|(factor07)',
     regex=True))[0]
 
+
+
 # index_columns: se guarda las posiciones de columnas de aquellas variables que satisface 
 # con algunos de los casos del regex
 
@@ -79,6 +81,8 @@ panel = panel.loc[:, new_cols_orders]
 
 
 # new_list: debe contener las variables en comun en todos los años (sin _año)
+
+panel.columns[3::]
 
 
 filter_list = list( map( lambda x: re.sub('.{3}$',"", x) , list(panel.columns)[3::] )   )

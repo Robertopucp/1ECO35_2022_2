@@ -6,7 +6,7 @@
   # Load libraries
   
 # install.packages("lubridate")
-
+# install.packages("tidyverse")
   
 # clear environment
 rm(list=ls(all=TRUE)) 
@@ -15,12 +15,14 @@ rm(list=ls(all=TRUE))
 library(readxl)
 #library(stringr) # libreria para trabajar expresiones regulares 
 #library(dplyr)
-library(lubridate)
+library(lubridate) # dmy 
 
 library(tidyverse) # dplyr, ggplot2, tdyr, stringi, stringr 
   
+  
 search()
   
+
 "1.0 Set Directorio"
 
 user <- Sys.getenv("USERNAME")  # username
@@ -189,9 +191,12 @@ data$coordinates <- apply(data['gps'],
 # Extraer una sección del texto sin especificar la forma completa del texto
 
 
-x <- "dada--dss kks. 12434 distrito san region juan lurigancho sds fdds"
+x <- "dada--dss kks. 12434 distrito Villa El Salvador region san juan de lurigancho"
 
-str_match(x,"\\.*[D/d]istrito\\s([\\w*\\s]*)\\s[R/r]egion\\s([\\w*\\s]*)")
+str_match(x,"\\.*[D/d]istrito\\s([\\w*\\s]*)\\s[R/r]egion\\s([\\w+\\s]+)")
+
+# \\d*: ninguna, uno o más ocurrencias 
+# \\d+: uno o más ocurrencias 
 
 str_match(x,"\\.*[Dd]istrito\\s([\\w*\\s]*)\\s[Rr]egion\\s([\\w*\\s]*)")
 
@@ -207,34 +212,44 @@ str_match(x,"\\.*+[D/d]istrito\\s([\\w*\\s]*)\\s[R/r]egion\\s([\\w*\\s]*)")[3]  
 
 data$distrito <- apply(data['dirección'],
                           1 ,  
-              function(x) str_match(x,"\\.*[D/d]istrito\\s([\\w*\\s]*)\\s[R/r]egion\\s([\\w*\\s]*)")[2])
+              function(x) str_match(x,"\\.*[D/d]istrito\\s([\\w*\\-\\s]*)\\s[R/r]egion\\s([\\w*\\s]*)")[2])
 
 data$region <- apply(data['dirección'],
                           1 ,  
-              function(x) str_match(x,"\\.*+[D/d]istrito\\s([\\w*\\s]*)\\s[R/r]egion\\s([\\w*\\s]*)")[3])
+              function(x) str_match(x,"\\.*+[D/d]istrito\\s([\\w*\\-\\s]*)\\s[R/r]egion\\s([\\w*\\s]*)")[3])
 
+
+View(data[,c('dirección','region')])
 
 #extracción del numero telefonico
 
+#telf: 123-4559
+
 data$telefono_fijo <- apply(data['telefono'],
                      1 ,  
-                     function(x) str_match(x,"\\.*+(\\d+\\-\\d+)$")[2])
+                     function(x) str_match(x,"\\.*(\\d+\\-\\d+)$")[2])
 
 
 data$telefono_fijo_2 <- apply(data['telefono'],
                             1 ,  
-                            function(x) str_match(x,"\\.*+(...\\-\\d+)$")[2])
+                            function(x) str_match(x,"\\.*(...\\-\\d+)$")[2])
 
 
 data$telefono_fijo_3 <- apply(data['telefono'],
                               1 ,  
-                              function(x) str_match(x,"\\.*+(\\d+.\\d+)$")[2])
+                              function(x) str_match(x,"\\.*(\\d+.\\d+)$")[2])
+
+
 
 # Extraer seccción de un texto cuando se tiene que especificar toda la estrucutra del texto
 
 
 match_output <- stringr::str_match(data$resolucion, 
-                   'DS-([0-9]+)-([0-9]+)\\s([A-Z]+)')
+                   'DS-(\\d+)-([0-9]+)\\s([A-Z]+)')
+
+# DS-54-2015 PCM
+
+# pip str_match , stringr, str_match
 
 "[0-9]+: existe uno o más digitos"                  
 
@@ -248,7 +263,7 @@ data <- data %>% mutate(code_res = match_output[,2], year_res = match_output[,3]
 
 data <- data %>% mutate(code_res = match_output[,2], year_res = match_output[,3],
                         entidad_res = match_output[,4],
-                        Gob_regional_jur = ifelse(str_detect(institución_ruc,"^G"), 1 , 0 ),
+                        Gob_regional_jur = ifelse(str_detect(institución_ruc,"(^G)|(^R)"), 1 , 0 ),
                         Minsa_jur = ifelse(str_detect(institución_ruc,"^M"), 1 , 0 )
 )
   
@@ -257,24 +272,31 @@ data <- data %>% mutate(code_res = match_output[,2], year_res = match_output[,3]
 #----- Look around ------------
 
 
+correo <- "rmendozam@gmail.com"
+
+str_match(correo, "(\\w+)\\@.*")
+
 
 "Horarios de apertura"
 
 # positive lookahead (?=)
 
+# "aperuta 8:30:20:01:05 am, cierre 16:00pm"
 
 data$apertura1 <- sapply(data$horario,
-                              function(x) str_extract(x,"[\\d+\\:]+(?= am)"))
+                              function(x) str_extract(x,"\\d+\\:\\d+(?= am)"))
 
+
+data$apertura2 <- sapply(data$horario,
+                         function(x) str_extract(x,"[\\d+\\:]+(?= am)"))
 
 # positive lookbehind (?<=)
 
-data$apertura2 <- sapply(data$horario,
+data$apertura3 <- sapply(data$horario,
                         function(x) str_extract(x,"(?<=apertura )[\\d+\\:]+"))
 
 
 # usando Pips ( |>  y  %>% )
-
 
 
 data$apertura3 <- data$horario |> str_extract("[\\d+\\:]+(?= am)")
@@ -295,10 +317,13 @@ data$cierre1 <- data$horario |> str_extract("(?<!apertura )\\d+\\:\\d+")
 
 # negative lookbahead (?!)
 
-data$pre_soles1 <- data$presupuesto |> str_extract("[\\d\\,]+(?!\\$)")
+data$pre_soles1 <- data$presupuesto |> str_extract("[\\d+\\,]+(?!\\$)")
 
+View(data[,c("presupuesto","pre_soles1")])
 
-# \\b: el string no está rodeado de letras o numeros
+#"perez\\B"  perez34 perezdhfj carlosperez
+
+ # \\b: el string no está rodeado de letras o numeros
 # \\B: el string está rodeado de letras o numeros
 
 data$pre_soles2 <- data$presupuesto |> str_extract("\\w+\\B[\\d+\\,]+\\B")
@@ -333,10 +358,12 @@ data <- data |> dplyr::mutate(
   nueva_fecha = dmy( paste(day,month, year1, sep = "/")  )             
                )
 
+# dmy(12/10/2026) = 2026-10-12
+
 # diferencia entre paste y paste0, paste0 une sin espacio
 # mientras paste permite indicar como separar los strings 
 
-data$year1 <- NULL
+data$year <- NULL
 
 
 #  Segunda aplicación ----
