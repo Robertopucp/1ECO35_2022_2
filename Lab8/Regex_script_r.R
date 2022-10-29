@@ -377,7 +377,7 @@ data$year <- NULL
 #  Segunda aplicación ----
 
 
-# Select varias lineas de cpodigo (Ctrl + alt + cambios)
+# Select varias lineas de codigo (Ctrl + alt + cambios)
 
  junin_data = read_excel("../data/Region_Junin.xlsx")
  newbase <- dplyr::filter(junin_data, grepl('AC', District))

@@ -26,7 +26,7 @@ panel = pd.read_stata("../../../datos/panel/743-Modulo1478/sumaria-2016-2020-pan
                       convert_categoricals=False)
 
 
-# Filter dummy hpanel1620 == 1: hogares u individual entrevistados en el periodo 2016-2020
+# Filter dummy hpanel1620 == 1: hogares entrevistados en el periodo 2016-2020
 
 panel = panel[panel.hpanel1620 == 1]
 
