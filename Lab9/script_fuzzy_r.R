@@ -1,4 +1,4 @@
-################  Clase 8 Fuzzy match ############################
+################  Clase 9 Fuzzy match ############################
 ## Curso: Laboratorio de R y Python ###########################
 ## @author: Roberto Mendoza 
 
@@ -172,14 +172,6 @@ data_match_lv <- stringdist_join(
   group_by(Nombre.x) %>%
   slice_min(order_by=lv_score, n=3)
 
-# cada individo se repite 3 veces por cada uno de los mejores matches
-
-n <- dim(master)[1]
-
-rep(c("match1","match2","match3"), n)
-
-
-data_match_lv$match <- rep(c("match1","match2","match3"), n)
 
 
 
