@@ -272,7 +272,7 @@ data <- data %>% mutate(code_res = match_output[,2], year_res = match_output[,3]
 #----- Look around ------------
 
 
-correo <- "rmendozam@gmail.com"
+correo <- "rmendozam31@gmail.com"
 
 str_match(correo, "(\\w+)\\@.*")
 
@@ -322,6 +322,14 @@ data$pre_soles1 <- data$presupuesto |> str_extract("[\\d+\\,]+(?!\\$)")
 View(data[,c("presupuesto","pre_soles1")])
 
 #"perez\\B"  perez34 perezdhfj carlosperez
+
+nombre <- c("perezmendoza","4343perez","juan perez")
+
+str_extract_all(nombre, "\\w+\\Bperez\\b")
+
+str_extract_all(nombre, "\\bperez\\B\\w+")
+
+str_extract_all(nombre, "\\bperez\\b")
 
  # \\b: el string no está rodeado de letras o numeros
 # \\B: el string está rodeado de letras o numeros
