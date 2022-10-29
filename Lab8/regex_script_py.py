@@ -141,7 +141,7 @@ data2 = data[data['gps'].str.contains('[0-9]', na = False)]
 
 
 
-#%% Segunda aplicación, filtro de columnas 
+#%% Segunda aplicación, filtro de filas
 
 junin = pd.read_excel("../data/Region_Junin.xlsx")
 
