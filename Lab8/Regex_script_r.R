@@ -83,7 +83,7 @@ colnames(data) <- tolower(colnames(data)) # capital letters to lower letters
 
 
 
-# 1) Extraer solo texto de una celda que contiene numero y texto 
+# 1.0 Extraer texto ----
 
 
 data$inst1 <- apply(data['institución_ruc'],
@@ -116,11 +116,12 @@ data$inst4 <- apply(data['institución_ruc'],
                     1 ,  
                     function(x) str_replace(x,"[^a-zA-Z\\s]+",''))
 
+
 #  substituye lo que sea diferente a letras y espacio por nada (''). 
 
 
 
-# Extraer numero
+# 2.0 Extraer numero ----
 
 
 data$ruc1 <- apply(data['institución_ruc'],
@@ -155,7 +156,7 @@ data$ruc5 <- apply(data['institución_ruc'],
                    function(x) gsub("[^0-9]", '', x))
 
 
-# usando \\D*, lo que sea diferentes de digitos, me reemplazas por nada
+# usando \\D, lo que sea diferentes de digitos, me reemplazas por nada ''
 
 data$ruc6 <- apply(data['institución_ruc'],
                     1 ,  
@@ -168,6 +169,8 @@ data$ruc6 <- apply(data['institución_ruc'],
 
 # usando str_replace para reemplazar caracteres
 # () permite agrupar, | (permite espeficar diferentes textos)
+
+# 3.0 str_ extract ----
 
 data$fecha_apertura <- apply(data['fecha_apertura'],
                    1 ,  
@@ -186,7 +189,7 @@ data$coordinates <- apply(data['gps'],
 # @-1.15,-74.155$%&//5
 
 
-#------ str_match ---------
+#------ 4.0 str_match ---------
 
 # Extraer una sección del texto sin especificar la forma completa del texto
 
@@ -220,7 +223,7 @@ data$region <- apply(data['dirección'],
 
 
 View(data[,c('dirección','region')])
-
+  
 #extracción del numero telefonico
 
 #telf: 123-4559
@@ -365,6 +368,9 @@ data <- data |> dplyr::mutate(
                
   nueva_fecha = dmy( paste(day,month, year1, sep = "/")  )             
                )
+
+
+
 
 # dmy(12/10/2026) = 2026-10-12
 
