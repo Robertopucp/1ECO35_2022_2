@@ -260,14 +260,6 @@ data['presupuesto'] = data['presupuesto'].apply(lambda x: unidecode.unidecode(x)
 
 data['presupuesto'] = data['presupuesto'].apply(unidecode.unidecode)
 
-# Se extrae el tipo de moneda del presupuesto "soles"
-
-data['moneda'] = data['presupuesto'].apply(lambda x: re.findall("\b\w+\B",x))
-
-
-
-
-
 
 #%% Fechas
 
