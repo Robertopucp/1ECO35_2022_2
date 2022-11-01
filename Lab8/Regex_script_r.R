@@ -46,7 +46,7 @@ colnames(data) <- tolower(colnames(data)) # capital letters to lower letters
 #------- Regex -----------
 
 
-# Patrones b谩sicos 
+# Patrones basicos 
 
 # 1. [] : permitir indicar tipo de caracter, definir el rango de las caracteres
 # 2. (): permite agrupar caracteres
@@ -77,42 +77,42 @@ colnames(data) <- tolower(colnames(data)) # capital letters to lower letters
 
 "jdhdh 77575"
 
-# [0-9]*: astericos permite capterar ninguno, uno o m谩s de uno 
-# [0-9]+: el signo m谩s permite capturar uno o m谩s uno 
-# [0-9][a-z]? : ?, permite capturar a lo m谩s una ocurrencia. 
+# [0-9]*: astericos permite capterar ninguno, uno o mas de uno 
+# [0-9]+: el signo mas permite capturar uno o mas uno 
+# [0-9][a-z]? : ?, permite capturar a lo mas una ocurrencia. 
 
 
 
 # 1.0 Extraer texto ----
 
 
-data$inst1 <- apply(data['instituci贸n_ruc'],
-                    1 ,    # margin 1: aplicar la funci贸n por filas , por observaciones
+data$inst1 <- apply(data['instituci髇_ruc'],
+                    1 ,    # margin 1: aplicar la funcion por filas , por observaciones
                     function(x) gsub("[0-9]", '', x))
 
-data$inst1 <- apply(data['instituci贸n_ruc'],
-                    1 ,    # margin 1: aplicar la funci贸n por filas , por observaciones
+data$inst1 <- apply(data['instituci髇_ruc'],
+                    1 ,    # margin 1: aplicar la funcion por filas , por observaciones
                     function(x) gsub("[0-9]", '', x))
 
 # gsub permitir reemplazar, gusb( se espeficica el patron de texto, '', string)
 
-"[0-9]*: ninguno, uno o m谩s digitos"
+"[0-9]*: ninguno, uno o mas digitos"
 
-data$inst2 <- apply(data['instituci贸n_ruc'],
+data$inst2 <- apply(data['instituci髇_ruc'],
                     1 ,  
                     function(x) gsub("\\d", '', x))
 
 
 "\\d: digitos"
 
-# usando la funci贸n extraer letras y espacio
+# usando la funcion extraer letras y espacio
 
-data$inst3 <- apply(data['instituci贸n_ruc'],
+data$inst3 <- apply(data['instituci髇_ruc'],
                     1 ,  
                     function(x) str_extract(x,"[a-zA-Z\\s]+"))
 
 
-data$inst4 <- apply(data['instituci贸n_ruc'],
+data$inst4 <- apply(data['instituci髇_ruc'],
                     1 ,  
                     function(x) str_replace(x,"[^a-zA-Z\\s]+",''))
 
@@ -124,26 +124,26 @@ data$inst4 <- apply(data['instituci贸n_ruc'],
 # 2.0 Extraer numero ----
 
 
-data$ruc1 <- apply(data['instituci贸n_ruc'],
+data$ruc1 <- apply(data['instituci髇_ruc'],
                     1 ,  
                     function(x) gsub("[a-zA-Z]", '', x))
 
 
-# se extrae digitos de uno o m谩s ocurrencia 
+# se extrae digitos de uno o mas ocurrencia 
 
-data$ruc2 <- apply(data['instituci贸n_ruc'],
+data$ruc2 <- apply(data['instituci髇_ruc'],
                    1 ,  
                    function(x) str_extract(x,"[0-9]+"))
 
 # extraer solo 3 digitos del rango 0-9 
 
-data$ruc3 <- apply(data['instituci贸n_ruc'],
+data$ruc3 <- apply(data['instituci髇_ruc'],
                    1 ,  
                    function(x) str_extract(x,"[0-9]{3}"))
 
 # {3} me permtie extraer 3 digitos
 
-data$ruc4 <- apply(data['instituci贸n_ruc'],
+data$ruc4 <- apply(data['instituci髇_ruc'],
                     1 ,  
                     function(x) str_extract(x,"[0-9]{1,}"))
 
@@ -151,14 +151,14 @@ data$ruc4 <- apply(data['instituci贸n_ruc'],
 # usando [^0-9], lo que sea diferente de numero en el rango 0 a 9, 
 # me reemplazas por nada. 
 
-data$ruc5 <- apply(data['instituci贸n_ruc'],
+data$ruc5 <- apply(data['instituci髇_ruc'],
                     1 ,  
                    function(x) gsub("[^0-9]", '', x))
 
 
 # usando \\D, lo que sea diferentes de digitos, me reemplazas por nada ''
 
-data$ruc6 <- apply(data['instituci贸n_ruc'],
+data$ruc6 <- apply(data['instituci髇_ruc'],
                     1 ,  
                     function(x) gsub("\\D", '', x))
 
@@ -191,20 +191,20 @@ data$coordinates <- apply(data['gps'],
 
 #------ 4.0 str_match ---------
 
-# Extraer una secci贸n del texto sin especificar la forma completa del texto
+# Extraer una seccion del texto sin especificar la forma completa del texto
 
 
 x <- "dada--dss kks. 12434 distrito Villa El Salvador region san juan de lurigancho"
 
 str_match(x,"\\.*[D/d]istrito\\s([\\w*\\s]*)\\s[R/r]egion\\s([\\w+\\s]+)")
 
-# \\d*: ninguna, uno o m谩s ocurrencias 
-# \\d+: uno o m谩s ocurrencias 
+# \\d*: ninguna, uno o mas ocurrencias 
+# \\d+: uno o mas ocurrencias 
 
 str_match(x,"\\.*[Dd]istrito\\s([\\w*\\s]*)\\s[Rr]egion\\s([\\w*\\s]*)")
 
 
-#\\.* : captura ninguna, una, o m谩s de un caracter (cualquiera: espacios, letras, numeros, #!%&/())
+#\\.* : captura ninguna, una, o mas de un caracter (cualquiera: espacios, letras, numeros, #!%&/())
 # () permite capturar lo que me interesa
 
 str_match(x,"\\.*+[D/d]istrito\\s([\\w*\\s]*)\\s[R/r]egion\\s([\\w*\\s]*)")[2] # distrito
@@ -213,18 +213,18 @@ str_match(x,"\\.*+[D/d]istrito\\s([\\w*\\s]*)\\s[R/r]egion\\s([\\w*\\s]*)")[3]  
 
 
 
-data$distrito <- apply(data['direcci贸n'],
+data$distrito <- apply(data['direcci髇'],
                           1 ,  
               function(x) str_match(x,"\\.*[D/d]istrito\\s([\\w*\\-\\s]*)\\s[R/r]egion\\s([\\w*\\s]*)")[2])
 
-data$region <- apply(data['direcci贸n'],
+data$region <- apply(data['direcci髇'],
                           1 ,  
               function(x) str_match(x,"\\.*+[D/d]istrito\\s([\\w*\\-\\s]*)\\s[R/r]egion\\s([\\w*\\s]*)")[3])
 
 
-View(data[,c('direcci贸n','region')])
+View(data[,c('direcci髇','region')])
   
-#extracci贸n del numero telefonico
+#extraccion del numero telefonico
 
 #telf: 123-4559
 
@@ -244,7 +244,7 @@ data$telefono_fijo_3 <- apply(data['telefono'],
 
 
 
-# Extraer seccci贸n de un texto cuando se tiene que especificar toda la estrucutra del texto
+# Extraer seccion de un texto cuando se tiene que especificar toda la estrucutra del texto
 
 
 match_output <- stringr::str_match(data$resolucion, 
@@ -254,7 +254,7 @@ match_output <- stringr::str_match(data$resolucion,
 
 # pip str_match , stringr, str_match
 
-"[0-9]+: existe uno o m谩s digitos"                  
+"[0-9]+: existe uno o mas digitos"                  
 
 data <- data %>% mutate(code_res = match_output[,2], year_res = match_output[,3],
                          entidad_res = match_output[,4])
@@ -266,8 +266,8 @@ data <- data %>% mutate(code_res = match_output[,2], year_res = match_output[,3]
 
 data <- data %>% mutate(code_res = match_output[,2], year_res = match_output[,3],
                         entidad_res = match_output[,4],
-                        Gob_regional_jur = ifelse(str_detect(instituci贸n_ruc,"(^G)|(^R)"), 1 , 0 ),
-                        Minsa_jur = ifelse(str_detect(instituci贸n_ruc,"^M"), 1 , 0 )
+                        Gob_regional_jur = ifelse(str_detect(instituci髇_ruc,"(^G)|(^R)"), 1 , 0 ),
+                        Minsa_jur = ifelse(str_detect(instituci髇_ruc,"^M"), 1 , 0 )
 )
   
 
@@ -334,8 +334,8 @@ str_extract_all(nombre, "\\bperez\\B\\w+")
 
 str_extract_all(nombre, "\\bperez\\b")
 
- # \\b: el string no est谩 rodeado de letras o numeros
-# \\B: el string est谩 rodeado de letras o numeros
+ # \\b: el string no esta rodeado de letras o numeros
+# \\B: el string esta rodeado de letras o numeros
 
 data$pre_soles2 <- data$presupuesto |> str_extract("\\w+\\B[\\d+\\,]+\\B")
 
@@ -369,10 +369,14 @@ data <- data |> dplyr::mutate(
   nueva_fecha = dmy( paste(day,month, year1, sep = "/")  )             
                )
 
-
-
-
 # dmy(12/10/2026) = 2026-10-12
+
+# De manera directa usamos lubridate en la columna inicial de la fecha 
+
+data <- data |> dplyr::mutate(
+  date = dmy( fecha_apertura  )             
+)
+
 
 # diferencia entre paste y paste0, paste0 une sin espacio
 # mientras paste permite indicar como separar los strings 
@@ -380,7 +384,7 @@ data <- data |> dplyr::mutate(
 data$year <- NULL
 
 
-#  Segunda aplicaci贸n ----
+#  Segunda aplicacion ----
 
 
 # Select varias lineas de codigo (Ctrl + alt + cambios)
