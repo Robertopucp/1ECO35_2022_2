@@ -43,6 +43,8 @@ attributes(repdata)
 
 summary(repdata)
 
+# Observamos las etiquetas de variable de los valores de las variables
+
 lapply(repdata, attr, 'label')
 
 lapply(repdata, attr, 'labels')
@@ -80,6 +82,8 @@ while(i < 42){
 table1 <- repdata %>% dplyr::select(any_prio, any_prio_on, any_prio_off,
                              war_prio, war_prio_on, war_prio_off, war_col, war_inc, war)
 
+
+stargazer(table1)
 
 # No obtenemos resultado pues la libreria exige que la base de datos sea DataFrame
 
@@ -170,14 +174,19 @@ summary(ols_model)$call
 summary(ols_model)$coef
 
 # Test de significancia individual usando Huber robust standard errors
-coeftest(ols_model, vcov = vcovHC(ols_model, "HC")) # Robust standar error (Huber se)
+coeftest(ols_model, vcov = vcovHC(ols_model, "HC")) # Robust standar error (White se)
 coeftest(ols_model, vcov = vcovHC(ols_model, "HC0"))
 
-coeftest(ols_model, vcov = vcovHC(ols_model, "HC1")) # otras especificaciones de se
-coeftest(ols_model, vcov = vcovHC(ols_model, "HC2"))
+coeftest(ols_model, vcov = vcovHC(ols_model, "HC1")) # Robust standar error (Huber se)
+coeftest(ols_model, vcov = vcovHC(ols_model, "HC2")) # otras especificaciones de se
 coeftest(ols_model, vcov = vcovHC(ols_model, "HC3"))
 coeftest(ols_model, vcov = vcovHC(ols_model, "HC4"))
 
+# robust se and cluster
+
+robust_lm <- coeftest(ols_model, cluster = ~ccode, vcov = vcovHC(ols_model, "HC1"))
+
+tidy(robust_lm, conf.int = TRUE)
 
 # Modelo 1: OLS, sin efectos fijos o country-time trend
 # errores estandar robustas (Huber robust)
