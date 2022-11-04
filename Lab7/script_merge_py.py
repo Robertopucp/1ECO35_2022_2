@@ -493,10 +493,10 @@ merge_base_2020[10]
 
 df1 = merge_base_2020.groupby( [ "conglome", "vivienda", "hogar" ]).agg( edu_max = ( 'p301a', np.max ) ,
                                                        edu_min = ( 'p301a', np.min ) ,
-                        total_miembros = ('hogar', np.size),
+                   total_miembros1 = ('conglome', np.count), # ignore  NA missing
+                   total_miembros2 = ('conglome', np.size),  # count missings
                         sup_educ = ( 'var_10', np.sum ))
            
-
 #   as_index = true (default), las varibales de agrupamiento son variables indenxing
    
    
@@ -518,7 +518,8 @@ df1['hogar'] # no existe
 df1 = merge_base_2020.groupby( [ "conglome", "vivienda", "hogar" ],
                               as_index = False ).agg( edu_max = ( 'p301a', np.max ) ,
                                                        edu_min = ( 'p301a', np.min ) ,
-                        total_miembros = ('conglome', np.size),
+                        total_miembros1 = ('conglome', np.count), # ignore  NA missing
+                        total_miembros2 = ('conglome', np.size),  # count missings
                         sup_educ = ( 'var_10', np.sum ))
       
                                                      

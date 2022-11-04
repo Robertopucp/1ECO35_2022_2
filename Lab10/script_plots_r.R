@@ -1,17 +1,16 @@
 ################  Clase 10 gráficos ############################
 ## Curso: Laboratorio de R y Python ###########################
-## @author: Roberto Mendoza 
+## @author: Roberto Mendoza
 
 # clear environment
 
-rm(list=ls(all=TRUE)) 
+rm(list=ls(all=TRUE))
 
 # install.packages("writexl")
 
 # install.packages("librarian") para cargar librerias
 
 librarian::shelf(
-  tidyverse
   , lubridate,
   readxl,
   writexl,
@@ -28,22 +27,22 @@ fin_data <- read_excel("../data/finanzas_data_2.xlsx", sheet = "Hoja1")
 
 dim(fin_data)
 
-colnames(fin_data) <- tolower(colnames(fin_data)) 
+colnames(fin_data) <- tolower(colnames(fin_data))
 
-# Trabajando la base de datos 
+# Trabajando la base de datos
 
 # Para detectar meses en españos necesitamos cambiar Set por Sep
-# Luego, colocalos un punto luego del mes 
+# Luego, colocalos un punto luego del mes
 
 filter_data  <- fin_data |>
-  slice((n() - 900):n()) |> 
+  slice((n() - 900):n()) |>
   mutate(
     fecha = str_replace_all(fecha, "Set", "Sep"),
     date = str_to_lower(fecha),
     date2 = paste(str_sub(date, 1, 5), ".", str_sub(date, 6, -1), sep = "") # -1 hasta el ultimo caracter
     , fecha = dmy(date2) # aplicando la libreria lubridate
-  ) |> 
-  select(1:5) |>  
+  ) |>
+  select(1:5) |>
   pivot_longer(!fecha) |> # reshape wide to long
   mutate(
     value = as.numeric(value) # convertir de character a numerico (float)
@@ -56,21 +55,21 @@ sapply(filter_data, class)
 
 # Se define los colores basado en codificación RGB
 
-mi_cl <- 
+mi_cl <-
   c(
     "#b87333"  # marron
     , "#ffd700" # amarillo
     , "#bac4c8" # plateado
-    , "#5b7582"  # plomo oscuro 
+    , "#5b7582"  # plomo oscuro
   )
 
 # Gráfico finanzas 1 ----
 
 
-filter_data  |> 
+filter_data  |>
   mutate(
     currencies = factor(name, labels = c("Cobre","Oro","Plata","Zinc"))
-  ) |> 
+  ) |>
   ggplot() +
   aes(fecha, value, group = currencies, color = currencies) +
   geom_line(size = 1, show.legend = F) +  # se grafico en formato de series
@@ -85,9 +84,9 @@ filter_data  |>
   scale_color_manual(    # se asigna el color de la serie
     values = mi_cl
   ) +
-  scale_y_continuous(labels = scales::dollar) + # formato de fondo blanco 
+  scale_y_continuous(labels = scales::dollar) + # formato de fondo blanco
   theme_minimal() +  # formato de gráfico
-  theme( 
+  theme(
     panel.background = element_rect("white", color = NA) #  en blanco el fondo del cuadro
     , panel.border = element_blank()
     , plot.background = element_rect("white") # toda el marco de la imagen en blanco
@@ -112,6 +111,75 @@ ggsave(
   , width = 12  # ancho
   , dpi = 320   # resolución (calidad de la imagen)
 )
+
+
+# gráfico 2
+
+
+librarian::shelf(
+  tidyverse
+  , PeruData
+  , ggtext
+)
+
+# Enaho, P524A1 ingresos
+# p207 sexo
+# p510 ocupacion principal para
+#
+#
+
+vari <- c("p524a1", "p207", "p510")
+
+#data
+
+# PeruData::inei_enaho("05", c("2010", "2020"))
+
+enaho <- dir(here::here("Data", "enaho", "solo-data"), recursive = T, pattern = ".dta", full.names = T)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -142,9 +210,9 @@ data_latam <- data_index |>
       , name =="peru" ~ "Perú"
       , name =="latam" ~ "Latam"
     )
-    , pais = fct_reorder2(pais, fecha, index) 
+    , pais = fct_reorder2(pais, fecha, index)
     # se catecoriza por nombre de país, fecha y valor del indicador de riesgo
-  ) 
+  )
 
 
 
@@ -153,47 +221,42 @@ data_index$name <- NULL
 
 
 
-
-
-
-
-
-# levels(rp_latam$.id)
-theme_ft <- function(...) {
-  text_color <- "#68625D"
-  color_cases <- "#71C8E4"
-  color_cases_text <- "#258BC3"
-  color_deaths <- "#CE3240" 
-  theme_minimal(base_family = "Outfit Medium", base_size = 16) + 
-    theme(
-      plot.background = element_rect(color = NA, fill = "#FFF1E5"),
-      panel.background = element_rect(color = NA, fill = NA),
-      panel.grid = element_blank(),
-      panel.grid.major.y = element_line(color = "#E3DACE", size = 0.3),
-      text = element_text(color = text_color, lineheight = 1.3),
-      plot.title = element_textbox(color = "#040000", family = "Outfit Medium", 
-                                   face = "plain", size = 20, width = 1),
-      plot.title.position = "plot",
-      plot.subtitle = element_markdown(family = "Outfit Medium"),
-      plot.caption = element_markdown(
-        family = "Outfit", hjust = 1, size = 11.5, color = "#5E5751"),
-      plot.caption.position = "plot",
-      axis.title = element_blank(),
-      axis.text.x = element_text(hjust = 0, color = text_color, size = 14),
-      axis.text.y.left = element_markdown(family = "Outfit Medium"),
-      axis.text.y.right = element_markdown(family = "Outfit Medium"),
-      axis.ticks.x = element_line(size = 0.3),
-      axis.ticks.length.x = unit(1.8, "mm"),                     
-      plot.margin = margin(t = 12, b = 6, l = 7, r = 15, "mm"),
-      strip.text = element_blank(),   # remove default facet titles
-      ...
-    )
-}  
+# # levels(rp_latam$.id)
+# theme_ft <- function(...) {
+#   text_color <- "#68625D"
+#   color_cases <- "#71C8E4"
+#   color_cases_text <- "#258BC3"
+#   color_deaths <- "#CE3240"
+#   theme_minimal(base_family = "Outfit Medium", base_size = 16) +
+#     theme(
+#       plot.background = element_rect(color = NA, fill = "#FFF1E5"),
+#       panel.background = element_rect(color = NA, fill = NA),
+#       panel.grid = element_blank(),
+#       panel.grid.major.y = element_line(color = "#E3DACE", size = 0.3),
+#       text = element_text(color = text_color, lineheight = 1.3),
+#       plot.title = element_textbox(color = "#040000", family = "Outfit Medium",
+#                                    face = "plain", size = 20, width = 1),
+#       plot.title.position = "plot",
+#       plot.subtitle = element_markdown(family = "Outfit Medium"),
+#       plot.caption = element_markdown(
+#         family = "Outfit", hjust = 1, size = 11.5, color = "#5E5751"),
+#       plot.caption.position = "plot",
+#       axis.title = element_blank(),
+#       axis.text.x = element_text(hjust = 0, color = text_color, size = 14),
+#       axis.text.y.left = element_markdown(family = "Outfit Medium"),
+#       axis.text.y.right = element_markdown(family = "Outfit Medium"),
+#       axis.ticks.x = element_line(size = 0.3),
+#       axis.ticks.length.x = unit(1.8, "mm"),
+#       plot.margin = margin(t = 12, b = 6, l = 7, r = 15, "mm"),
+#       strip.text = element_blank(),   # remove default facet titles
+#       ...
+#     )
+# }
 
 
 
 clrs <- c(
-  "#056c8d"
+  "#00CDCD"
   , "#009c3b"
   , "#e63d31"
   , "#0039A6"
@@ -203,10 +266,13 @@ clrs <- c(
 
 names(clrs) <- levels(data_latam$pais)
 
+names(clrs)
+
+
 lb_a <- function(y, z){
   annotate(
     "text"
-    , x = as_date("2022-03-15")
+    , x = as_date("2022-09-01")
     , y = y
     , size = 5
     , label = names(clrs)[z]
@@ -216,17 +282,17 @@ lb_a <- function(y, z){
 }
 
 
-data_latam |> 
+data_latam |>
   ggplot() +
   aes(fecha, index, group = pais, color = pais) +
   geom_point(data = filter(data_latam, fecha == max(fecha)),
              aes(fecha, index, color = pais), shape = 15, size = 4) +
   ggalt::geom_xspline(size = 1, alpha = .8) +
   scale_color_manual(
-    values = clrs 
+    values = clrs
   ) +
   labs(
-    x = "", y = "", 
+    x = "", y = "",
     title = "Latinoamerica: Riesgo país"
     , subtitle = "Diferencial de rendimientos del índice de bonos de mercados emergentes"
     , caption = "Fuente: BCRP"
@@ -237,9 +303,37 @@ data_latam |>
   lb_a(290, 2) +
   lb_a(220, 3) +
   lb_a(150, 4) +
+  lb_a(150, 4) +
   theme(
+
+    text_color <- "#68625D"
+    color_cases <- "#71C8E4"
+    color_cases_text <- "#258BC3"
+    color_deaths <- "#CE3240"
+    theme_minimal(base_family = "Outfit Medium", base_size = 16) +
+      theme(
+        plot.background = element_rect(color = NA, fill = "#FFF1E5"),
+        panel.background = element_rect(color = NA, fill = NA),
+        panel.grid = element_blank(),
+        panel.grid.major.y = element_line(color = "#E3DACE", size = 0.3),
+        text = element_text(color = text_color, lineheight = 1.3),
+        plot.title = element_textbox(color = "#040000", family = "Outfit Medium",
+                                     face = "plain", size = 20, width = 1),
+        plot.title.position = "plot",
+        plot.subtitle = element_markdown(family = "Outfit Medium"),
+        plot.caption = element_markdown(
+          family = "Outfit", hjust = 1, size = 11.5, color = "#5E5751"),
+        plot.caption.position = "plot",
+        axis.title = element_blank(),
+        axis.text.x = element_text(hjust = 0, color = text_color, size = 14),
+        axis.text.y.left = element_markdown(family = "Outfit Medium"),
+        axis.text.y.right = element_markdown(family = "Outfit Medium"),
+        axis.ticks.x = element_line(size = 0.3),
+        axis.ticks.length.x = unit(1.8, "mm"),
+        plot.margin = margin(t = 12, b = 6, l = 7, r = 15, "mm"),
+        strip.text = element_blank(),   # remove default facet titles
     legend.position = "none"
-  ) 
+  )
 
 
 ggsave(
