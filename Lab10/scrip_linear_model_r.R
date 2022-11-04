@@ -472,6 +472,8 @@ coeftest(probit, vcov. = vcovCL(probit, cluster = ~ccode, type = "HC"))
 
 # Logit model
 
+###  Logit, Probit models ----
+
 logit <- logitmfx(prob_formula, data = repdata, atmean = TRUE, robust = T)
 
 logit <- logitmfx(prob_formula, data = repdata, atmean = TRUE, robust = T,
@@ -494,15 +496,241 @@ texreg(list(logit, probit))
 
 htmlreg(list(logit, probit)) # export to html
 
-# Modelo 2
+###  Modelo 2 ----
+
+model2_formula <- as.formula(
+    paste("any_prio",
+          "~",
+          paste("gdp_g","gdp_g_l",
+                paste(control_vars, collapse = "+"),
+                "time_year"
+                , sep="+")
+    )
+)
+
+
+ols_model2 <- lm_robust(model2_formula, data = repdata,
+                        clusters = ccode, se_type = "stata")
+
+summary(ols_model2)
+
+glance(ols_model2)
+
+tidy(ols_model2)
+
+rmse2 <- round( RMSE(ols_model2$fitted.values, repdata$any_prio ), 2)
+
+###  Modelo 3 ----
+
+model3_formula <- as.formula(
+    paste("any_prio",
+          "~",
+          paste("gdp_g","gdp_g_l",
+                paste(control_vars, collapse = "+"),
+                paste(country_time_trend, collapse = "+")
+                , sep="+")
+    )
+)
+
+
+ols_model3 <- lm_robust(model3_formula, data = repdata,
+                        clusters = ccode, se_type = "stata")
+
+summary(ols_model3)
+
+glance(ols_model3)
+
+tidy(ols_model3)
+
+rmse3 <- round(RMSE(ols_model3$fitted.values, repdata$any_prio ), 2)
+
+###  Modelo 4 ----
+
+model4_formula <- as.formula(
+    paste("any_prio",
+          "~",
+          paste("gdp_g","gdp_g_l",
+                paste(country_time_trend, collapse = "+")
+                , sep="+")
+    )
+)
+
+
+ols_model4 <- lm_robust(model4_formula, data = repdata,
+                        clusters = ccode, se_type = "stata", fixed_effects = ~ ccode)
+
+summary(ols_model4)
+
+glance(ols_model4)
+
+tidy(ols_model4)
+
+rmse4 <- round( RMSE(ols_model4$fitted.values, repdata$any_prio ), 2)
+
+
+###  Modelo 5 IV ----
+
+model5_formula <- as.formula(
+    paste(
+    paste("any_prio",
+          "~",
+          paste("gdp_g","gdp_g_l",
+                paste(country_time_trend, collapse = "+")
+                , paste(control_vars, collapse = "+")
+                , sep="+")
+    )
+    , paste("GPCP_g", "GPCP_g_l",
+            paste(country_time_trend, collapse = "+")
+            , paste(control_vars, collapse = "+")
+            , sep="+")
+    , sep=" | "
+    )
+)
 
 
 
+ols_model5 <- iv_robust(model5_formula, data = repdata,
+                        clusters = ccode, se_type = "stata")
+
+summary(ols_model5)
+
+glance(ols_model5)
+
+tidy(ols_model5)
+
+rmse5 <- round(RMSE(ols_model5$fitted.values, repdata$any_prio ), 2)
+
+# usando flem
+
+model5_formula <- as.formula(
+    paste(
+        paste("any_prio",
+              "~",
+              paste("gdp_g","gdp_g_l",
+                    paste(country_time_trend, collapse = "+")
+                    , paste(control_vars, collapse = "+")
+                    , sep="+")
+        )
+        , "|0|(gdp_g|gdp_g_l ~ GPCP_g + GPCP_g_l)| ccode"
+    )
+)
+
+ols_model5_fle <- felm( model5_formula, data = repdata )
+
+summary(ols_model5_fle)
+
+glance(ols_model5_fle)
+
+tidy(ols_model5_fle)
+
+rmse5_fle <- RMSE(ols_model5_fle$fitted.values, repdata$any_prio )
 
 
+### Modelo 6 IV ----
+
+model6_formula <- as.formula(
+    paste(
+        paste("any_prio",
+              "~",
+              paste("gdp_g","gdp_g_l",
+                    paste(country_time_trend, collapse = "+")
+                    , sep="+")
+        )
+        , paste("GPCP_g", "GPCP_g_l",
+                paste(country_time_trend, collapse = "+")
+                , sep="+")
+        , sep=" | "
+    )
+)
 
 
+ols_model6 <- iv_robust(model6_formula, data = repdata,
+                        clusters = ccode, se_type = "stata",
+                        fixed_effects = ~ ccode)
 
+summary(ols_model6)
+
+glance(ols_model6)
+
+tidy(ols_model6)
+
+rmse6 <- round(RMSE(ols_model6$fitted.values, repdata$any_prio ), 2)
+
+# usando flem
+
+model6_formula <- as.formula(
+    paste(
+        paste("any_prio",
+              "~",
+              paste("gdp_g","gdp_g_l",
+                    paste(country_time_trend, collapse = "+")
+                    , sep="+")
+        )
+        , "|ccode|(gdp_g|gdp_g_l ~ GPCP_g + GPCP_g_l)| ccode"
+    )
+)
+
+ols_model6_fle <- felm( model6_formula, data = repdata )
+
+summary(ols_model6_fle)
+
+glance(ols_model6_fle)
+
+tidy(ols_model6_fle)
+
+rmse6_fle <- round( RMSE(ols_model6_fle$fitted.values, repdata$any_prio ), 2)
+
+### Modelo 7 IV ----
+
+model7_formula <- as.formula(
+    paste(
+        paste("war_prio",
+              "~",
+              paste("gdp_g","gdp_g_l",
+                    paste(country_time_trend, collapse = "+")
+                    , sep="+")
+        )
+        , paste("GPCP_g", "GPCP_g_l",
+                paste(country_time_trend, collapse = "+")
+                , sep="+")
+        , sep=" | "
+    )
+)
+
+
+ols_model7 <- iv_robust(model7_formula, data = repdata,
+                        clusters = ccode, se_type = "stata",
+                        fixed_effects = ~ ccode)
+
+summary(ols_model7)
+
+glance(ols_model7)
+
+tidy(ols_model7)
+
+rmse7 <- round(RMSE(ols_model7$fitted.values, repdata$war_prio ) ,2 )
+
+
+# Export table
+
+texreg(list(logit, probit, ols_model2, ols_model3, ols_model4,
+            ols_model5, ols_model6, ols_model7),
+       custom.coef.map = list("gdp_g"="Economic growth rate, t",
+                              "gdp_g_l"="Economic growth rate, t-1",
+                              "y_0" = "Log(GDP per capita), 1979",
+                              "polity2l" = "Democracy (Polity IV), t-1",
+                              "ethfrac" = "Ethnolinguistic fractionalization",
+                              "relfrac" = "Religious fractionalization",
+                              "Oil" = "Oil-exporting country",
+                              "lmtnest" = "Log(mountainous)",
+                              "lpopl1" = "Log(national population), t-1"
+
+       ), digits = 3,
+       stars = c(0.01, 0.05, 0.1),
+       custom.gof.rows = list("Country fixed effects" = c("no","no", "no","no", "yes", "no","yes", "yes"),
+                              "Country-specific time trends" = c("no","no", "no","no", "yes", "yes","yes", "yes"),
+                              "RMSE" = c("","",rmse2,rmse3,rmse4,rmse5,rmse6,rmse7)),
+       caption = "Economic Growth and Civil Conflict")
 
 
 
