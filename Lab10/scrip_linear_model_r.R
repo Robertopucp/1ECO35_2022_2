@@ -742,5 +742,8 @@ texreg(list(logit, probit, ols_model2, ols_model3, ols_model4,
        caption = "Economic Growth and Civil Conflict")
 
 
+## glmnet library para modelos de machine learning lineales
+
+"https://glmnet.stanford.edu/articles/glmnet.html"
 
 
