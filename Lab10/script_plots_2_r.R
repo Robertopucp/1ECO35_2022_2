@@ -29,12 +29,7 @@ user <- Sys.getenv("USERNAME")  # username
 setwd( paste0("C:/Users/",user,"/Documents/GitHub/1ECO35_2022_2/Lab10") ) # set directorio
 
 
-
-
 help(WDI)
-
-
-
 
 data <- WDI(indicator = "NY.GDP.PCAP.KD", start = 2018, end = 2018)
 
