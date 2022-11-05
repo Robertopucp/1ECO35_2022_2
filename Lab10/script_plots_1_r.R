@@ -115,7 +115,7 @@ enaho %>%  filter(year == 2019 & !is.na(l_salario) ) %>%
     theme(text=element_text(size =12), plot.title = element_text(hjust = 0.5))
 
 
-# Sector económico
+
 
 enaho <- enaho %>% mutate(sector = case_when(sector == 1 ~ "Agricultura y pesca", sector == 2 ~ "Minería",
                                              sector == 3 ~ "Manufactura", sector == 4 ~ "Construcción",
@@ -131,4 +131,5 @@ enaho %>% filter(year == 2019 & !is.na(sector)) %>% filter(sector %in% c("Constr
          y = "Density")
 
 ggsave("imagen1.png", width = 10, height = 10, dpi = 200)
+
 

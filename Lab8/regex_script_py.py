@@ -137,6 +137,7 @@ x = "AVENIDA LA PAZ CUADRA 3 LA PERLA CALLAO CALLAO distrito LA PERLA Region El 
 re.search('\.*[D/d]istrito\s([\w+\-\s]+)\s[R/r]egion\s([\w+\s]+)', x).group(1)
 
 
+
 re.search('\.*[D/d]istrito\s([\w+\-\s]+)\s[R/r]egion\s([\w+\s]+)', x).group(2)
 
 
@@ -157,21 +158,6 @@ data['distrito'] = data['dirección'].apply(lambda x: dist_region(x)[0])
 
 data['region'] = data['dirección'].apply(lambda x: dist_region(x)[1])
 
-
-def dist_region(x):
-    
-    output =  re.search('\.*distrito\s([\w+\-*\s]*)\sregion\s([\w+\s]*)$',x,  re.I)
-    
-    return output.group(1), output.group(2)
-
-# re.IGNORECASE , re.I : ingnora los casos de mayuscula o minuscula en distrito y region (Flags)
-
-help(re)
-
-data['distrito'] = data['dirección'].apply(lambda x: dist_region(x)[0])
-
-
-data['region'] = data['dirección'].apply(lambda x: dist_region(x)[1])
 
 # try and except cuando la celda tiene missing, simplemente me devolverá None
 
