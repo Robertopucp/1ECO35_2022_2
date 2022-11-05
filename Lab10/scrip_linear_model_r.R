@@ -216,7 +216,7 @@ glance(ols_model1)
 tidy(ols_model1)
 
 # Model2 OLS: No efectos fijos (country), Si country-time trends
-# errores estandar robustas (Huber robust)
+# errores estandar robustas (Huber-white robust)
 # termino de perturbación están clusterizados (agrupados) a nivel país
 # Se añade variables de control
 
