@@ -124,9 +124,9 @@ data.info()
 
 x = "AVENIDA LA PAZ CUADRA 3 LA PERLA CALLAO CALLAO distrito LA-PERLA Region CALLAO"
 
-re.search('\.*[D/d]istrito\s([\w+\-*\s]+)\s[R/r]egion\s([\w+\s]+)', x).group(1)
+re.search('\.*[D/d]istrito\s([\w+\-\s]+)\s[R/r]egion\s([\w+\s]+)', x).group(1)
 
-re.search('\.*[D/d]istrito\s([\w+\-*\s]+)\s[R/r]egion\s([\w+\s]+)', x).group(2)
+re.search('\.*[D/d]istrito\s([\w+\-\s]+)\s[R/r]egion\s([\w+\s]+)', x).group(2)
 
 
 #\\.* : captura ninguna, una, o más de un caracter (cualquiera: espacios, letras, numeros, #!%&/())
@@ -136,7 +136,7 @@ re.search('\.*[D/d]istrito\s([\w+\-*\s]+)\s[R/r]egion\s([\w+\s]+)', x).group(2)
 
 def dist_region(x):
     
-    output =  re.search('\.*[D/d]istrito\s([\w+\-*\s]*)\s[R/r]egion\s([\w+\s]*)',x)
+    output =  re.search('\.*[D/d]istrito\s([\w+\-\s]*)\s[R/r]egion\s([\w+\s]*)',x)
     
     return output.group(1), output.group(2)
  
@@ -146,19 +146,6 @@ data['distrito'] = data['dirección'].apply(lambda x: dist_region(x)[0])
 
 data['region'] = data['dirección'].apply(lambda x: dist_region(x)[1])
 
-
-def dist_region(x):
-    
-    output =  re.search('\.*distrito\s([\w+\-*\s]*)\sregion\s([\w+\s]*)$',x,  re.I)
-    
-    return output.group(1), output.group(2)
-
-# re.IGNORECASE , re.I : ingnora mayuscula o minuscula (Flags)
-
-data['distrito'] = data['dirección'].apply(lambda x: dist_region(x)[0])
-
-
-data['region'] = data['dirección'].apply(lambda x: dist_region(x)[1])
 
 # try and except cuando la celda tiene missing, simplemente me devolverá None
 
@@ -317,10 +304,10 @@ newbase  = junin.loc[junin['Place'].str.contains('^ac*', flags = re.I, na = Fals
 
 # match : ac (strict)
 
-newbase  =  junin.loc[junin['Place'].str.contains('ac+', flags = re.I, na = False, regex = True)]
+newbase  =  junin.loc[junin['Place'].str.contains('^ac+', flags = re.I, na = False, regex = True)]
 
 # match a or c
 
-newbase  =  junin.loc[junin['Place'].str.contains('ac?', flags = re.I, na = False, regex = True)]
+newbase  =  junin.loc[junin['Place'].str.contains('^ac?', flags = re.I, na = False, regex = True)]
 
 
