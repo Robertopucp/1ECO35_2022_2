@@ -99,7 +99,7 @@ data['fecha_apertura'] = data['fecha_apertura'].apply(lambda x: re.sub('(:00:00)
 #%% re.findall
 
 
-data['coordinates1'] = data['gps'].apply(lambda x: re.findall('-\d+.\d+,-\d+.\d+',x))
+data['coordinates1'] = data['gps'].apply(lambda x: re.findall('-\d+.\d+,-\d+.\d+',str(x)))
 
 
 #Se obtiene error pues la variable gps celdas nan que son float y no string
@@ -132,10 +132,15 @@ data.info()
 # extracción del nombre de distrito y región 
 
 
+<<<<<<< Updated upstream
 x = "AVENIDA LA PAZ CUADRA 3 LA PERLA CALLAO CALLAO distrito LA PERLA Region El CALLAO"
 
 re.search('\.*[D/d]istrito\s([\w+\-\s]+)\s[R/r]egion\s([\w+\s]+)', x).group(1)
 
+=======
+
+x = "AVENIDA LA PAZ CUADRA 3 LA PERLA CALLAO CALLAO distrito LA PERLA Region CALLAO"
+>>>>>>> Stashed changes
 
 
 re.search('\.*[D/d]istrito\s([\w+\-\s]+)\s[R/r]egion\s([\w+\s]+)', x).group(2)
@@ -223,41 +228,34 @@ data['Minsa_jur'] =  np.where(data['institución_ruc'].str.contains('^M', na = F
 #%% Look around
 
 # positive lookahead (?=)
-
-
 data['apertura1'] = data['horario'].apply(lambda x: re.search("\d+\:\d+(?= am)",x).group())
 
 # Solo debe colocarse group()
-
 data['apertura2'] = data['horario'].apply(lambda x: re.search("[\d+\:]+(?= am)",x).group())
 
 # positive lookbehind (?<=)
-
 data['apertura3'] = data['horario'].apply(lambda x: re.search("(?<=apertura )[\d+\:]+",x).group())
 
-
 # negative lookbehind (?<!)
-
-
 data['cierre1'] = data['horario'].apply(lambda x: re.search("(?<!apertura )\d+\:\d+",x).group())
 
 # negative lookbahead (?!)
-
 data['pres_soles'] = data['presupuesto'].apply(lambda x: re.search("[\d*\,]+(?!\$)",x).group())
 
+<<<<<<< Updated upstream
 
  # \b: el string no está rodeado de letras o numeros
 # \B: el string está rodeado de letras o numeros
 
+=======
+# \\b: el string no está rodeado de letras o numeros
+# \\B: el string está rodeado de letras o numeros
+>>>>>>> Stashed changes
 data['pres_soles2'] = data['presupuesto'].apply(lambda x: re.findall("\w+\B[\d+\,]+\B",x)[0])
 
 # retirar tildes del texto
-
 data['presupuesto'] = data['presupuesto'].apply(lambda x: unidecode.unidecode(x))
-
-
 data['presupuesto'] = data['presupuesto'].apply(unidecode.unidecode)
-
 
 #%% Fechas
 
