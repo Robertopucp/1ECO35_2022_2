@@ -17,8 +17,11 @@ import swifter  # for parallel procesing
 import unidecode # to drop tildes
 from datetime import datetime  # library for time
 
+# !pip install swifter
+# !pip install xlrd
 
 user = os.getlogin()   # Username
+
 print(user)
 
 # Set directorio
@@ -35,6 +38,7 @@ data.columns = map(str.lower, data.columns)
 
 # map es el loop replacement que permite aplicar la función str.lower a cada elemento de la lista data.columns
 
+
 #%% regex re.sub
 
 
@@ -44,6 +48,7 @@ data.columns = map(str.lower, data.columns)
 
 data['inst1'] = data['institución_ruc'].apply(lambda x: re.sub('[0-9]','',x))
 
+# re.sub es de sustución 
 
 "[0-9]*: ninguno, uno o más digitos"
 
@@ -79,6 +84,7 @@ data['ruc2'] = data['institución_ruc'].apply(lambda x: re.sub('[a-zA-Z\s]','',x
 
 data['ruc3'] = data['institución_ruc'].apply(lambda x: re.sub('\D','',x))
 
+#\D: caracteres diferetnes de digitos
 
 # Alternativas 4
 
@@ -88,19 +94,22 @@ data['ruc4'] = data['institución_ruc'].apply(lambda x: re.sub('[^0-9]','',x))
 
 data['fecha_apertura'] = data['fecha_apertura'].apply(lambda x: re.sub('(:00:00)|(!%&)|(00/00/00)','',x))
 
+# | permite incluir varias opciones (disyuntivo 0 )
 
 #%% re.findall
 
 
-data['coordinates1'] = data['gps'].apply(lambda x: re.findall('-\d+.\d+,-\d+.\d+',x))
+data['coordinates1'] = data['gps'].apply(lambda x: re.findall('-\d+.\d+,-\d+.\d+',str(x)))
+
 
 #Se obtiene error pues la variable gps celdas nan que son float y no string
 
 # columa de string con nan, pero nan es float (en STATA sucede lo mismo)
 
+
 data['coordinates2'] = data['gps'].apply(lambda x: re.findall('-\d+.\d+,-\d+.\d+', str(x)  ) )
 
-# se captura la presencia de más de un digito \d+
+# se captura la presencia de más de un digito \d+, str(x): transforma a texto cada fila de la columna 
 
 data['coordinates3'] = data['gps'].apply(lambda x: re.findall('-\d{1,2}.\d{1,3},-\d{2}.\d{1,4}', str(x)  ))
 
@@ -108,7 +117,8 @@ data['coordinates3'] = data['gps'].apply(lambda x: re.findall('-\d{1,2}.\d{1,3},
 # \d{1,4} de uno a cuatro digitos 
 
 data['coordinates4'] = data['gps'].apply(lambda x: re.findall('-\d*.\d*,-\d*.\d*', str(x))  )
-    
+
+#\d* ningun caso, uno + más casos 
 
 # Se retira los elementos dentro del output re.findall que es una lista
 
@@ -122,11 +132,18 @@ data.info()
 # extracción del nombre de distrito y región 
 
 
-x = "AVENIDA LA PAZ CUADRA 3 LA PERLA CALLAO CALLAO distrito LA-PERLA Region CALLAO"
+<<<<<<< Updated upstream
+x = "AVENIDA LA PAZ CUADRA 3 LA PERLA CALLAO CALLAO distrito LA PERLA Region El CALLAO"
 
-re.search('\.*[D/d]istrito\s([\w+\-*\s]+)\s[R/r]egion\s([\w+\s]+)', x).group(1)
+re.search('\.*[D/d]istrito\s([\w+\-\s]+)\s[R/r]egion\s([\w+\s]+)', x).group(1)
 
-re.search('\.*[D/d]istrito\s([\w+\-*\s]+)\s[R/r]egion\s([\w+\s]+)', x).group(2)
+=======
+
+x = "AVENIDA LA PAZ CUADRA 3 LA PERLA CALLAO CALLAO distrito LA PERLA Region CALLAO"
+>>>>>>> Stashed changes
+
+
+re.search('\.*[D/d]istrito\s([\w+\-\s]+)\s[R/r]egion\s([\w+\s]+)', x).group(2)
 
 
 #\\.* : captura ninguna, una, o más de un caracter (cualquiera: espacios, letras, numeros, #!%&/())
@@ -136,7 +153,7 @@ re.search('\.*[D/d]istrito\s([\w+\-*\s]+)\s[R/r]egion\s([\w+\s]+)', x).group(2)
 
 def dist_region(x):
     
-    output =  re.search('\.*[D/d]istrito\s([\w+\-*\s]*)\s[R/r]egion\s([\w+\s]*)',x)
+    output =  re.search('\.*[D/d]istrito\s([\w+\-\s]*)\s[R/r]egion\s([\w+\s]*)',x)
     
     return output.group(1), output.group(2)
  
@@ -146,19 +163,6 @@ data['distrito'] = data['dirección'].apply(lambda x: dist_region(x)[0])
 
 data['region'] = data['dirección'].apply(lambda x: dist_region(x)[1])
 
-
-def dist_region(x):
-    
-    output =  re.search('\.*distrito\s([\w+\-*\s]*)\sregion\s([\w+\s]*)$',x,  re.I)
-    
-    return output.group(1), output.group(2)
-
-# re.IGNORECASE , re.I : ingnora mayuscula o minuscula (Flags)
-
-data['distrito'] = data['dirección'].apply(lambda x: dist_region(x)[0])
-
-
-data['region'] = data['dirección'].apply(lambda x: dist_region(x)[1])
 
 # try and except cuando la celda tiene missing, simplemente me devolverá None
 
@@ -178,7 +182,6 @@ def phone(x):
 data['phone'] = data['telefono'].apply(lambda x: phone(x))
 
 data['phone'] = data['telefono'].apply(phone)
-
 
 
 def reso_info(x):
@@ -225,41 +228,34 @@ data['Minsa_jur'] =  np.where(data['institución_ruc'].str.contains('^M', na = F
 #%% Look around
 
 # positive lookahead (?=)
-
-
 data['apertura1'] = data['horario'].apply(lambda x: re.search("\d+\:\d+(?= am)",x).group())
 
 # Solo debe colocarse group()
-
 data['apertura2'] = data['horario'].apply(lambda x: re.search("[\d+\:]+(?= am)",x).group())
 
 # positive lookbehind (?<=)
-
 data['apertura3'] = data['horario'].apply(lambda x: re.search("(?<=apertura )[\d+\:]+",x).group())
 
-
 # negative lookbehind (?<!)
-
-
 data['cierre1'] = data['horario'].apply(lambda x: re.search("(?<!apertura )\d+\:\d+",x).group())
 
 # negative lookbahead (?!)
-
 data['pres_soles'] = data['presupuesto'].apply(lambda x: re.search("[\d*\,]+(?!\$)",x).group())
 
+<<<<<<< Updated upstream
 
- # \\b: el string no está rodeado de letras o numeros
+ # \b: el string no está rodeado de letras o numeros
+# \B: el string está rodeado de letras o numeros
+
+=======
+# \\b: el string no está rodeado de letras o numeros
 # \\B: el string está rodeado de letras o numeros
-
+>>>>>>> Stashed changes
 data['pres_soles2'] = data['presupuesto'].apply(lambda x: re.findall("\w+\B[\d+\,]+\B",x)[0])
 
 # retirar tildes del texto
-
 data['presupuesto'] = data['presupuesto'].apply(lambda x: unidecode.unidecode(x))
-
-
 data['presupuesto'] = data['presupuesto'].apply(unidecode.unidecode)
-
 
 #%% Fechas
 
@@ -317,10 +313,10 @@ newbase  = junin.loc[junin['Place'].str.contains('^ac*', flags = re.I, na = Fals
 
 # match : ac (strict)
 
-newbase  =  junin.loc[junin['Place'].str.contains('ac+', flags = re.I, na = False, regex = True)]
+newbase  =  junin.loc[junin['Place'].str.contains('^ac+', flags = re.I, na = False, regex = True)]
 
 # match a or c
 
-newbase  =  junin.loc[junin['Place'].str.contains('ac?', flags = re.I, na = False, regex = True)]
+newbase  =  junin.loc[junin['Place'].str.contains('^ac?', flags = re.I, na = False, regex = True)]
 
 
