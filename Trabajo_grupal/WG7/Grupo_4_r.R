@@ -16,7 +16,7 @@
 #                                                                              #
 #------------------------------------------------------------------------------#
 
-#Recursos necesarios
+#Recursos necesarios para la pregunta
 pacman::p_load(haven,dplyr, stringr, fastDummies,srvyr )
 
 library(readxl)
