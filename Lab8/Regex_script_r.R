@@ -13,7 +13,7 @@ rm(list=ls(all=TRUE))
 
 
 library(readxl)
-#library(stringr) # libreria para trabajar expresiones regulares
+library(stringr) # libreria para trabajar expresiones regulares
 #library(dplyr)
 library(lubridate) # dmy
 
