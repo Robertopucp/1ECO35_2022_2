@@ -1,0 +1,135 @@
+# -*- coding: utf-8 -*-
+"""
+Spyder Editor
+
+This is a temporary script file.
+"""
+
+
+
+### Importamos las librerías que vamos a utilizar
+
+import pandas as pd
+import re
+
+### Es preciso mencionar que el trabajo de python se realizó por dos personas, razón por la cual, se abre la base de datos desde dos distintas rutas de carpeta. 
+
+base = pd.read_excel(r"C:/Users/oscar/Downloads/data_administrativa.xlsx", sheet_name= "Hoja1")
+
+base = pd.read_excel(r"/Users/diegoyeliseo/Desktop/Base de datos Tarea 7/data_administrativa.xlsx", sheet_name= "Hoja1")
+
+
+
+### 1. Covertir el nombre de las variables a minuscula"
+
+base.rename(columns={"Nombre":"nombre","AGE":"age"}, inplace= True)
+
+
+### 2. Identificar correctamente los nombres
+
+base.nombre = base.nombre.str.replace ("3","")
+base.nombre = base.nombre.str.replace ("2","")
+base.nombre = base.nombre.str.replace ("[^a-zA-Z]\W+","")
+
+
+### 3. Identificar correctamente la fecha
+
+base.born_date = base.born_date.str.replace ("[^0-9]\W+","")
+base['born_date'] = pd.to_datetime(base['born_date']).dt.date
+
+
+
+### 4. Identificar correctamente la edad
+
+base['age'] = base['age'].apply(lambda x: re.sub('\D','',str(x)))
+
+
+## 5. dummies según el rango del sentenciado en la organización criminal
+
+base["rank"] = base["rank"].str.replace("noato","novato")
+base["rank"] = base["rank"].str.replace("novto","novato")
+base["rank"] = base["rank"].str.replace("extorsionador","extorsion")
+base["rank"] = base["rank"].str.replace("principiante","novato")
+
+##dum1: toma el valor de 1 si el sentenciado fue líder de la banda criminal
+base["dum1"] = pd.np.where(base["rank"].str.contains("lider de la banda criminal"),"1","0")  
+
+##dum2: toma el valor de 1 si el sentenciado fue cabecilla local
+base["dum2"] = pd.np.where(base["rank"].str.contains("cabecilla local"),"1","0")
+
+##dum3: toma el valor de 1 si el sentenciado fue cabecilla regional
+base["dum3"] = pd.np.where(base["rank"].str.contains("cabecilla regional"),"1","0")
+
+##dum4: toma el valor de 1 si el sentenciado fue sicario
+base["dum4"] = pd.np.where(base["rank"].str.contains("sicario"),"1","0")
+
+##dum5: toma el valor de 1 si el sentenciado realizó extorsión
+base["dum5"] = pd.np.where(base["rank"].str.contains("extorsion"),"1","0")
+
+##dum6: toma el valor de 1 si el sentenciado fue miembro regular
+base["dum6"] = pd.np.where(base["rank"].str.contains("miembro"),"1","0")
+
+##dum7: toma el valor de 1 si el sentenciado fue novato o principiante
+base["dum7"] = pd.np.where(base["rank"].str.contains("novato"),"1","0")
+
+
+
+### 7. Extraer el usuario del correo electrónico.
+
+base['correo_abogado'] = base['correo_abogado'].apply(lambda x: re.sub('@.+','',x))
+
+#Si  queremos ver el cambio realizado, utilizamos el siguiente código:
+
+base['correo_abogado']                                                   
+                                                     
+
+### 8. Crear una columna que contenga solo la información del número de dni (por ejemplo: 01-75222677)
+
+
+### Con este código le estamos diciendo a python que nos cree una nueva columna llamada número de dni
+
+base['número de dni'] = ''
+
+### Con este código le estamos diciendo a python que borre el texto "dni es" y se quede con la información que resta que es justamente el número de dni 
+
+base['número de dni']= base['dni'].apply(lambda x: re.sub('dni es','',x))
+
+
+### Si queremos ver el cambio realizado, pongamos lo siguiente:
+    
+base
+
+
+
+### 9. A partir de la columna observaciones, crear las siguiente variables:
+ 
+#crimen: debe contener información del delito cometido
+# n_hijos: cantidad de hijos del criminal
+# edad_inicio : edad de inicio en actividades criminales
+
+Def crimen(x):
+Try:
+match = re.search('\.*\s(\d+\-\d+)', str(x))
+return match.group(1)
+
+except:
+        
+        pass
+    
+
+base['crimen'] = base ['observaciones'].apply(lambda x: crimen(x))
+
+base['crimen'] = base['observaciones'].apply(crimen)
+
+base['n_hijos'] = base ['observaciones'].apply(lambda x: n_hijos(x))
+
+base['n_hijos'] = base['observaciones'].apply(n_hijos)
+
+base['edad_inicio'] = base ['observaciones'].apply(lambda x: edad_inicio(x))
+
+base['edad_inicio'] = base['observaciones'].apply(edad_inicio)
+
+
+
+
+
