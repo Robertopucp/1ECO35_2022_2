@@ -215,6 +215,9 @@ glance(ols_model1)
 
 tidy(ols_model1)
 
+
+htmlreg(ols_model1)
+
 # Model2 OLS: No efectos fijos (country), Si country-time trends
 # errores estandar robustas (Huber-white robust)
 # termino de perturbación están clusterizados (agrupados) a nivel país
@@ -253,6 +256,7 @@ tidy(ols_model2)
 
 rmse2 <- RMSE(ols_model2$fitted.values, repdata$gdp_g ) # root mean squeare error
 
+htmlreg(list(ols_model1,ols_model2))
 
 # Modelo 3: Si efectos fijos (country), Si country-time trends
 # errores estandar robustas (Huber robust)
