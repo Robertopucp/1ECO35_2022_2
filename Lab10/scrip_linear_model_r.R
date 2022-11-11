@@ -555,8 +555,7 @@ stargazer( m1, m2, m3, m4, m5,
                 c("Root mean square error",lm_rmse1,lm_rmse2,lm_rmse3,lm_rmse4,lm_rmse5)),
            keep.stat = c("rsq","n"),
            notes.append = FALSE, notes.align = "l",
-            notes ="Huber robust standard errors are in parentheses. Regression disturbance terms are clustered at the country
-level.", style = "qje"
+            notes ="Huber robust standard errors are in parentheses", style = "qje"
            )
 
 # qje: quataerly journal of economics
