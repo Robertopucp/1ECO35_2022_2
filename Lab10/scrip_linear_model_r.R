@@ -96,6 +96,7 @@ table1 <- repdata %>% dplyr::select(any_prio, any_prio_on, any_prio_off,
 stargazer(table1)
 
 
+
 # Ajuste de algunos argumentos digits:
 
 
@@ -149,7 +150,7 @@ stargazer(table1, title = "Descriptive Statistics", digits = 2, # decimales con 
           summary.stat = c("mean", "sd", "n"), # se especifica el orden de los estadísticos
           min.max = F, # borrar el estadístico de maximo y minimo
           notes = "Note.—The source of most characteristics is the World Bank’s World Development Indicators (WDI)."
-          ,notes.append = FALSE, # TRUE append the significance levels
+          , notes.append = FALSE, # TRUE append the significance levels
           notes.align = 'l')
 
 
