@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE metadata SYSTEM "http://www.fgdc.gov/metadata/fgdc-std-001-1998.dtd">
+<metadata>
+	<idinfo>
+		<citation>
+			<citeinfo>
+				<origin>Melissa Dell</origin>
+				<pubdate>20070406</pubdate>
+				<title>Mitas of Peru and Bolivia</title>
+				<geoform Sync="TRUE">vector digital data</geoform>
+				<onlink>\\MAPS-BURNS-W2K\E$\Bonnie\patrons\melissa\cities.shp</onlink>
+				<ftname Sync="TRUE">pot_line</ftname></citeinfo>
+		</citation>
+		<descript>
+			<abstract>Mitas of Peru and Bolivia</abstract>
+			<purpose>This dataset was created for display using geographic information systems.</purpose>
+			<langdata Sync="TRUE">en</langdata></descript>
+		<timeperd>
+			<timeinfo>
+				<sngdate>
+					<caldate>20070406</caldate>
+				</sngdate>
+			</timeinfo>
+			<current>publication date</current>
+		</timeperd>
+		<status>
+			<progress>Complete</progress>
+			<update>None planned</update>
+		</status>
+		<spdom>
+			<bounding>
+				<westbc Sync="TRUE">-81.333499</westbc>
+				<eastbc Sync="TRUE">-57.454676</eastbc>
+				<northbc Sync="TRUE">-0.025892</northbc>
+				<southbc Sync="TRUE">-22.916527</southbc>
+			</bounding>
+			<lboundng><leftbc Sync="TRUE">-903904.464731</leftbc><rightbc Sync="TRUE">1686145.011752</rightbc><bottombc Sync="TRUE">-2551056.116390</bottombc><topbc Sync="TRUE">-2882.284256</topbc></lboundng></spdom>
+		<keywords>
+			<theme>
+				<themekt>LCSH</themekt>
+				<themekey>mita</themekey>
+			</theme>
+			<place>
+				<placekey>Potosi</placekey>
+				<placekey>Huancavelica</placekey>
+				<placekey>Peru</placekey>
+			</place>
+		</keywords>
+		<accconst>None</accconst>
+		<useconst>None</useconst>
+		<native Sync="TRUE">Microsoft Windows XP Version 5.1 (Build 2600) Service Pack 2; ESRI ArcCatalog 9.2.0.1324</native>
+		<natvform Sync="TRUE">Shapefile</natvform></idinfo>
+	<dataqual>
+		<lineage>
+			<procstep>
+				<procdesc>The counties of Peru and Bolivia that are part of the study area were selected and exported.  Each county was coded with its status re: which mita(s) it was part of (if any).</procdesc>
+			</procstep>
+			<procstep>
+				<procdesc>Metadata imported.</procdesc>
+				<srcused>E:\Bonnie\temp\edge_hp_Line.xml</srcused>
+			</procstep>
+			<procstep><procdesc Sync="TRUE">Dataset copied.</procdesc><srcused Sync="TRUE">E:\Bonnie\patrons\melissa\fixed_mita_codes</srcused><date Sync="TRUE">20070406</date><time Sync="TRUE">16094500</time></procstep></lineage>
+	</dataqual>
+	<spdoinfo>
+		<direct Sync="TRUE">Vector</direct>
+		<ptvctinf>
+			<sdtsterm Name="pot_line">
+				<sdtstype Sync="TRUE">String</sdtstype>
+				<ptvctcnt Sync="TRUE">0</ptvctcnt>
+			</sdtsterm>
+			<esriterm Name="pot_line"><efeatyp Sync="TRUE">Simple</efeatyp><efeageom Sync="TRUE">Polyline</efeageom><esritopo Sync="TRUE">FALSE</esritopo><efeacnt Sync="TRUE">0</efeacnt><spindex Sync="TRUE">FALSE</spindex><linrefer Sync="TRUE">FALSE</linrefer></esriterm></ptvctinf>
+	</spdoinfo>
+	<spref>
+		<horizsys>
+			<planar>
+				<planci>
+					<plance Sync="TRUE">coordinate pair</plance>
+					<coordrep>
+						<absres Sync="TRUE">0.000000</absres>
+						<ordres Sync="TRUE">0.000000</ordres>
+					</coordrep>
+					<plandu Sync="TRUE">meters</plandu>
+				</planci>
+				<mapproj><mapprojn Sync="TRUE">Equirectangular</mapprojn><equirect><stdparll Sync="TRUE">-13.000000</stdparll><longcm Sync="TRUE">-73.000000</longcm><feast Sync="TRUE">0.000000</feast><fnorth Sync="TRUE">0.000000</fnorth></equirect></mapproj></planar>
+			<geodetic>
+				<horizdn Sync="TRUE">D_WGS_1984</horizdn>
+				<ellips Sync="TRUE">WGS_1984</ellips>
+				<semiaxis Sync="TRUE">6378137.000000</semiaxis>
+				<denflat Sync="TRUE">298.257224</denflat>
+			</geodetic>
+			<cordsysn><geogcsn Sync="TRUE">GCS_WGS_1984</geogcsn><projcsn Sync="TRUE">mita_equi</projcsn></cordsysn></horizsys>
+	</spref>
+	<eainfo>
+		<detailed Name="pot_line">
+			<enttyp>
+				<enttypl Sync="TRUE">pot_line</enttypl>
+				<enttypt Sync="TRUE">Feature Class</enttypt><enttypc Sync="TRUE">0</enttypc></enttyp>
+			<attr>
+				<attrlabl>FID</attrlabl>
+				<attrdef>Internal feature number.</attrdef>
+				<attrdefs>ESRI</attrdefs>
+				<attrdomv>
+					<udom>Sequential unique whole numbers that are automatically generated.</udom>
+				</attrdomv>
+			</attr>
+			<attr><attrlabl Sync="TRUE">ID</attrlabl><attalias Sync="TRUE">ID</attalias><attrtype Sync="TRUE">String</attrtype><attwidth Sync="TRUE">20</attwidth></attr><attr><attrlabl Sync="TRUE">FID_mita_t</attrlabl><attalias Sync="TRUE">FID_mita_t</attalias><attrtype Sync="TRUE">Number</attrtype><attwidth Sync="TRUE">9</attwidth></attr><attr>
+				<attrlabl>Shape</attrlabl>
+				<attrdef>Feature geometry.</attrdef>
+				<attrdefs>ESRI</attrdefs>
+				<attrdomv>
+					<udom>Coordinates defining the features.</udom>
+				</attrdomv>
+				<attrtype Sync="TRUE">Number</attrtype><attwidth Sync="TRUE">6</attwidth></attr>
+			<attr><attrlabl Sync="TRUE">Id</attrlabl><attalias Sync="TRUE">Id</attalias><attrtype Sync="TRUE">Integer</attrtype><attwidth Sync="TRUE">6</attwidth><atprecis Sync="TRUE">6</atprecis><attscale Sync="TRUE">0</attscale></attr></detailed>
+	</eainfo>
+	<distinfo>
+		<resdesc>Downloadable Data</resdesc>
+		<stdorder>
+			<digform>
+				<digtinfo>
+					<transize>0.000</transize>
+					<dssize Sync="TRUE">0.000</dssize></digtinfo>
+			</digform>
+		</stdorder>
+	</distinfo>
+	<metainfo>
+		<metd Sync="TRUE">20070822</metd>
+		<metc>
+			<cntinfo>
+				<cntorgp>
+					<cntorg>REQUIRED: The organization responsible for the metadata information.</cntorg>
+					<cntper>REQUIRED: The person responsible for the metadata information.</cntper>
+				</cntorgp>
+				<cntaddr>
+					<addrtype>REQUIRED: The mailing and/or physical address for the organization or individual.</addrtype>
+					<city>REQUIRED: The city of the address.</city>
+					<state>REQUIRED: The state or province of the address.</state>
+					<postal>REQUIRED: The ZIP or other postal code of the address.</postal>
+				</cntaddr>
+				<cntvoice>REQUIRED: The telephone number by which individuals can speak to the organization or individual.</cntvoice>
+			</cntinfo>
+		</metc>
+		<metstdn Sync="TRUE">FGDC Content Standards for Digital Geospatial Metadata</metstdn>
+		<metstdv Sync="TRUE">FGDC-STD-001-1998</metstdv>
+		<mettc Sync="TRUE">local time</mettc>
+		<metextns>
+			<onlink>http://www.esri.com/metadata/esriprof80.html</onlink>
+			<metprof>ESRI Metadata Profile</metprof>
+		</metextns>
+		<metextns>
+			<onlink>http://www.esri.com/metadata/esriprof80.html</onlink>
+			<metprof>ESRI Metadata Profile</metprof>
+		</metextns>
+		<metextns>
+			<onlink>http://www.esri.com/metadata/esriprof80.html</onlink>
+			<metprof>ESRI Metadata Profile</metprof>
+		</metextns>
+		<langmeta Sync="TRUE">en</langmeta><metextns><onlink Sync="TRUE">http://www.esri.com/metadata/esriprof80.html</onlink><metprof Sync="TRUE">ESRI Metadata Profile</metprof></metextns></metainfo>
+	<Esri><CreaDate>20070406</CreaDate><CreaTime>16094500</CreaTime><SyncOnce>FALSE</SyncOnce><SyncDate>20070822</SyncDate><SyncTime>01182200</SyncTime><ModDate>20070822</ModDate><ModTime>01182200</ModTime><MetaID>{EE6229E4-3F8C-4500-9814-B6FA748BCB23}</MetaID><DataProperties><lineage><Process ToolSource="C:\Program Files\ArcGIS\ArcToolbox\Toolboxes\Analysis Tools.tbx\Select" Date="20070822" Time="000731">Select fixed_mita_codes.shp C:\Melissa\mdell\Mita\Data\GIS\Arc\package\bol.shp ""BOLIVIA" =1"</Process><Process ToolSource="C:\Program Files\ArcGIS\ArcToolbox\Toolboxes\Analysis Tools.tbx\Select" Date="20070822" Time="000733">Select bol.shp C:\Melissa\mdell\Mita\Data\GIS\Arc\package\bolpot.shp "MITA =1"</Process><Process ToolSource="C:\Program Files\ArcGIS\ArcToolbox\Toolboxes\Data Management Tools.tbx\Dissolve" Date="20070822" Time="000735">Dissolve bolpot.shp C:\Melissa\mdell\Mita\Data\GIS\Arc\package\mita_bol.shp # # MULTI_PART</Process><Process ToolSource="C:\Program Files\ArcGIS\ArcToolbox\Toolboxes\Analysis Tools.tbx\Buffer" Date="20070822" Time="000737">Buffer mita_bol.shp C:\Melissa\mdell\Mita\Data\GIS\Arc\package\bmitabuf.shp "2000 Meters" FULL ROUND NONE #</Process><Process ToolSource="C:\Program Files\ArcGIS\ArcToolbox\Toolboxes\Analysis Tools.tbx\Union" Date="20070822" Time="000739">Union "bmitabuf.shp #;pot_ply.shp #" C:\Melissa\mdell\Mita\Data\GIS\Arc\package\temp.shp ALL # GAPS</Process><Process ToolSource="C:\Program Files\ArcGIS\ArcToolbox\Toolboxes\Data Management Tools.tbx\Dissolve" Date="20070822" Time="000741">Dissolve temp.shp C:\Melissa\mdell\Mita\Data\GIS\Arc\package\mita_tot.shp # # MULTI_PART</Process><Process Name="FeatureToLine_2" ToolSource="C:\Program Files\ArcGIS\ArcToolbox\Toolboxes\Data Management Tools.tbx\FeatureToLine" Date="20070822" Time="011822">FeatureToLine 'Potosi Mita' C:\Melissa\mdell\Mita\Data\GIS\Arc\package\pot_line.shp # ATTRIBUTES</Process></lineage></DataProperties></Esri><dataIdInfo><envirDesc Sync="TRUE">Microsoft Windows XP Version 5.1 (Build 2600) Service Pack 2; ESRI ArcCatalog 9.2.0.1324</envirDesc><dataLang><languageCode Sync="TRUE" value="en"></languageCode></dataLang><idCitation><resTitle Sync="TRUE">pot_line</resTitle><presForm><PresFormCd Sync="TRUE" value="005"></PresFormCd></presForm></idCitation><spatRpType><SpatRepTypCd Sync="TRUE" value="001"></SpatRepTypCd></spatRpType><dataExt><geoEle><GeoBndBox esriExtentType="native"><westBL Sync="TRUE">-903904.464731</westBL><eastBL Sync="TRUE">1686145.011752</eastBL><northBL Sync="TRUE">-2882.284256</northBL><southBL Sync="TRUE">-2551056.11639</southBL><exTypeCode Sync="TRUE">1</exTypeCode></GeoBndBox></geoEle></dataExt><geoBox esriExtentType="decdegrees"><westBL Sync="TRUE">-81.333499</westBL><eastBL Sync="TRUE">-57.454676</eastBL><northBL Sync="TRUE">-0.025892</northBL><southBL Sync="TRUE">-22.916527</southBL><exTypeCode Sync="TRUE">1</exTypeCode></geoBox></dataIdInfo><mdLang><languageCode Sync="TRUE" value="en"></languageCode></mdLang><mdStanName Sync="TRUE">ISO 19115 Geographic Information - Metadata</mdStanName><mdStanVer Sync="TRUE">DIS_ESRI1.0</mdStanVer><mdChar><CharSetCd Sync="TRUE" value="004"></CharSetCd></mdChar><mdHrLv><ScopeCd Sync="TRUE" value="005"></ScopeCd></mdHrLv><mdHrLvName Sync="TRUE">dataset</mdHrLvName><distInfo><distributor><distorTran><onLineSrc><orDesc Sync="TRUE">002</orDesc><linkage Sync="TRUE">file://\\PALPC-13\C$\Melissa\mdell\Mita\Data\GIS\Arc\package\pot_line.shp</linkage><protocol Sync="TRUE">Local Area Network</protocol></onLineSrc><transSize Sync="TRUE">0.000</transSize></distorTran><distorFormat><formatName Sync="TRUE">Shapefile</formatName></distorFormat></distributor></distInfo><refSysInfo><RefSystem><refSysID><identCode Sync="TRUE">mita_equi</identCode></refSysID></RefSystem></refSysInfo><spatRepInfo><VectSpatRep><topLvl><TopoLevCd Sync="TRUE" value="001"></TopoLevCd></topLvl><geometObjs Name="pot_line"><geoObjTyp><GeoObjTypCd Sync="TRUE" value="001"></GeoObjTypCd></geoObjTyp><geoObjCnt Sync="TRUE">0</geoObjCnt></geometObjs></VectSpatRep></spatRepInfo><mdDateSt Sync="TRUE">20070822</mdDateSt></metadata>
