@@ -63,7 +63,7 @@ data_plot |> ggplot() +
     geom_bar(stat = "identity", alpha = .6, width = .5)  + # with: ancho de barra, alpha: transparencia de gráfico
     geom_text(
         aes(label = format(round(GDP, 1), nsmall = 1)),  # nsmall: cantidad de decimales
-        hjust = - 0.35,   #
+        hjust = - 0.35,
         size = 3  # tamaño
     ) +
     coord_flip(ylim = c(0, 2000)) + #coord_flip: El eje x es ahora el eje Y. Luego se define el rango del eje y
