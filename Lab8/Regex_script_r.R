@@ -16,8 +16,8 @@ library(readxl)
 #library(stringr) # libreria para trabajar expresiones regulares
 #library(dplyr)
 library(lubridate) # dmy
-
-library(tidyverse) # dplyr, ggplot2, tdyr, stringi, stringr
+library(stringi)
+library(tidyverse) # dplyr, ggplot2, tdyr, stringr
 
 
 search()
@@ -86,11 +86,11 @@ colnames(data) <- tolower(colnames(data)) # capital letters to lower letters
 # 1.0 Extraer texto ----
 
 
-data$inst1 <- apply(data['instituci?n_ruc'],
+data$inst1 <- apply(data['institución_ruc'],
                     1 ,    # margin 1: aplicar la funcion por filas , por observaciones
                     function(x) gsub("[0-9]", '', x))
 
-data$inst1 <- apply(data['instituci?n_ruc'],
+data$inst1 <- apply(data['institución_ruc'],
                     1 ,    # margin 1: aplicar la funcion por filas , por observaciones
                     function(x) gsub("[0-9]", '', x))
 
@@ -98,7 +98,7 @@ data$inst1 <- apply(data['instituci?n_ruc'],
 
 "[0-9]*: ninguno, uno o mas digitos"
 
-data$inst2 <- apply(data['instituci?n_ruc'],
+data$inst2 <- apply(data['institución_ruc'],
                     1 ,
                     function(x) gsub("\\d", '', x))
 
@@ -107,12 +107,12 @@ data$inst2 <- apply(data['instituci?n_ruc'],
 
 # usando la funcion extraer letras y espacio
 
-data$inst3 <- apply(data['instituci?n_ruc'],
+data$inst3 <- apply(data['institución_ruc'],
                     1 ,
                     function(x) str_extract(x,"[a-zA-Z\\s]+"))
 
 
-data$inst4 <- apply(data['instituci?n_ruc'],
+data$inst4 <- apply(data['institución_ruc'],
                     1 ,
                     function(x) str_replace(x,"[^a-zA-Z\\s]+",''))
 
@@ -124,26 +124,26 @@ data$inst4 <- apply(data['instituci?n_ruc'],
 # 2.0 Extraer numero ----
 
 
-data$ruc1 <- apply(data['instituci?n_ruc'],
+data$ruc1 <- apply(data['institución_ruc'],
                     1 ,
                     function(x) gsub("[a-zA-Z]", '', x))
 
 
 # se extrae digitos de uno o mas ocurrencia
 
-data$ruc2 <- apply(data['instituci?n_ruc'],
+data$ruc2 <- apply(data['institución_ruc'],
                    1 ,
                    function(x) str_extract(x,"[0-9]+"))
 
 # extraer solo 3 digitos del rango 0-9
 
-data$ruc3 <- apply(data['instituci?n_ruc'],
+data$ruc3 <- apply(data['institución_ruc'],
                    1 ,
                    function(x) str_extract(x,"[0-9]{3}"))
 
 # {3} me permtie extraer 3 digitos
 
-data$ruc4 <- apply(data['instituci?n_ruc'],
+data$ruc4 <- apply(data['institución_ruc'],
                     1 ,
                     function(x) str_extract(x,"[0-9]{1,}"))
 
@@ -151,14 +151,14 @@ data$ruc4 <- apply(data['instituci?n_ruc'],
 # usando [^0-9], lo que sea diferente de numero en el rango 0 a 9,
 # me reemplazas por nada.
 
-data$ruc5 <- apply(data['instituci?n_ruc'],
+data$ruc5 <- apply(data['institución_ruc'],
                     1 ,
                    function(x) gsub("[^0-9]", '', x))
 
 
 # usando \\D, lo que sea diferentes de digitos, me reemplazas por nada ''
 
-data$ruc6 <- apply(data['instituci?n_ruc'],
+data$ruc6 <- apply(data['institución_ruc'],
                     1 ,
                     function(x) gsub("\\D", '', x))
 
@@ -266,8 +266,8 @@ data <- data %>% mutate(code_res = match_output[,2], year_res = match_output[,3]
 
 data <- data %>% mutate(code_res = match_output[,2], year_res = match_output[,3],
                         entidad_res = match_output[,4],
-                        Gob_regional_jur = ifelse(str_detect(instituciÃ³n_ruc,"(^G)|(^R)"), 1 , 0 ),
-                        Minsa_jur = ifelse(str_detect(instituciÃ³n_ruc,"^M"), 1 , 0 )
+                        Gob_regional_jur = ifelse(str_detect(institución_ruc,"(^G)|(^R)"), 1 , 0 ),
+                        Minsa_jur = ifelse(str_detect(institución_ruc,"^M"), 1 , 0 )
 )
 
 

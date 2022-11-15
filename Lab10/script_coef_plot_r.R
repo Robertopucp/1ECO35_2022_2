@@ -112,7 +112,7 @@ data %>% ggplot(aes(x=bwghtlbs, fill = Dummy1 , colour=Dummy1)) +
 
 # First Model ~
 # ~ : alt + 126
-# el interceptp se añade por default
+# el intercept se añade por default
 
 
 model1 <- lm(lbwght ~ Dummy, data = data)

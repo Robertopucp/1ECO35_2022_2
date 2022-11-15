@@ -493,10 +493,16 @@ merge_base_2020[10]
 
 df1 = merge_base_2020.groupby( [ "conglome", "vivienda", "hogar" ]).agg( edu_max = ( 'p301a', np.max ) ,
                                                        edu_min = ( 'p301a', np.min ) ,
-                   total_miembros1 = ('conglome', np.count), # ignore  NA missing
-                   total_miembros2 = ('conglome', np.size),  # count missings
+                   total_miembros1 = ('conglome', np.count), # Contabiliza incluso los missings
+                   total_miembros2 = ('conglome', np.size),  # ignore  NA missing
                         sup_educ = ( 'var_10', np.sum ))
-           
+
+# ignorar missing np.namax, np.nasum
+
+df1 = merge_base_2020.groupby( [ "conglome", "vivienda", "hogar" ]).agg( edu_max = ( 'p301a', np.nanmax ) ,
+                                                       edu_min = ( 'p301a', np.nanmin ) ,
+                   total_miembros2 = ('conglome', np.size),  # ignore  NA missing
+                        sup_educ = ( 'var_10', np.nasum ))
 #   as_index = true (default), las varibales de agrupamiento son variables indenxing
    
    
@@ -516,17 +522,17 @@ df1['hogar'] # no existe
 # as_index = False  genera que "conglome", "vivienda", "hogar"  sea parte de la base de datos 
                                        
 df1 = merge_base_2020.groupby( [ "conglome", "vivienda", "hogar" ],
-                              as_index = False ).agg( edu_max = ( 'p301a', np.max ) ,
-                                                       edu_min = ( 'p301a', np.min ) ,
+                              as_index = False ).agg( edu_max = ( 'p301a', np.nanmax ) ,
+                                                       edu_min = ( 'p301a', np.nanmin ) ,
                         total_miembros = ('conglome', np.size),  # count no missings
-                        sup_educ = ( 'var_10', np.sum ))
+                        sup_educ = ( 'var_10', np.nansum ))
       
                                                      
 df1['vivienda'] # se puede verificar que vivienda pertenece a la base de datos
                      
         
 df2 = merge_base_2020.groupby( [ "ubigeo_dep2" ],
-                                  as_index = False ).agg( index_poverty = ( 'dummy_pobre', np.mean ))                                               
+                                  as_index = False ).agg( index_poverty = ( 'dummy_pobre', np.nanmean ))                                               
                                    
 
 #    Dummy
@@ -544,7 +550,7 @@ merge_base_2020["dpto"] = merge_base_2020["ubigeo_dep2"].replace({
 
 
 df3 = merge_base_2020.groupby( [ "dpto" ],
-                                  as_index = False ).agg( index_poverty = ( 'dummy_pobre', np.mean ))                                                
+                                  as_index = False ).agg( index_poverty = ( 'dummy_pobre', np.nanmean ))                                                
                            
 
                           
