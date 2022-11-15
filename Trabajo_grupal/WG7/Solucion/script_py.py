@@ -51,7 +51,7 @@ crimen_data['new_date'] = pd.to_datetime(crimen_data['born_date']
 
 # 4.0 edad
 
-crimen_data['age'] = crimen_data['age'].apply(lambda x: re.sub('[^\d]','', str(x)))
+crimen_data['age'] = crimen_data['age'].apply(lambda x: re.sub('\D','', str(x)))
 
 # 5.0 Dummies por rango criminal 
 
