@@ -132,7 +132,6 @@ enaho05 <- enaho05[ , c("conglome", "vivienda", "hogar" , "codperso",
                         "p507", "p511a", "p512b", "p513a1", "p505" , "p506", "d544t", "d556t1",
                         "d556t2" , "d557t" , "d558t" , "ocu500" , "i530a" , "i541a")]
 
-#----------------------------------------------------------
 # 3.0 Merge section #
 
 # Merge identifica automaticamente los casos de merge m:1, 1:1, 1:m
@@ -346,7 +345,6 @@ merge_base_2020 <- merge_base_2020 %>%
 
 
 
-#----------------------------------------------------------
 
 "ENAHO 2019"
 
@@ -394,7 +392,7 @@ enaho05 <- enaho05[ , c("conglome", "vivienda", "hogar" , "codperso",
                         "d556t1",
                         "d556t2" , "d557t" , "d558t" , "ocu500" , "i530a" , "i541a")]
 
-#-------------------------------------------------------
+
 
 
 num = list(enaho34 , enaho37) # lista de data.frames
@@ -423,7 +421,7 @@ for (i in num){
   )
 }
 
-#----------------------------------------------------------
+
 
 merge_base <- merge(merge_ind, merge_hog,
                     by = c("conglome", "vivienda", "hogar"),
@@ -516,7 +514,6 @@ View(merge_base_2020[, c("p301a","p301a_1","p301a_2","p301a_3","p301a_4","p301a_
 
 
 
-#----------------------------------------------------------------------
 ################ Colappse #############################################
 
 
