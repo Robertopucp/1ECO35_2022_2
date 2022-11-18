@@ -121,7 +121,9 @@ enaho_pension <- df |> left_join(enaho_20_34, by = c("conglome", "vivienda", "ho
 
 # Ifelse coloca missing si edad_max o pobreza es missing
 
+
 table(enaho_pension$hogar_benf_pen)
+
 
 # Se verifica que coincide con Python 
 

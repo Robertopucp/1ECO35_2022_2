@@ -220,8 +220,13 @@ glance(ols_model1)
 
 tidy(ols_model1)
 
+tidy(ols_model1)
 
 htmlreg(ols_model1)
+
+tidy(ols_model1)[2,2] # coeficiente
+tidy(ols_model1)[2,6] # limite inferior
+tidy(ols_model1)[2,7] # limite superior 
 
 
 "Usando LM y luego coestest para los error standar robusto"
@@ -236,6 +241,16 @@ type = "HC1",
 cluster = ~ ccode)
 
 sd_robust_model1 <- robust_model1[,2]
+
+# intervalo de confianza 
+
+model1_lower = coefci(m1, df = Inf, 
+                      vcov. = vcovCL, cluster = ~ ccode, type = "HC1")[2,1]
+
+model1_upper = coefci(m1, df = Inf,
+                      vcov. = vcovCL, cluster = ~ ccode, type = "HC1")[2,2]
+
+tidy(m1, conf.int = TRUE)
 
 #### Segundo Modelo ----
 # No efectos fijos (country), Si country-time trends
@@ -270,6 +285,8 @@ ols_model2 <- lm_robust(model2_formula, data = repdata,
 
 summary(ols_model2)
 
+
+
 glance(ols_model2)
 
 tidy(ols_model2)
@@ -293,6 +310,8 @@ robust_model2 <- coeftest(m2,
 
 sd_robust_model2 <- robust_model2[,2]
 
+coefci(m2, df = Inf, 
+       vcov. = vcovCL, cluster = ~ ccode, type = "HC1")
 
 #### Tercer Modelo ----
 # Si efectos fijos (country), Si country-time trends
@@ -398,6 +417,10 @@ robust_model3 <- coeftest(m3 ,
 
 
 sd_robust_model3 <- robust_model3[,2]
+#c.i : confidence interval 
+
+coefci(m3, df = Inf, 
+       vcov. = vcovCL, cluster = ~ ccode, type = "HC1")
 
 #### Cuarto modelo ----
 # Si efectos fijos (country), Si country-time trends
@@ -449,6 +472,8 @@ robust_model4 <- coeftest(m4,
 
 sd_robust_model4 <- robust_model4[,2]
 
+coefci(m4, df = Inf, 
+       vcov. = vcovCL, cluster = ~ ccode, type = "HC1")
 
 #### Quinto modelo ----
 # Si efectos fijos (country), Si country-time trends
@@ -496,6 +521,9 @@ robust_model5 <- coeftest(m5,
                           cluster = ~ ccode)
 
 sd_robust_model5 <- robust_model5[,2]
+
+coefci(m5, df = Inf, 
+       vcov. = vcovCL, cluster = ~ ccode, type = "HC1")
 
 # RMSE manual
 

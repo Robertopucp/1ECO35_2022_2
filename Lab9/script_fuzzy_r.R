@@ -7,22 +7,12 @@ rm(list=ls(all=TRUE))
 
 # Load libraries ----
 
-# install.packages("stringdist")
-# install.packages("fuzzyjoin")
-
-
-# install.packages("fuzzywuzzyR")
-#library(fuzzywuzzyR)
 
 library(tidyverse)
 library(readxl)
-library(stringdist)
-library(fuzzyjoin)
-library(reshape)
+library(stringdist)  # indicadores de similaridad 
+library(fuzzyjoin) # merge dataste using names o text column
 
-# library(reticulate)
-# 
-# reticulate::py_discover_config(required_module = 'fuzzywuzzy')
 
 user <- Sys.getenv("USERNAME")  # username
 
