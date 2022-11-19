@@ -16,7 +16,7 @@ librarian::shelf(
     , stargazer  # for summary and econometrics tables
     , sandwich  # for linear models
     , lmtest # for robust standar error
-    , estimatr # for iv, cluster, robust standar error
+    , estimatr # for iv, cluster, robust standar error (LM_robust)
     , lfe  # for fixed effects, cluster standar error
     , caret # for easy machine learning workflow (mse, rmse)
     , texreg # library for export table
@@ -57,9 +57,12 @@ repdata$ccode %>% attr('label') # var label
 repdata  <- dummy_cols(repdata, select_columns = 'ccode')
 
 #
+
 index <- grep("ccode_", colnames(repdata))
 
-repdata$time_year <- repdata$year - 1978
+# D*time_var 
+
+repdata$time_year <- repdata$year - 1978 # creando la variable temporal
 
 list_vars <- names(repdata)[index]
 
@@ -90,7 +93,7 @@ stargazer(table1)
 table1 <- repdata %>% dplyr::select(any_prio, any_prio_on, any_prio_off,
                              war_prio, war_prio_on, war_prio_off, war_col, war_inc, war,
                              GPCP, GPCP_g, GPCP_g_l,gdp_g, gdp_g_l,
-        y_0, polity2l, polity2l_6, ethfrac, relfrac, Oil, lmtnest, lpopl1, tot_100_g) %>% dplyr::as.data.frame()
+        y_0, polity2l, polity2l_6, ethfrac, relfrac, Oil, lmtnest, lpopl1, tot_100_g) %>% as.data.frame()
 
 
 stargazer(table1)
@@ -154,6 +157,8 @@ stargazer(table1, title = "Descriptive Statistics", digits = 2, # decimales con 
           notes.align = 'l')
 
 
+
+
 # TABLE 2: First stage ----
 
 # OLS simple
@@ -162,9 +167,9 @@ ols_model <- lm(gdp_g ~ GPCP_g + GPCP_g_l, data = repdata)
 
 attributes(ols_model)
 
-ols_model1$coefficients  # coeficientes
+ols_model$coefficients  # coeficientes
 
-ols_model1$fitted.values  # Y estimado
+ols_model$fitted.values  # Y estimado
 
 # summary table como en stata
 
@@ -175,10 +180,11 @@ summary(ols_model)$call
 summary(ols_model)$coef
 
 # Test de significancia individual usando Huber robust standard errors
+
 coeftest(ols_model, vcov = vcovHC(ols_model, "HC")) # Clasical white robust
 coeftest(ols_model, vcov = vcovHC(ols_model, "HC0"))
 
-coeftest(ols_model, vcov = vcovHC(ols_model, "HC1")) # Huber-White robust
+coeftest(ols_model, vcov = vcovHC(ols_model, "HC1")) # Huber-White robust (STATA)
 coeftest(ols_model, vcov = vcovHC(ols_model, "HC2")) # Eicker-Huber-White robust
 coeftest(ols_model, vcov = vcovHC(ols_model, "HC3"))
 coeftest(ols_model, vcov = vcovHC(ols_model, "HC4"))
@@ -188,11 +194,15 @@ coeftest(ols_model, vcov = vcovHC(ols_model, "HC4"))
 
 # robust se and cluster
 
-robust_lm <- coeftest(ols_model, cluster = ~ccode, vcov = vcovHC(ols_model, "HC1"))
+robust_model <- coeftest(ols_model,
+                          vcov = vcovCL,  # Matrix varianza-covarianza cluster (CL)
+                          type = "HC1",
+                          cluster = ~ ccode)
 
 sd_robust <- robust_lm[,2]
 
 #### Primer Modelo ----
+
 # OLS, sin efectos fijos o country-time trend
 # errores estandar robustas (Huber robust)
 # Los residuos estan clusterizados (agrupados) a nivel país
@@ -270,14 +280,17 @@ country_time_trend <-names(repdata)[index_country_time]
 
 
 model2_formula <- as.formula(
+  
     paste("gdp_g",
           "~",
           paste("GPCP_g","GPCP_g_l", paste(country_time_trend, collapse = "+"),
                 paste(control_vars, collapse = "+")
                 ,sep="+")
           )
+    
     )
 
+# Usando LM_robust 
 
 ols_model2 <- lm_robust(model2_formula, data = repdata,
                         clusters = ccode, se_type = "stata")
@@ -312,6 +325,7 @@ sd_robust_model2 <- robust_model2[,2]
 
 coefci(m2, df = Inf, 
        vcov. = vcovCL, cluster = ~ ccode, type = "HC1")
+
 
 #### Tercer Modelo ----
 # Si efectos fijos (country), Si country-time trends
@@ -375,6 +389,8 @@ tidy(ols_model3)
 glance(ols_model3)
 
 rmse3 <- RMSE(ols_model3$fitted.values, repdata$gdp_g ) # root mean squeare error
+
+# !! Usar para el trabajo final 
 
 # 3. Usando ccode como una variable tipo factor (variable categórica)
 
