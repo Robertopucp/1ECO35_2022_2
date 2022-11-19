@@ -566,7 +566,6 @@ texreg(list(ols_model1, ols_model2, ols_model3, ols_model4, ols_model5),
                               "Oil" = "Oil-exporting country",
                               "lmtnest" = "Log(mountainous)",
                               "lpopl1" = "Log(national population), t-1"
-
                               ), digits = 3,
        stars = c(0.01, 0.05, 0.1),
        custom.gof.rows = list("Country fixed effects" = c("no", "no", "yes", "yes", "yes"),
@@ -855,6 +854,7 @@ texreg(list(logit, probit, ols_model2, ols_model3, ols_model4,
 
 
 
+# Links referencias ----
 
 ## glmnet library para modelos de machine learning lineales
 
