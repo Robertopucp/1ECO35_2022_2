@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+    <html>
+        <head>  <!-- Continee el nombre de la pagina web, diseño de la web  -->
+
+            <title>Mi pagina web </title> 
+            <script src="codigo_js.js"></script>  <!-- permite el dinamismo de la página web. Recuerde que html es estático -->
+            <link href="ej4.css" rel="stylesheet"><!-- define el estilo de la web (.css)  -->
+            <!-- Enlaces a tempaltes de diseño. Bootstrap es la fuente más usada para diseño (Códigos ya trabajados  -->
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.1/css/all.min.css" integrity="sha512-gMjQeDaELJ0ryCI+FtItusU9MkAifCZcGq789FrzkiM49D8lbDhoaUaIX4ASU187wofMNlgBJ4ckbrXM9sE6Pg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        </head>
+
+        <body>
+
+
+            <div class="row headerSide justify-content-end">
+                <div class="col-2">
+                    <div class="row h-100 w-100">
+                        <div class="col-4">
+                            <div class="row h-100 align-items-center text-center">
+                                <i class="fa fa-signal" style="color: blue;"></i>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="row h-100 align-items-center text-center">
+                                <i class="fa fa-wifi" style="color: brown;"></i>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="row h-100 align-items-center text-center">
+                                <i class="fa fa-battery-full" style="color: red;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- atributos de todo class asigna diseño particular  -->
+
+                <div class="col-4" style="color: red;">   <!-- atributos de todo class asigna diseño particular  -->
+                    <h1>Bienvenido a mi pagina web </h1>
+                </div>
+
+                <div class="col-10" style="color: green;">
+                    <h2> PUCP Economia  </h2>
+                </div>
+
+                        <!-- UNORDER LIST-->
+        <div >
+            <ul>
+                <li>Coffee</li>
+                <li>Tea</li>
+                <li>Milk</li>
+              </ul>
+        </div>
+
+                <!-- Tabla-->  
+                <div>
+                    <table class = "diseño1">
+                        <tr> <!-- Se completa la fila 1 -->   
+                          <th>Manager</th> <!-- primera fila columna 1 -->  
+                          <th>Club</th> <!-- primera fila columna 2 -->  
+                          <th>Nationality</th> <!-- primera fila columna 3 -->  
+                        </tr>
+                          
+                        <tr>  <!-- Se completa la fila 2 -->  
+                          <td>Mikel Arteta</td>
+                          <td>Arsenal</td>
+                          <td>Spain</td>
+                        </tr>
+                          
+                        <tr>  <!-- Se completa la fila 1 -->  
+                          <td>Thomas Tuchel</td>
+                          <td>Chelsea</td>
+                          <td>Germany</td>
+                        </tr>
+                      </table>
+                </div>
+
+                <div>
+                    <table class = "diseño2">
+                        <tr> <!-- Se completa la fila 1 -->   
+                          <th>Universidad</th> <!-- primera fila columna 1 -->  
+                          <th>Carreras</th> <!-- primera fila columna 2 -->  
+                          <th>Pensiones</th> <!-- primera fila columna 3 -->  
+                        </tr>
+                          
+                        <tr>  <!-- Se completa la fila 2 -->  
+                          <td>Mikel Arteta</td>
+                          <td>Arsenal</td>
+                          <td>Spain</td>
+                        </tr>
+                          
+                        <tr>  <!-- Se completa la fila 1 -->  
+                          <td>Thomas Tuchel</td>
+                          <td>Chelsea</td>
+                          <td>Germany</td>
+                        </tr>
+                      </table>
+                </div>
+
+
+                    <button onclick="showContent()">Show hidden content</button>
+
+                    <!-- tag formulario -->  
+
+                    <div> 
+                            <h1>6.0 Lista de opciones </h1>
+                        <form action="/action_page.php">
+                            <label for="cars">Choose a car:</label>
+                            <select name="cars" id="cars">  <!-- name, id (identificador) -->  
+                                <option value="volvo">Volvo</option>
+                                <option value="saab">Saab</option>
+                                <option value="opel">Opel</option>
+                                <option value="audi">Audi</option>
+                            </select>
+                            <br><br>
+                        </form>
+                  
+                        <button onclick="showContent()">Show hidden content</button>
+                    </div>
+
+                    <div> 
+                        <h4>6.0 Lista de paises </h4>
+                    <form action="/action_page.php">
+                        <label for="cars">Pais:</label>
+                        <select name="pasies" id="paises">  <!-- name, id (identificador) -->  
+                            <option value="volvo">Peru</option>
+                            <option value="saab">Brazil</option>
+                            <option value="opel">Chile</option>
+                            <option value="audi">Argentina</option>
+                        </select>
+                        <br><br>
+                    </form>
+              
+                    <button onclick="showContent()">Show hidden content</button>
+                </div>
+
+
+                
+        </body>
+
+
+
+
+    </html>
