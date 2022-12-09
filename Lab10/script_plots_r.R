@@ -120,10 +120,10 @@ ggplot(data_plot , aes(x = pc_gdp_1980, y = pc_gdp_2020)) +
         limits = c(0, 100),
         breaks = c(0, 25,50,75, 100),
         labels = expression(0, 25,50,75, 100)
-    ) +
-    scale_color_manual(values = c("gray", "red")) +
+
+    scale_color_manual(values = c("gray", "red")) +    ) +
     xlab("GDP per capita (constante 2000 miles-US$)  1980") +
-    ylab("GDP per capita (cosntante 2000 milesUS$)  2020") +
+    ylab("GDP per capita (cosntante R milesUS$)  2020") +
     theme_classic() +
     theme(
         axis.text = element_text(size = 12),
