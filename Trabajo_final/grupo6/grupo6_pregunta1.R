@@ -25,7 +25,7 @@ librarian::shelf(
 
 user <- Sys.getenv("USERNAME")  # username
 
-setwd( paste0("C:/Users/",user,"/Documentos/GitHub/1ECO35_2022_2/Lab10") ) # set directorio
+setwd( paste0("C:/Users/",user,"/Documents/GitHub/1ECO35_2022_2/Lab10") ) # set directorio
 
 
 repdata <- read_dta("../data/dataverse_files/mss_repdata.dta")
@@ -61,30 +61,30 @@ stargazer(table1)
 
 #etiquetas
 
-stargazer(table1, title = "Estadísticos Descriptivos", digits = 2,
-          covariate.labels = c("Tasa de variación del índice de vegetación","Términos de intercambio","Porcentajes de las exportaciones respecto al PBI","Densidad poblacional rural",
-                               "Porcentaje de tierra cultivable en uso","Valor agregado del sector agrícola respecto al PBI","Valor agregado del secctor manufacturero respecto al PBI"))
-stargazer(table1, title = "Estadísticos Descriptivos", digits = 2,
-          covariate.labels = c("Tasa de variación del índice de vegetación","Términos de intercambio","Porcentajes de las exportaciones respecto al PBI","Densidad poblacional rural",
-                               "Porcentaje de tierra cultivable en uso","Valor agregado del sector agrícola respecto al PBI","Valor agregado del secctor manufacturero respecto al PBI"),
+stargazer(table1, title = "EstadÃ­sticos Descriptivos", digits = 2,
+          covariate.labels = c("Tasa de variaciÃ³n del Ã­ndice de vegetaciÃ³n","TÃ©rminos de intercambio","Porcentajes de las exportaciones respecto al PBI","Densidad poblacional rural",
+                               "Porcentaje de tierra cultivable en uso","Valor agregado del sector agrÃ­cola respecto al PBI","Valor agregado del secctor manufacturero respecto al PBI"))
+stargazer(table1, title = "EstadÃ­sticos Descriptivos", digits = 2,
+          covariate.labels = c("Tasa de variaciÃ³n del Ã­ndice de vegetaciÃ³n","TÃ©rminos de intercambio","Porcentajes de las exportaciones respecto al PBI","Densidad poblacional rural",
+                               "Porcentaje de tierra cultivable en uso","Valor agregado del sector agrÃ­cola respecto al PBI","Valor agregado del secctor manufacturero respecto al PBI"),
                               min.max = F)
 
 #sum, ordenar las columnas de los estadisticos
 
-list_vars <- c("Tasa de variación del índice de vegetación (NDVI_g)","Términos de intercambio (tot_100)","Porcentajes de las exportaciones respecto al PBI (trade_pGDP)","Densidad poblacional rural (pop
+list_vars <- c("Tasa de variaciÃ³n del Ã­ndice de vegetaciÃ³n (NDVI_g)","TÃ©rminos de intercambio (tot_100)","Porcentajes de las exportaciones respecto al PBI (trade_pGDP)","Densidad poblacional rural (pop
                _den_rur)",
-               "Porcentaje de tierra cultivable en uso (land_crop)","Valor agregado del sector agrícola respecto al PBI (va_agr)","Valor agregado del secctor manufacturero respecto al PBI (va_ind_manf)")
+               "Porcentaje de tierra cultivable en uso (land_crop)","Valor agregado del sector agrÃ­cola respecto al PBI (va_agr)","Valor agregado del secctor manufacturero respecto al PBI (va_ind_manf)")
 
 
-stargazer(table1, title = "Estadísticos descriptivos", digits = 2, # decimales con 2 digitos
+stargazer(table1, title = "EstadÃ­sticos descriptivos", digits = 2, # decimales con 2 digitos
           covariate.labels = list_vars,  # Lista de etiquetas
-          summary.stat = c("mean", "sd", "n"), # se especifica el orden de los estadÃ?sticos
-          min.max = F, # borrar el estadÃ?stico de maximo y minimo
-          notes = "Note.â€” Se tomó las variables indicadas."
+          summary.stat = c("mean", "sd", "n"), # se especifica el orden de los estadÃƒ?sticos
+          min.max = F, # borrar el estadÃƒ?stico de maximo y minimo
+          notes = "Note.Ã¢â‚¬â€ Se tomÃ³ las variables indicadas."
           , notes.append = FALSE, # TRUE append the significance levels
           notes.align = 'l')
 
-################# T A B L A 2: REGRESIÓN MCO SIMPLE  ########################
+################# T A B L A 2: REGRESIÃ“N MCO SIMPLE  ########################
 
 #modelo1
 
@@ -287,7 +287,7 @@ texreg(list(ols_model, ols_model2),
 
 
 ##################################################
-#Gráfico de Coefplot del coeficiente para GPCP_g #                               
+#GrÃ¡fico de Coefplot del coeficiente para GPCP_g #                               
 ##################################################
 
 #tabla de resultados
@@ -300,14 +300,14 @@ table<- matrix(0, 3, 4)
 library(coefplot)
 coefplot(ols_model, ols_model2)  + 
   theme_minimal() + 
-  labs(title="Estimación de coeficientes con error estandar", 
-       x="Estimación", 
+  labs(title="EstimaciÃ³n de coeficientes con error estandar", 
+       x="EstimaciÃ³n", 
        y="Variable", 
-       caption="Elaboración propia con datos de mss_repdata")
+       caption="ElaboraciÃ³n propia con datos de mss_repdata")
 
 
 ggsave("../plots/Coef_plot.png"
        , height = 8  # alto
        , width = 12  # ancho
-       , dpi = 320   # resoluciÃ³n (calidad de la imagen)
+       , dpi = 320   # resoluciÃƒÂ³n (calidad de la imagen)
 )
