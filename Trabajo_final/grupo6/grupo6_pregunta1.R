@@ -27,7 +27,6 @@ user <- Sys.getenv("USERNAME")  # username
 
 setwd( paste0("C:/Users/",user,"/Documents/GitHub/1ECO35_2022_2/Lab10") ) # set directorio
 
-
 repdata <- read_dta("../data/dataverse_files/mss_repdata.dta")
 
 
