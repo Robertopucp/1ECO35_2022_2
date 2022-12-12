@@ -192,6 +192,14 @@ import re
 # In[388]:
 
 
+# Extraer year
+# con .month se puede extraer el mes 
+# con .day se puede extraer el día 
+
+data['time_year'] = pd.DatetimeIndex(data['year']).year - 1978
+data['time_year']
+
+
 # Creando una variable dummy por país: 
 
 # se convierte a entero data["ccode"].astype(int)
@@ -230,6 +238,8 @@ data
 
 
 # In[392]:
+
+
 
 
 # Creación del trend_country effects : multiplicación de las dummy por país y la variable temporal 
